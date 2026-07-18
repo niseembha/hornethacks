@@ -18,9 +18,12 @@ npm run lint
 npm run typecheck
 npm run build
 npm run build:worker
+npm run build:sites
 ```
 
-The OpenNext worker build is written to `.open-next/`.
+`build:worker` writes OpenNext's intermediate worker to `.open-next/`.
+`build:sites` also runs Wrangler's final bundling pass and replaces
+`.open-next/worker.js` with the self-contained worker used by Sites.
 
 ## Routes
 

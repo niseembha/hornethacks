@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "build:worker": "opennextjs-cloudflare build",
+    "build:sites": "node scripts/build-sites.mjs",
     "preview:worker": "opennextjs-cloudflare build && opennextjs-cloudflare preview"
   },
   "dependencies": {

@@ -9,6 +9,7 @@
 # Next.js and OpenNext
 /.next/
 /.open-next/
+/.wrangler/
 /out/
 
 # local environments and generated scratch assets
