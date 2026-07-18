@@ -1,0 +1,29 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# testing
+/coverage
+
+# Next.js and OpenNext
+/.next/
+/.open-next/
+/out/
+
+# local environments and generated scratch assets
+/.venv/
+/tmp/
+
+# production
+/build
+
+# local environment variables
+.env*
+
+# editor and operating-system files
+.DS_Store
+*.pem
+
+# TypeScript
+*.tsbuildinfo
