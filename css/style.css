@@ -629,10 +629,12 @@ html.js:not(.no-voxel) .voxel-title {
 }
 .fact:hover {
   background: var(--surface-2);
-  border-color: var(--green-dark);
+  border-color: #33473d; /* border-strong nudged toward green, barely */
   transform: translate(-2px, -2px);
-  box-shadow: 3px 3px 0 0 var(--green-dark), 6px 6px 0 0 var(--green-darker),
-    0 0 30px -10px rgba(52, 211, 153, 0.35);
+  /* deeper extrusion in the same grays — the lift is the effect, the
+     color shift stays a whisper */
+  box-shadow: 3px 3px 0 0 var(--border-strong), 6px 6px 0 0 var(--border),
+    0 0 24px -12px rgba(52, 211, 153, 0.18);
 }
 /* Subtle entrance: the site's standard quiet fade-up, done as an
    animation so the generic reveal's transition-delay never lingers on
@@ -646,8 +648,15 @@ html.js .fact.reveal {
   opacity: 0;
 }
 html.js .fact.reveal.in {
-  animation: fact-in 0.55s ease-out both;
+  opacity: 1;
+  /* backwards fill (not both): once the entrance ends the animation
+     releases transform, so the hover lift works again */
+  animation: fact-in 0.55s ease-out backwards;
   animation-delay: var(--reveal-delay, 0s);
+}
+/* outweigh the generic .reveal.in transform pin so the lift survives */
+html.js .fact.reveal.in:hover {
+  transform: translate(-2px, -2px);
 }
 @keyframes fact-in {
   from {
