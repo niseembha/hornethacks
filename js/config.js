@@ -5,10 +5,10 @@
    ========================================================================== */
 window.HORNETHACKS = {
   /* Participant interest form — the main CTA */
-  interestFormUrl: "https://forms.gle/REPLACE-WITH-INTEREST-FORM",
+  interestFormUrl: "https://forms.gle/M7gdcq6S3hP9UQd58",
 
   /* Sponsor interest form — the subtle secondary link */
-  sponsorFormUrl: "https://forms.gle/REPLACE-WITH-SPONSOR-FORM",
+  sponsorFormUrl: "https://forms.gle/mgJEzq5jDzMutS6cA",
 
   /* General contact email */
   contactEmail: "hello@hornethacks.org",
