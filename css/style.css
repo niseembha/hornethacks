@@ -507,10 +507,10 @@ html.js:not(.no-voxel) .voxel-title {
 }
 @media (max-width: 760px) {
   /* phones: bleed the wordmark through most of the page padding, keeping
-     a slim 0.75rem breathing gap at each screen edge */
+     a 1rem breathing gap at each screen edge */
   .voxel-title {
-    width: calc(100% + (var(--pad) - 0.75rem) * 2);
-    margin-inline: calc(0.75rem - var(--pad));
+    width: calc(100% + (var(--pad) - 1rem) * 2);
+    margin-inline: calc(1rem - var(--pad));
   }
 }
 .voxel-title canvas {
