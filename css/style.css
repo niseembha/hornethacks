@@ -338,8 +338,8 @@ canvas {
   color: var(--text);
 }
 .brand svg {
-  width: 2rem;
-  height: 1.5rem;
+  width: 2.0625rem; /* 3px per cell of the 11x10 sprite */
+  height: 1.875rem;
   flex: none;
   color: var(--text); /* pixel hornet picks this up via currentColor */
   image-rendering: pixelated;
@@ -1050,8 +1050,8 @@ html.js .reveal.in {
   position: fixed;
   top: 0;
   left: 0;
-  width: 38px;
-  height: 29px;
+  width: 44px; /* 4px per cell of the 11x10 sprite */
+  height: 40px;
   color: var(--text);
   filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.35));
   will-change: transform;
