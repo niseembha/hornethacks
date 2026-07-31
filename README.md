@@ -4,7 +4,7 @@ Landing site for **HornetHacks** — a 12-hour high school hackathon on
 **Saturday, October 10, 2026** at the Valdes STEM + Innovation Center,
 Greenhill School, Addison, TX.
 
-The centerpiece is an interactive, realistic 3D honeycomb on the home page:
+The centerpiece is an interactive voxel 3D honeycomb on the home page — glowing 8-bit cells with a neon gradient and tiny voxel hornets buzzing around:
 drag it to spin, click a cell to navigate. The six cells around the center
 link to About, Schedule, FAQ, Sponsors, Contact, and the interest form.
 
@@ -50,9 +50,9 @@ contact.html          Email, forms, directions
 css/style.css         All styles (design tokens up top)
 js/config.js          ← form URLs + contact email live here
 js/main.js            Mobile nav, config-driven links
-js/hive.js            The interactive 3D hive (Three.js)
+js/hive.js            The interactive voxel hive (Three.js)
 assets/vendor/        Vendored Three.js (no CDN dependency)
-assets/fonts/         Self-hosted Space Grotesk
+assets/fonts/         Self-hosted Geist Sans/Mono + Press Start 2P, Silkscreen
 assets/*.svg          Hornet mark + favicon
 ```
 

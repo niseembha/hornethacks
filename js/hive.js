@@ -1,12 +1,13 @@
 /* ==========================================================================
-   HornetHacks — interactive 3D hive
-   A realistic honeycomb rendered with Three.js. The six cells around the
-   center are the site's navigation; decorative cells (open, honey-filled,
-   capped brood) make it read as a real comb fragment.
+   HornetHacks — interactive voxel hive
+   The site's navigation, rebuilt as a playful 8-bit object: every hex cell
+   is rasterized into little glowing cubes, a neon gradient sweeps across
+   the comb, labels are set in a pixel font, and two tiny voxel hornets
+   orbit the hive.
 
-   Interaction: hover/tap highlights a cell, click follows its link,
-   drag spins the comb, and it gently sways while idle. Falls back to the
-   static SVG honeycomb (.hive-fallback) when WebGL isn't available.
+   Interaction: hover/tap highlights a cell, click follows its link, drag
+   spins the comb, and it gently sways while idle. Falls back to the static
+   SVG honeycomb (.hive-fallback) when WebGL isn't available.
    ========================================================================== */
 import * as THREE from "../assets/vendor/three.module.min.js";
 
@@ -24,28 +25,27 @@ const NAV_CELLS = [
   { label: "Contact", angle: 150, href: "contact.html" },
 ];
 
-/* Decorative outer cells: rMul is in units of the cell-to-cell distance.
-   Two positions are intentionally left empty for an organic silhouette. */
+/* Decorative outer cells: glow = neon block, open = dark socket. */
 const SQ3 = Math.sqrt(3);
 const DECOR_CELLS = [
-  { angle: 30, rMul: 2, type: "honey" },
-  { angle: 90, rMul: 2, type: "brood" },
+  { angle: 30, rMul: 2, type: "glow" },
+  { angle: 90, rMul: 2, type: "solid" },
   { angle: 150, rMul: 2, type: "open" },
-  { angle: 210, rMul: 2, type: "honey" },
-  { angle: 330, rMul: 2, type: "brood" },
+  { angle: 210, rMul: 2, type: "glow" },
+  { angle: 330, rMul: 2, type: "solid" },
   { angle: 0, rMul: SQ3, type: "open" },
-  { angle: 60, rMul: SQ3, type: "honey" },
+  { angle: 60, rMul: SQ3, type: "glow" },
   { angle: 180, rMul: SQ3, type: "open" },
-  { angle: 240, rMul: SQ3, type: "brood" },
+  { angle: 240, rMul: SQ3, type: "solid" },
   { angle: 300, rMul: SQ3, type: "open" },
 ];
 
 /* Geometry constants */
 const R = 1; // hex circumradius
-const WALL = 0.6; // wall depth
-const DIST = SQ3 * R + 0.07; // center-to-center distance (small gap)
+const DIST = SQ3 * R + 0.18; // center-to-center distance (dark seams between cells)
+const VOX = 0.21; // voxel pitch (cube size = pitch → touching cubes)
 
-/* Deterministic per-cell variation so the comb looks handmade but stable */
+/* Deterministic per-cube variation so the mosaic is stable across loads */
 let seed = 20261010;
 const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 
@@ -75,99 +75,83 @@ async function main() {
   }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.06;
+  renderer.toneMappingExposure = 1.1;
   host.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 60);
 
-  /* ---- Lights: warm key, soft warm fill, moving glint ---- */
-  scene.add(new THREE.HemisphereLight(0xfff3da, 0x7a5218, 0.95));
-  const key = new THREE.DirectionalLight(0xffffff, 1.55);
-  key.position.set(4.5, 6, 7.5);
+  /* ---- Lights: crisp voxel shading — bright top-left key, cool fill ---- */
+  scene.add(new THREE.HemisphereLight(0x8a8aa8, 0x141018, 0.75));
+  const key = new THREE.DirectionalLight(0xffffff, 1.9);
+  key.position.set(-3.5, 6, 7);
   scene.add(key);
-  const fill = new THREE.DirectionalLight(0xffd27a, 0.5);
-  fill.position.set(-6, -2.5, 4);
+  const fill = new THREE.DirectionalLight(0xff9a5c, 0.5);
+  fill.position.set(6, -3, 4);
   scene.add(fill);
-  const glint = new THREE.PointLight(0xffc35c, 26, 0, 2);
-  glint.position.set(2.6, 2.2, 4.4);
-  scene.add(glint);
+  const rim = new THREE.DirectionalLight(0xb187ff, 0.65);
+  rim.position.set(0, -5, -6);
+  scene.add(rim);
 
-  /* ---- Soft backdrop shadow so the comb feels grounded ---- */
-  const shadowTex = radialTexture("rgba(46,30,8,0.55)", "rgba(46,30,8,0)");
-  const shadow = new THREE.Mesh(
-    new THREE.PlaneGeometry(11.5, 11.5),
-    new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, opacity: 0.42, depthWrite: false })
+  /* ---- Neon gradient halo behind the comb ---- */
+  const halo = new THREE.Mesh(
+    new THREE.PlaneGeometry(14, 14),
+    new THREE.MeshBasicMaterial({
+      map: gradientHaloTexture(),
+      transparent: true,
+      opacity: 0.22,
+      depthWrite: false,
+    })
   );
-  shadow.position.set(0.1, -0.55, -1.35);
-  scene.add(shadow);
+  halo.position.set(0, -0.3, -1.6);
+  scene.add(halo);
 
-  /* ---- Shared geometry ---- */
-  const wallGeo = new THREE.ExtrudeGeometry(hexRing(R, R * 0.84), {
-    depth: WALL,
-    bevelEnabled: true,
-    bevelThickness: 0.06,
-    bevelSize: 0.05,
-    bevelSegments: 2,
-  });
-  const capGeo = new THREE.ExtrudeGeometry(hexShape(R * 0.66), {
-    depth: 0.08,
-    bevelEnabled: true,
-    bevelThickness: 0.05,
-    bevelSize: 0.09,
-    bevelSegments: 3,
-  });
-  const floorGeo = new THREE.ShapeGeometry(hexShape(R * 0.85));
-  const labelGeo = new THREE.PlaneGeometry(1.62, 1.62);
+  /* ---- Neon ramp: amber → orange → magenta → violet across the comb ---- */
+  function cellTint(x, y, light = 0.5) {
+    const t = clamp((x * 0.55 - y * 0.62) / 5.6 + 0.42, 0, 1);
+    const h = ((42 - 104 * t) + 360) % 360;
+    return { h: h / 360, s: 0.92, l: light };
+  }
 
-  /* ---- Materials ---- */
-  const floorTex = radialTexture("#1f1204", "#4a2f10");
-  floorTex.colorSpace = THREE.SRGBColorSpace;
-  fitShapeUVs(floorGeo, R * 0.85, floorTex);
-  const floorMat = new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.96 });
-
-  const wallMatBase = new THREE.MeshPhysicalMaterial({
-    color: 0xd6952e,
-    roughness: 0.52,
-    clearcoat: 0.3,
-    clearcoatRoughness: 0.5,
-  });
-  const honeyMat = new THREE.MeshPhysicalMaterial({
-    color: 0x9e5a02,
-    roughness: 0.16,
-    clearcoat: 1,
-    clearcoatRoughness: 0.08,
-    emissive: 0x6b3400,
-    emissiveIntensity: 0.4,
-  });
-  const broodMat = new THREE.MeshPhysicalMaterial({
-    color: 0xd8a054,
-    roughness: 0.86,
-    clearcoat: 0.05,
-    clearcoatRoughness: 0.8,
-  });
+  const glowSpriteTex = radialTexture("rgba(255,255,255,0.85)", "rgba(255,255,255,0)");
 
   /* ---- Build the comb ---- */
   const hive = new THREE.Group();
   scene.add(hive);
   const navCells = [];
   const rayTargets = [];
+  const glowPulses = [];
 
-  function buildCell(x, y) {
+  const wallMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.68, metalness: 0 });
+  const capBaseOpts = { vertexColors: true, roughness: 0.38, metalness: 0, emissive: 0xffffff, emissiveIntensity: 0 };
+
+  function buildCellBase(cx, cy) {
     const cell = new THREE.Group();
-    cell.position.set(x, y, 0);
-    const wallMat = wallMatBase.clone();
-    wallMat.color.offsetHSL((rnd() - 0.5) * 0.016, (rnd() - 0.5) * 0.06, (rnd() - 0.5) * 0.05);
-    const walls = new THREE.Mesh(wallGeo, wallMat);
-    const floor = new THREE.Mesh(floorGeo, floorMat);
-    floor.position.z = 0.015;
-    cell.add(walls, floor);
+    cell.position.set(cx, cy, 0);
+    const tint = cellTint(cx, cy);
+    const cubes = [];
+    /* three-deep voxel walls + dark floor, rasterized on the voxel grid */
+    forHexGrid((gx, gy) => {
+      const inOuter = pointInHex(gx, gy, R);
+      const inInner = pointInHex(gx, gy, R * 0.7);
+      if (inOuter && !inInner) {
+        for (let layer = 0; layer < 3; layer++) {
+          const sparkle = rnd() < 0.05;
+          const l = tint.l + (rnd() - 0.5) * 0.09 + (sparkle ? 0.28 : 0) + layer * 0.02;
+          cubes.push({ x: gx, y: gy, z: layer * VOX, s: VOX, hsl: [tint.h, sparkle ? 0.6 : tint.s, clamp(l, 0.1, 0.9)] });
+        }
+      } else if (inInner) {
+        cubes.push({ x: gx, y: gy, z: 0, s: VOX, hsl: [tint.h, 0.35, 0.06 + rnd() * 0.03] });
+      }
+    });
+    const walls = new THREE.Mesh(mergeCubes(cubes), wallMat);
+    cell.add(walls);
     hive.add(cell);
-    return { cell, walls };
+    return { cell, walls, tint };
   }
 
-  /* Navigation cells + center logo cell */
-  const labelFont = '700 92px "Space Grotesk", ui-sans-serif, sans-serif';
+  /* Pixel labels want the pixel font ready before we draw them */
+  const labelFont = '400 54px "Press Start 2P", monospace';
   await Promise.race([
     document.fonts.load(labelFont).catch(() => {}),
     new Promise((res) => setTimeout(res, 1500)),
@@ -175,118 +159,139 @@ async function main() {
 
   for (const nav of NAV_CELLS) {
     const a = (nav.angle * Math.PI) / 180;
-    const { cell, walls } = buildCell(Math.cos(a) * DIST, Math.sin(a) * DIST);
+    const cx = Math.cos(a) * DIST;
+    const cy = Math.sin(a) * DIST;
+    const { cell, walls, tint } = buildCellBase(cx, cy);
 
-    const capMat = new THREE.MeshPhysicalMaterial({
-      color: nav.primary ? 0xf2a819 : 0xf0bc55,
-      roughness: 0.4,
-      clearcoat: 0.55,
-      clearcoatRoughness: 0.3,
-      emissive: 0xffa200,
-      emissiveIntensity: 0,
+    /* glowing voxel cap plate — hover glow in the cell's own accent hue */
+    const capMat = new THREE.MeshStandardMaterial(capBaseOpts);
+    capMat.emissive = new THREE.Color().setHSL(tint.h, 0.9, 0.42);
+    const capCubes = [];
+    forHexGrid((gx, gy) => {
+      if (pointInHex(gx, gy, R * 0.68)) {
+        const l = (nav.primary ? 0.6 : 0.54) + (rnd() - 0.5) * 0.07;
+        capCubes.push({ x: gx, y: gy, z: VOX * 1.6, s: VOX, hsl: [tint.h, tint.s, l] });
+      }
     });
-    const cap = new THREE.Mesh(capGeo, capMat);
-    cap.position.z = WALL * 0.52 - 0.13;
+    const cap = new THREE.Mesh(mergeCubes(capCubes), capMat);
+    cell.add(cap);
+
+    /* pixel-font label + soft glow sprite that brightens on hover */
+    const accent = new THREE.Color().setHSL(tint.h, 0.95, 0.62);
     const label = new THREE.Mesh(
-      labelGeo,
+      new THREE.PlaneGeometry(1.72, 1.72),
       new THREE.MeshBasicMaterial({
-        map: labelTexture(nav.label, "#2a1b05"),
+        map: labelTexture(nav.label, accent.getStyle()),
         transparent: true,
         depthWrite: false,
       })
     );
-    label.position.z = cap.position.z + 0.17;
-    cell.add(cap, label);
+    label.position.z = VOX * 2.4;
+    const glow = new THREE.Mesh(
+      new THREE.PlaneGeometry(3.1, 3.1),
+      new THREE.MeshBasicMaterial({
+        map: glowSpriteTex,
+        color: accent,
+        transparent: true,
+        opacity: 0.0,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      })
+    );
+    glow.position.z = VOX * 2.1;
+    cell.add(label, glow);
 
-    cell.userData = { nav, capMat, hover: 0 };
+    cell.userData = { nav, capMat, glowMat: glow.material, hover: 0 };
     for (const m of [walls, cap, label]) m.userData.cellRef = cell;
     navCells.push(cell);
     rayTargets.push(walls, cap, label);
   }
 
-  /* Center cell wears the hornet mark like a wax seal */
-  const centerCap = (() => {
-    const { cell } = buildCell(0, 0);
-    const mat = new THREE.MeshPhysicalMaterial({
-      color: 0xf0b136,
-      roughness: 0.42,
-      clearcoat: 0.55,
-      clearcoatRoughness: 0.3,
-      emissive: 0xffa200,
-      emissiveIntensity: 0.06,
+  /* Center cell wears a pixel-art hornet sprite */
+  {
+    const { cell, tint } = buildCellBase(0, 0);
+    const capCubes = [];
+    forHexGrid((gx, gy) => {
+      if (pointInHex(gx, gy, R * 0.68)) {
+        capCubes.push({ x: gx, y: gy, z: VOX * 1.6, s: VOX, hsl: [0.11, 0.9, 0.55 + (rnd() - 0.5) * 0.06] });
+      }
     });
-    const cap = new THREE.Mesh(capGeo, mat);
-    cap.position.z = WALL * 0.52 - 0.13;
-    cell.add(cap);
-    logoTexture().then((tex) => {
-      if (!tex) return;
-      const logo = new THREE.Mesh(
-        labelGeo,
-        new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false })
-      );
-      logo.position.z = cap.position.z + 0.17;
-      cell.add(logo);
-    });
-    return mat;
-  })();
+    cell.add(new THREE.Mesh(mergeCubes(capCubes), new THREE.MeshStandardMaterial(capBaseOpts)));
+    const sprite = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.5, 1.5),
+      new THREE.MeshBasicMaterial({ map: hornetSpriteTexture(), transparent: true, depthWrite: false })
+    );
+    sprite.position.z = VOX * 2.4;
+    cell.add(sprite);
+  }
 
   /* Decorative cells */
   for (const d of DECOR_CELLS) {
     const a = (d.angle * Math.PI) / 180;
-    const { cell, walls } = buildCell(Math.cos(a) * DIST * d.rMul, Math.sin(a) * DIST * d.rMul);
-    walls.scale.z = 0.86 + rnd() * 0.22;
-    if (d.type === "honey") {
-      const cap = new THREE.Mesh(capGeo, honeyMat);
-      cap.position.z = WALL * 0.3 - 0.13;
-      cap.scale.z = 0.7;
-      cell.add(cap);
-    } else if (d.type === "brood") {
-      const cap = new THREE.Mesh(capGeo, broodMat);
-      cap.position.z = WALL * 0.62 - 0.13;
-      cell.add(cap);
+    const cx = Math.cos(a) * DIST * d.rMul;
+    const cy = Math.sin(a) * DIST * d.rMul;
+    const { cell, tint } = buildCellBase(cx, cy);
+    if (d.type === "glow") {
+      const cubes = [];
+      forHexGrid((gx, gy) => {
+        if (pointInHex(gx, gy, R * 0.68)) {
+          cubes.push({ x: gx, y: gy, z: VOX * 0.8, s: VOX, hsl: [tint.h, 1, 0.6 + (rnd() - 0.5) * 0.08] });
+        }
+      });
+      const mat = new THREE.MeshStandardMaterial({
+        vertexColors: true,
+        roughness: 0.3,
+        emissive: new THREE.Color().setHSL(tint.h, 1, 0.5),
+        emissiveIntensity: 0.55,
+      });
+      cell.add(new THREE.Mesh(mergeCubes(cubes), mat));
+      const glow = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.35, 2.35),
+        new THREE.MeshBasicMaterial({
+          map: glowSpriteTex,
+          color: new THREE.Color().setHSL(tint.h, 1, 0.55),
+          transparent: true,
+          opacity: 0.16,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        })
+      );
+      glow.position.z = VOX * 1.6;
+      cell.add(glow);
+      glowPulses.push({ mat, glowMat: glow.material, ph: rnd() * 7 });
+    } else if (d.type === "solid") {
+      const cubes = [];
+      forHexGrid((gx, gy) => {
+        if (pointInHex(gx, gy, R * 0.68)) {
+          cubes.push({ x: gx, y: gy, z: VOX * 1.4, s: VOX, hsl: [tint.h, 0.25, 0.24 + (rnd() - 0.5) * 0.05] });
+        }
+      });
+      cell.add(new THREE.Mesh(mergeCubes(cubes), wallMat));
     }
-    cell.position.z = (rnd() - 0.5) * 0.08;
+    cell.position.z = (rnd() - 0.5) * 0.06;
   }
 
-  /* Floating pollen motes for depth (skipped under reduced motion) */
-  let motes = null;
+  /* ---- Two tiny voxel hornets orbiting the comb ---- */
+  const hornets = [];
   if (!RM) {
-    const N = 34;
-    const pos = new Float32Array(N * 3);
-    const vel = new Float32Array(N);
-    for (let i = 0; i < N; i++) {
-      pos[i * 3] = (rnd() - 0.5) * 10.5;
-      pos[i * 3 + 1] = (rnd() - 0.5) * 8.5;
-      pos[i * 3 + 2] = -0.8 + rnd() * 3.2;
-      vel[i] = 0.06 + rnd() * 0.12;
+    for (let i = 0; i < 2; i++) {
+      const h = buildVoxelHornet();
+      h.group.scale.setScalar(0.34);
+      hive.add(h.group);
+      hornets.push({ ...h, ph: i * Math.PI, dir: i === 0 ? 1 : -1 });
     }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-    motes = new THREE.Points(
-      g,
-      new THREE.PointsMaterial({
-        color: 0xdca43e,
-        size: 0.055,
-        transparent: true,
-        opacity: 0.5,
-        depthWrite: false,
-        sizeAttenuation: true,
-      })
-    );
-    motes.userData.vel = vel;
-    scene.add(motes);
   }
 
-  /* ---- Pose: slight 3/4 view at rest so the depth reads immediately ---- */
-  const BASE_Y = 0.17;
-  const BASE_X = -0.1;
+  /* ---- Pose ---- */
+  const BASE_Y = 0.16;
+  const BASE_X = -0.09;
   hive.rotation.set(BASE_X, BASE_Y, 0);
 
   /* ---- Interaction ---- */
   const raycaster = new THREE.Raycaster();
   const ndc = new THREE.Vector2();
   let hovered = null;
-  let down = null; // {x, y, t, moved}
+  let down = null;
   let userYaw = 0;
   let userPitch = 0;
   let parX = 0;
@@ -369,7 +374,7 @@ async function main() {
     const h = host.clientHeight || 1;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    const fitR = 4.9; // cluster bounding radius + margin
+    const fitR = 4.95;
     const half = Math.tan((camera.fov * Math.PI) / 360);
     camera.position.set(0, 0.5, Math.max(fitR / half, fitR / (half * camera.aspect)) + 0.4);
     camera.lookAt(0, 0.05, 0);
@@ -389,7 +394,6 @@ async function main() {
     last = now;
     t += dt;
 
-    /* User spin slowly relaxes back to center after a pause */
     if (!down && now - lastInteract > 2500) {
       const decay = Math.exp(-dt / 3.5);
       userYaw *= decay;
@@ -402,8 +406,6 @@ async function main() {
       ty += Math.sin(t * 0.22) * 0.05;
       tx += Math.cos(t * 0.165) * 0.03;
       hive.position.y = Math.sin(t * 0.55) * 0.05;
-      glint.position.set(Math.cos(t * 0.3) * 3.2, 1.8 + Math.sin(t * 0.21) * 1.4, 4.4);
-      centerCap.emissiveIntensity = 0.07 + (Math.sin(t * 1.3) + 1) * 0.04;
     }
     const k = 1 - Math.exp(-dt * 4.5);
     hive.rotation.y += (ty - hive.rotation.y) * k;
@@ -412,23 +414,32 @@ async function main() {
     for (const cell of navCells) {
       const d = cell.userData;
       d.hover += ((cell === hovered ? 1 : 0) - d.hover) * Math.min(1, dt * 9);
-      cell.position.z = d.hover * 0.34;
+      cell.position.z = d.hover * 0.4;
       const s = 1 + d.hover * 0.05;
       cell.scale.set(s, s, 1);
       d.capMat.emissiveIntensity = d.hover * 0.55;
+      d.glowMat.opacity = d.hover * 0.38;
     }
 
-    if (motes) {
-      const pos = motes.geometry.attributes.position;
-      const vel = motes.userData.vel;
-      for (let i = 0; i < vel.length; i++) {
-        let y = pos.getY(i) + vel[i] * dt;
-        let x = pos.getX(i) + Math.sin(t * 0.5 + i) * 0.0009;
-        if (y > 4.4) y = -4.4;
-        pos.setY(i, y);
-        pos.setX(i, x);
+    if (!RM) {
+      for (const g of glowPulses) {
+        const pulse = 0.5 + 0.5 * Math.sin(t * 1.6 + g.ph);
+        g.mat.emissiveIntensity = 0.3 + pulse * 0.35;
+        g.glowMat.opacity = 0.1 + pulse * 0.16;
       }
-      pos.needsUpdate = true;
+      for (const h of hornets) {
+        const a = t * 0.45 * h.dir + h.ph;
+        h.group.position.set(
+          Math.cos(a) * 4.1,
+          Math.sin(a * 1.7) * 1.9 + Math.sin(t * 7 + h.ph) * 0.08,
+          1.1 + Math.sin(a * 0.9) * 0.7
+        );
+        h.group.rotation.y = -a * h.dir + (h.dir > 0 ? Math.PI : 0);
+        h.group.rotation.z = Math.sin(t * 6 + h.ph) * 0.12;
+        const flap = 0.7 + Math.abs(Math.sin(t * 26 + h.ph)) * 0.7;
+        h.wingL.scale.y = flap;
+        h.wingR.scale.y = flap;
+      }
     }
 
     renderer.render(scene, camera);
@@ -445,41 +456,178 @@ async function main() {
   });
   io.observe(host);
 
-  /* ---- Helpers ---- */
+  /* ======================================================================
+     Voxel builders & helpers
+     ====================================================================== */
 
-  function hexShape(r) {
-    const s = new THREE.Shape();
-    for (let i = 0; i < 6; i++) {
-      const a = (i * Math.PI) / 3;
-      const x = Math.cos(a) * r;
-      const y = Math.sin(a) * r;
-      if (i === 0) s.moveTo(x, y);
-      else s.lineTo(x, y);
+  /* Visit every voxel-grid point that could fall inside a cell hex */
+  function forHexGrid(fn) {
+    const n = Math.ceil(R / VOX) + 1;
+    for (let ix = -n; ix <= n; ix++) {
+      for (let iy = -n; iy <= n; iy++) {
+        fn(ix * VOX, iy * VOX);
+      }
     }
-    s.closePath();
-    return s;
   }
 
-  function hexRing(rOut, rIn) {
-    const s = hexShape(rOut);
-    const hole = new THREE.Path();
-    for (let i = 0; i < 6; i++) {
-      const a = (i * Math.PI) / 3;
-      const x = Math.cos(a) * rIn;
-      const y = Math.sin(a) * rIn;
-      if (i === 0) hole.moveTo(x, y);
-      else hole.lineTo(x, y);
+  /* Flat-top hex (vertices at 0°, 60°, …) point-inside test */
+  function pointInHex(px, py, r) {
+    const a = r * Math.cos(Math.PI / 6);
+    for (let k = 0; k < 6; k++) {
+      const ang = Math.PI / 6 + (k * Math.PI) / 3;
+      if (px * Math.cos(ang) + py * Math.sin(ang) > a) return false;
     }
-    hole.closePath();
-    s.holes.push(hole);
-    return s;
+    return true;
   }
 
-  /* ShapeGeometry UVs equal local x/y — remap so the texture spans the hex */
-  function fitShapeUVs(geo, r, tex) {
-    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-    tex.repeat.set(1 / (2 * r), 1 / (2 * r));
-    tex.offset.set(0.5, 0.5);
+  /* Merge axis-aligned cubes into one geometry with per-vertex colors */
+  function mergeCubes(cubes) {
+    const box = new THREE.BoxGeometry(1, 1, 1);
+    const bp = box.attributes.position.array;
+    const bn = box.attributes.normal.array;
+    const bi = box.index.array;
+    const V = bp.length / 3;
+    const pos = new Float32Array(cubes.length * bp.length);
+    const nrm = new Float32Array(cubes.length * bp.length);
+    const col = new Float32Array(cubes.length * bp.length);
+    const idx = new Uint32Array(cubes.length * bi.length);
+    const c = new THREE.Color();
+    cubes.forEach((cube, ci) => {
+      const sx = cube.sx || cube.s;
+      const sy = cube.sy || cube.s;
+      const sz = cube.sz || cube.s;
+      c.setHSL(cube.hsl[0], cube.hsl[1], cube.hsl[2]);
+      for (let v = 0; v < V; v++) {
+        const o = (ci * V + v) * 3;
+        pos[o] = bp[v * 3] * sx + cube.x;
+        pos[o + 1] = bp[v * 3 + 1] * sy + cube.y;
+        pos[o + 2] = bp[v * 3 + 2] * sz + cube.z;
+        nrm[o] = bn[v * 3];
+        nrm[o + 1] = bn[v * 3 + 1];
+        nrm[o + 2] = bn[v * 3 + 2];
+        col[o] = c.r;
+        col[o + 1] = c.g;
+        col[o + 2] = c.b;
+      }
+      for (let i = 0; i < bi.length; i++) {
+        idx[ci * bi.length + i] = bi[i] + ci * V;
+      }
+    });
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute("normal", new THREE.BufferAttribute(nrm, 3));
+    geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+    geo.setIndex(new THREE.BufferAttribute(idx, 1));
+    return geo;
+  }
+
+  /* A ~30-cube hornet: striped voxel body, dark head, flappy wings */
+  function buildVoxelHornet() {
+    const g = new THREE.Group();
+    const u = 0.24;
+    const cubes = [];
+    const amber = [0.11, 0.95, 0.55];
+    const dark = [0.08, 0.5, 0.08];
+    /* abdomen stripes (x: tail → head), 2×2 columns */
+    const cols = [dark, amber, dark, amber];
+    cols.forEach((hsl, i) => {
+      for (const y of [0, 1]) {
+        for (const z of [0, 1]) {
+          cubes.push({ x: i * u, y: y * u, z: z * u, s: u, hsl });
+        }
+      }
+    });
+    /* stinger */
+    cubes.push({ x: -u, y: u * 0.5, z: u * 0.5, s: u * 0.6, hsl: dark });
+    /* thorax */
+    for (const y of [0, 1]) {
+      for (const z of [0, 1]) {
+        cubes.push({ x: 4 * u, y: y * u, z: z * u, s: u, hsl: [0.09, 0.65, 0.28] });
+      }
+    }
+    /* head + eyes */
+    for (const y of [0, 1]) {
+      for (const z of [0, 1]) {
+        cubes.push({ x: 5 * u, y: y * u, z: z * u, s: u * 0.92, hsl: dark });
+      }
+    }
+    cubes.push({ x: 5.3 * u, y: u * 1.1, z: -u * 0.1, s: u * 0.34, hsl: [0.6, 0.9, 0.75] });
+    cubes.push({ x: 5.3 * u, y: u * 1.1, z: u * 1.1, s: u * 0.34, hsl: [0.6, 0.9, 0.75] });
+    const body = new THREE.Mesh(
+      mergeCubes(cubes),
+      new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.55 })
+    );
+    body.position.set(-2.5 * u, -u, -u * 0.5); /* roughly center the body */
+    g.add(body);
+
+    const wingMat = new THREE.MeshBasicMaterial({
+      color: 0xdfe8ff,
+      transparent: true,
+      opacity: 0.55,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+    const wingGeo = new THREE.PlaneGeometry(u * 2.6, u * 1.4);
+    const wingL = new THREE.Mesh(wingGeo, wingMat);
+    wingL.position.set(u * 0.6, u * 1.4, -u * 0.7);
+    wingL.rotation.set(0.9, 0, 0.25);
+    const wingR = new THREE.Mesh(wingGeo, wingMat);
+    wingR.position.set(u * 0.6, u * 1.4, u * 1.2);
+    wingR.rotation.set(-0.9, 0, 0.25);
+    g.add(wingL, wingR);
+    return { group: g, wingL, wingR };
+  }
+
+  /* Neon pixel label: blurred color glow behind crisp white pixel text */
+  function labelTexture(text, glowColor) {
+    const size = 512;
+    const c = document.createElement("canvas");
+    c.width = c.height = size;
+    const g = c.getContext("2d");
+    g.textAlign = "center";
+    g.textBaseline = "middle";
+    const upper = text.toUpperCase();
+    let px = 54;
+    do {
+      g.font = `400 ${px}px "Press Start 2P", monospace`;
+      if (g.measureText(upper).width <= 430) break;
+      px -= 4;
+    } while (px > 22);
+    g.shadowColor = glowColor;
+    g.shadowBlur = 16;
+    g.fillStyle = glowColor;
+    g.fillText(upper, size / 2, size / 2 + 4);
+    g.fillText(upper, size / 2, size / 2 + 4);
+    g.shadowBlur = 0;
+    g.fillStyle = "#ffffff";
+    g.fillText(upper, size / 2, size / 2 + 4);
+    g.fillText(upper, size / 2, size / 2 + 4);
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.magFilter = THREE.NearestFilter;
+    tex.anisotropy = 4;
+    return tex;
+  }
+
+  /* 16×16 pixel-art hornet, drawn crisp for the center cell */
+  function hornetSpriteTexture() {
+    const P = pixelHornetMap();
+    const cellPx = 20;
+    const c = document.createElement("canvas");
+    c.width = c.height = 16 * cellPx;
+    const g = c.getContext("2d");
+    for (let y = 0; y < 16; y++) {
+      for (let x = 0; x < 16; x++) {
+        const col = P[y][x];
+        if (!col) continue;
+        g.fillStyle = col;
+        g.fillRect(x * cellPx, y * cellPx, cellPx, cellPx);
+      }
+    }
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.magFilter = THREE.NearestFilter;
+    return tex;
   }
 
   function radialTexture(inner, outer, size = 256) {
@@ -494,61 +642,57 @@ async function main() {
     return new THREE.CanvasTexture(c);
   }
 
-  function labelTexture(text, color) {
-    const size = 512;
+  /* Big soft multi-color gradient blob for the backdrop halo */
+  function gradientHaloTexture(size = 512) {
     const c = document.createElement("canvas");
     c.width = c.height = size;
     const g = c.getContext("2d");
-    g.textAlign = "center";
-    g.textBaseline = "middle";
-    g.fillStyle = color;
-    try {
-      g.letterSpacing = "5px";
-    } catch (e) {
-      /* older browsers: no tracking, still fine */
+    const blobs = [
+      ["rgba(245,166,35,0.55)", 0.32, 0.3, 0.42],
+      ["rgba(255,45,146,0.4)", 0.72, 0.62, 0.4],
+      ["rgba(138,99,255,0.35)", 0.34, 0.74, 0.38],
+    ];
+    for (const [col, bx, by, br] of blobs) {
+      const grad = g.createRadialGradient(size * bx, size * by, 8, size * bx, size * by, size * br);
+      grad.addColorStop(0, col);
+      grad.addColorStop(1, "rgba(0,0,0,0)");
+      g.fillStyle = grad;
+      g.fillRect(0, 0, size, size);
     }
-    let px = 92;
-    const upper = text.toUpperCase();
-    do {
-      g.font = `700 ${px}px "Space Grotesk", ui-sans-serif, sans-serif`;
-      if (g.measureText(upper).width <= 410) break;
-      px -= 4;
-    } while (px > 40);
-    g.fillText(upper, size / 2, size / 2 + 4);
-    const tex = new THREE.CanvasTexture(c);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.anisotropy = 4;
-    return tex;
-  }
-
-  function logoTexture() {
-    return new Promise((resolve) => {
-      const img = new Image();
-      const timer = setTimeout(() => resolve(fallbackMark()), 2000);
-      img.onload = () => {
-        clearTimeout(timer);
-        const size = 512;
-        const c = document.createElement("canvas");
-        c.width = c.height = size;
-        const g = c.getContext("2d");
-        g.drawImage(img, size * 0.14, size * 0.14, size * 0.72, size * 0.72);
-        const tex = new THREE.CanvasTexture(c);
-        tex.colorSpace = THREE.SRGBColorSpace;
-        resolve(tex);
-      };
-      img.onerror = () => {
-        clearTimeout(timer);
-        resolve(fallbackMark());
-      };
-      img.src = "assets/hornet-mark.svg";
-    });
-
-    function fallbackMark() {
-      return labelTexture("HH", "#2a1b05");
-    }
+    return new THREE.CanvasTexture(c);
   }
 
   function clamp(v, lo, hi) {
     return Math.min(hi, Math.max(lo, v));
   }
+}
+
+/* Shared 16×16 pixel hornet (also mirrored by assets/favicon.svg).
+   Facing right: stinger left, wings up, antenna up-right, legs below. */
+function pixelHornetMap() {
+  const COLORS = {
+    K: "#15100a", /* outline / stripes */
+    A: "#f5a623", /* amber */
+    W: "rgba(223,232,255,0.85)", /* wings */
+    E: "#ffffff", /* eye */
+  };
+  const ROWS = [
+    "................",
+    "......WWW.......",
+    ".....WWWWW....K.",
+    ".....WWWWW...K..",
+    "......WWW....K..",
+    ".............K..",
+    "...AKAAKKKKKK...",
+    "..AAKAAKKKKKEK..",
+    "KKAAKAAKKKKKKK..",
+    "..AAKAAKKKKKK...",
+    "...AKAA.K.K.....",
+    "........K.K.....",
+    "................",
+    "................",
+    "................",
+    "................",
+  ];
+  return ROWS.map((row) => [...row].map((ch) => COLORS[ch] || null));
 }
