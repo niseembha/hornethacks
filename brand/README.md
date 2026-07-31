@@ -15,11 +15,11 @@ them), plus ready-to-drop PNG exports.
 | `monogram-hh.svg` | The HH initials in Silkscreen | Tiny spaces where the full wordmark won't fit |
 | `png/` | Transparent PNG exports of each mark | Anywhere SVG isn't accepted |
 
-`*-light.svg` variants swap the white pixels for near-black (`#0a0a0a`) and
-the emerald for the deeper `#0e9f6e`, for use on white or light surfaces.
-The default marks are drawn for dark backgrounds. The bee itself works on
-both — its black outline carries the shape on light surfaces and melts into
-dark ones by design.
+Every mark uses the one brand palette — white `#ededed`, emerald `#34d399`,
+black `#000000` — and every letter carries a 1px black pixel outline, the
+same treatment as the bee. That outline is what lets a single set of files
+work anywhere: it melts into the site's dark surfaces and carries the
+letterforms on light ones.
 
 Ground rules: don't recolor, restyle, outline, rotate, or add effects to the
 marks; don't set the wordmark in another font. Keep clear space around every
