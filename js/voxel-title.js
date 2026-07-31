@@ -11,14 +11,19 @@
    ========================================================================== */
 (function () {
   var host = document.getElementById("voxel-title");
-  var heroTitle = document.querySelector(".hero h1");
-  if (!host || !window.CanvasRenderingContext2D) return;
+  if (!host) return;
+  if (!window.CanvasRenderingContext2D) {
+    document.documentElement.classList.add("no-voxel");
+    return;
+  }
 
   var TEXT_A = "HORNET";
   var TEXT_B = "HACKS";
   var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var canvas = document.createElement("canvas");
+  canvas.width = 0; /* keep the pre-draw canvas out of layout — the host's */
+  canvas.height = 0; /* aspect-ratio box alone reserves the title's space */
   host.appendChild(canvas);
   var ctx = canvas.getContext("2d");
 
@@ -342,18 +347,22 @@
     io.observe(host);
   }
 
+  /* CSS reserves the canvas's slot from first paint (aspect-ratio on the
+     host), so a failed init must hand the slot back to the text h1 */
+  function fallback() {
+    document.documentElement.classList.add("no-voxel");
+  }
+
   function start() {
     try {
       rasterize();
-      if (!gw || !gh) return; /* raster failed → keep the text headline */
-      if (heroTitle) heroTitle.classList.add("replaced-by-voxel");
-      host.classList.add("active");
+      if (!gw || !gh) return fallback(); /* raster failed → text headline */
       reveal();
       new ResizeObserver(function () {
         draw(performance.now());
       }).observe(host);
     } catch (err) {
-      /* canvas blocked (e.g. privacy mode) → text headline stays */
+      fallback(); /* canvas blocked (e.g. privacy mode) → text headline */
     }
   }
 

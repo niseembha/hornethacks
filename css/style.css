@@ -261,6 +261,9 @@ canvas {
   font-family: var(--pixel);
   font-size: 0.6875rem;
   font-weight: 400;
+  /* numeric line-height keeps the box the same before/after Silkscreen
+     loads, so the page never reflows on font arrival */
+  line-height: 1.6;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -475,8 +478,12 @@ canvas {
   color: transparent;
   filter: drop-shadow(0 0 26px rgba(52, 211, 153, 0.3));
 }
-/* Once the voxel canvas renders, the text h1 stays for screen readers only */
-.hero h1.replaced-by-voxel {
+/* With JS, the canvas wordmark owns the title slot from first paint; its
+   height is reserved up front via aspect-ratio so nothing below shifts
+   when the canvas draws. The text h1 stays in the page for screen
+   readers, SEO, and no-JS; voxel-title.js sets .no-voxel on <html> if
+   canvas init fails, restoring the text headline. */
+html.js:not(.no-voxel) .hero h1 {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -489,11 +496,14 @@ canvas {
 .voxel-title {
   display: none;
   justify-content: center;
+  align-items: center;
   margin: 0 auto 1.6rem;
   width: min(860px, 100%);
 }
-.voxel-title.active {
+html.js:not(.no-voxel) .voxel-title {
   display: flex;
+  /* the 63x5-block raster: (63+2 side pad) : (5 + 0.5 extrusion drop) */
+  aspect-ratio: 65 / 5.5;
 }
 .voxel-title canvas {
   filter: drop-shadow(0 6px 30px rgba(52, 211, 153, 0.22));
@@ -968,10 +978,12 @@ html.js .reveal.in {
   transform: none;
 }
 
-/* Reserve the hero eyebrow's line box while it types itself out */
+/* Reserve the hero eyebrow's line box while it types itself out —
+   must equal the .eyebrow line-height so the first typed character
+   doesn't grow the line */
 .hero .eyebrow [data-type] {
   display: inline-block;
-  min-height: 1.2em;
+  min-height: 1.6em;
 }
 
 /* The pixel hornet in the header buzzes when you poke it */
