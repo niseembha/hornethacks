@@ -27,6 +27,14 @@
   var gh = 0;
   var splitX = 0;
 
+  /* Live-interaction state: cursor-proximity glow + idle glints */
+  var curS = 8; /* block size of the last draw, for pointer→block mapping */
+  var pointer = null; /* {x, y} in block coordinates */
+  var glints = []; /* {x, y, t0} short-lived bright blocks */
+  var idleRaf = 0;
+  var lastGlint = 0;
+  var lastIdleDraw = 0;
+
   /* Deterministic per-block jitter so the mosaic is stable */
   function hash(x, y) {
     var h = Math.imul(x + 1, 374761393) + Math.imul(y + 1, 668265263);
@@ -79,8 +87,29 @@
   }
 
   /* ---- Block face colors (light from the top-left) ---- */
-  function frontColor(green, x, y) {
-    var j = (hash(x, y) - 0.5) * 8;
+  /* Brightness boost from the cursor and any active glints */
+  function liveBoost(x, y, now) {
+    var b = 0;
+    if (pointer) {
+      var dx = x - pointer.x;
+      var dy = (y - pointer.y) * 1.5;
+      var d = Math.sqrt(dx * dx + dy * dy);
+      if (d < 5.5) b += (1 - d / 5.5) * 17;
+    }
+    for (var i = 0; i < glints.length; i++) {
+      var gl = glints[i];
+      var age = (now - gl.t0) / 750;
+      if (age < 0 || age > 1) continue;
+      var gx = x - gl.x;
+      var gy = y - gl.y;
+      var gd = Math.sqrt(gx * gx + gy * gy);
+      if (gd < 1.8) b += Math.sin(age * Math.PI) * (1 - gd / 1.8) * 15;
+    }
+    return b;
+  }
+
+  function frontColor(green, x, y, boost) {
+    var j = (hash(x, y) - 0.5) * 8 + (boost || 0);
     var sparkle = hash(x * 3 + 7, y * 5 + 3) > 0.94 ? 10 : 0;
     return green
       ? "hsl(160,62%," + (52 + j + sparkle) + "%)"
@@ -112,9 +141,11 @@
      behind the center of the word, so letters left of center show their
      right faces, letters right of center show their left faces, and the
      middle sits flat — a natural centered curve. */
-  function draw(progress) {
+  function draw(progress, now) {
+    now = now || 0;
     var wAvail = host.clientWidth || 300;
     var s = Math.max(3, Math.floor(wAvail / (gw + 2)));
+    curS = s;
     var oxMax = s * 1.1; /* horizontal depth at the outer edges */
     var oy = Math.max(2, Math.round(s * 0.5)); /* constant downward drop */
     var W = gw * s + 2;
@@ -153,7 +184,7 @@
           } else {
             ctx.fillStyle = "rgba(4,12,9,0.9)"; /* thin mortar seam */
             ctx.fillRect(px, py, s, s);
-            ctx.fillStyle = frontColor(green, x, y);
+            ctx.fillStyle = frontColor(green, x, y, liveBoost(x, y, now));
             ctx.fillRect(px + 0.5, py + 0.5, s - 1, s - 1);
           }
         }
@@ -170,9 +201,62 @@
     var DUR = 750;
     (function step(now) {
       var p = Math.min(1, (now - t0) / DUR);
-      draw(p * p * (3 - 2 * p) * 1.15); /* slight overshoot finishes the corner */
+      draw(p * p * (3 - 2 * p) * 1.15, now); /* slight overshoot finishes the corner */
       if (p < 1) requestAnimationFrame(step);
+      else startIdle();
     })(t0);
+  }
+
+  /* After the build-in: blocks glow near the cursor, and random glints
+     shimmer across the mark while it's on screen. ~30fps, paused offscreen. */
+  function startIdle() {
+    if (RM) return;
+
+    canvas.addEventListener("pointermove", function (e) {
+      pointer = { x: e.offsetX / curS, y: e.offsetY / curS };
+    });
+    canvas.addEventListener("pointerdown", function (e) {
+      pointer = { x: e.offsetX / curS, y: e.offsetY / curS };
+    });
+    canvas.addEventListener("pointerleave", function () {
+      pointer = null;
+    });
+
+    function spawnGlint(now) {
+      for (var tries = 0; tries < 10; tries++) {
+        var x = Math.floor(Math.random() * gw);
+        var y = Math.floor(Math.random() * gh);
+        if (grid[y][x]) {
+          glints.push({ x: x, y: y, t0: now });
+          return;
+        }
+      }
+    }
+
+    function tick(now) {
+      idleRaf = requestAnimationFrame(tick);
+      if (now - lastIdleDraw < 33) return; /* ~30fps is plenty */
+      lastIdleDraw = now;
+      if (now - lastGlint > 500 + hash(now | 0, 3) * 900) {
+        spawnGlint(now);
+        lastGlint = now;
+      }
+      glints = glints.filter(function (g) {
+        return now - g.t0 < 750;
+      });
+      draw(1, now);
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting && !idleRaf) {
+        lastIdleDraw = 0;
+        idleRaf = requestAnimationFrame(tick);
+      } else if (!entries[0].isIntersecting && idleRaf) {
+        cancelAnimationFrame(idleRaf);
+        idleRaf = 0;
+      }
+    });
+    io.observe(host);
   }
 
   function start() {

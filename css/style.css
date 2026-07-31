@@ -565,22 +565,23 @@ canvas {
   bottom: 4%;
   animation: float-a 9s ease-in-out 1.2s infinite;
 }
+/* Floats include --par-x/--par-y so the cursor parallax composes in */
 @keyframes float-a {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translate(var(--par-x, 0px), var(--par-y, 0px));
   }
   50% {
-    transform: translateY(-14px);
+    transform: translate(var(--par-x, 0px), calc(var(--par-y, 0px) - 14px));
   }
 }
 @keyframes float-b {
   0%,
   100% {
-    transform: translateY(0) rotate(0.001deg);
+    transform: translate(var(--par-x, 0px), var(--par-y, 0px));
   }
   50% {
-    transform: translateY(10px);
+    transform: translate(var(--par-x, 0px), calc(var(--par-y, 0px) + 10px));
   }
 }
 @media (max-width: 760px) {
@@ -909,6 +910,152 @@ canvas {
 .site-footer .fine .link-quiet {
   font-size: inherit;
   font-family: var(--mono);
+}
+
+/* ---- Alive: entrances, reveals, micro-interactions ----------------------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hero .status-pill {
+  animation: rise 0.55s 0.05s ease-out both;
+}
+.hero .eyebrow {
+  animation: rise 0.55s 0.15s ease-out both;
+}
+.hero h1 {
+  animation: rise 0.55s 0.2s ease-out both;
+}
+.hero .lede {
+  animation: rise 0.55s 0.3s ease-out both;
+}
+.hero .event-meta {
+  animation: rise 0.55s 0.4s ease-out both;
+}
+.hero .cta-row {
+  animation: rise 0.55s 0.5s ease-out both;
+}
+.page-hero .eyebrow {
+  animation: rise 0.5s 0.05s ease-out both;
+}
+.page-hero h1 {
+  animation: rise 0.5s 0.12s ease-out both;
+}
+.page-hero .lede {
+  animation: rise 0.5s 0.2s ease-out both;
+}
+
+/* Scroll reveals (motion.js adds .reveal/.in; html.js guard keeps no-JS visible) */
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+  transition-delay: var(--reveal-delay, 0s);
+}
+html.js .reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Typing caret for the hero eyebrow */
+.hero .eyebrow [data-type] {
+  display: inline-block;
+  min-height: 1.2em;
+}
+[data-type].typing::after {
+  content: "▮";
+  margin-left: 0.35em;
+  color: var(--green);
+  animation: blink 0.9s steps(1) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* The pixel hornet in the header buzzes when you poke it */
+@keyframes buzz {
+  0%,
+  100% {
+    transform: none;
+  }
+  20% {
+    transform: translate(-1px, 1px) rotate(-4deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(4deg);
+  }
+  60% {
+    transform: translate(-1px, -1px) rotate(-3deg);
+  }
+  80% {
+    transform: translate(1px, 1px) rotate(3deg);
+  }
+}
+.brand:hover svg,
+.brand:focus-visible svg {
+  animation: buzz 0.45s linear;
+}
+
+/* Card cube icons pop on hover */
+.card .cell-icon {
+  transition: transform 0.2s, color 0.2s;
+}
+.card:hover .cell-icon {
+  transform: translateY(-3px) scale(1.1);
+  color: var(--green-bright);
+}
+
+/* Button cube gives a little hop */
+.btn .hex {
+  transition: transform 0.2s;
+}
+.btn:hover .hex {
+  transform: translateY(-2px) rotate(-8deg);
+}
+
+/* The band's gradient hairline drifts slowly */
+.band::after {
+  background-size: 220% 100%;
+  animation: grad-slide 7s ease-in-out infinite alternate;
+}
+@keyframes grad-slide {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
+}
+
+/* FAQ answers ease open */
+.faq details[open] p {
+  animation: faq-in 0.28s ease-out both;
+}
+@keyframes faq-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* The occasional hero flyby hornet (spawned by motion.js) */
+.flyby {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  color: var(--text);
+  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.35));
+  will-change: transform;
 }
 
 /* ---- Motion ------------------------------------------------------------- */
