@@ -1003,8 +1003,9 @@ html.js .reveal.in {
 .brand:hover svg,
 .brand:focus-visible svg {
   /* the flap keyframes flip the --fw-a/--fw-b wing-frame opacities, which
-     inherit into the #hh-mark <use> shadow DOM */
-  animation: buzz 0.45s linear, hh-flap-brand 160ms linear infinite;
+     inherit into the #hh-mark <use> shadow DOM; 3 cycles x 150ms matches
+     the 0.45s buzz so wings stop when the shake stops */
+  animation: buzz 0.45s linear, hh-flap-brand 150ms linear 3;
 }
 @keyframes hh-flap-brand {
   0%,
