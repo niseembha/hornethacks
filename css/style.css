@@ -506,10 +506,11 @@ html.js:not(.no-voxel) .voxel-title {
   aspect-ratio: 65 / 5.5;
 }
 @media (max-width: 760px) {
-  /* phones: let the wordmark bleed to the screen edges for maximum size */
+  /* phones: bleed the wordmark through most of the page padding, keeping
+     a slim 0.75rem breathing gap at each screen edge */
   .voxel-title {
-    width: calc(100% + var(--pad) * 2);
-    margin-inline: calc(var(--pad) * -1);
+    width: calc(100% + (var(--pad) - 0.75rem) * 2);
+    margin-inline: calc(0.75rem - var(--pad));
   }
 }
 .voxel-title canvas {
