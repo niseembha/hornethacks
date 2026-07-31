@@ -338,8 +338,8 @@ canvas {
   color: var(--text);
 }
 .brand svg {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 2.5rem;
+  height: 2.25rem;
   flex: none;
   color: var(--text); /* pixel hornet picks this up via currentColor */
   image-rendering: pixelated;
@@ -1050,8 +1050,8 @@ html.js .reveal.in {
   position: absolute;
   top: 0;
   left: 0;
-  width: 30px;
-  height: 30px;
+  width: 38px;
+  height: 34px;
   color: var(--text);
   filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.35));
   will-change: transform;
