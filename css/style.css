@@ -565,23 +565,22 @@ canvas {
   bottom: 4%;
   animation: float-a 9s ease-in-out 1.2s infinite;
 }
-/* Floats include --par-x/--par-y so the cursor parallax composes in */
 @keyframes float-a {
   0%,
   100% {
-    transform: translate(var(--par-x, 0px), var(--par-y, 0px));
+    transform: translateY(0);
   }
   50% {
-    transform: translate(var(--par-x, 0px), calc(var(--par-y, 0px) - 14px));
+    transform: translateY(-14px);
   }
 }
 @keyframes float-b {
   0%,
   100% {
-    transform: translate(var(--par-x, 0px), var(--par-y, 0px));
+    transform: translateY(0);
   }
   50% {
-    transform: translate(var(--par-x, 0px), calc(var(--par-y, 0px) + 10px));
+    transform: translateY(10px);
   }
 }
 @media (max-width: 760px) {

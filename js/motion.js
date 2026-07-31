@@ -53,25 +53,6 @@
     }, 42);
   }
 
-  /* ---- Cursor parallax on the floating wireframe cubes ---- */
-  var cubes = document.querySelectorAll(".vcube");
-  if (cubes.length && !RM && window.matchMedia("(pointer: fine)").matches) {
-    var depths = [16, 10, 7];
-    window.addEventListener(
-      "pointermove",
-      function (e) {
-        var nx = e.clientX / window.innerWidth - 0.5;
-        var ny = e.clientY / window.innerHeight - 0.5;
-        cubes.forEach(function (c, i) {
-          var d = depths[i % depths.length];
-          c.style.setProperty("--par-x", (nx * d).toFixed(1) + "px");
-          c.style.setProperty("--par-y", (ny * d).toFixed(1) + "px");
-        });
-      },
-      { passive: true }
-    );
-  }
-
   /* ---- Every so often, a tiny hornet buzzes across the hero ---- */
   var decor = document.querySelector(".hero .voxel-decor");
   if (decor && !RM && document.getElementById("hh-mark") !== null) {
