@@ -38,7 +38,7 @@
   /* Build animation: blocks fly in from the viewer's side of the z-axis —
      big, close, and faint — and shrink down onto the page with a squash
      as they land, radiating from the center outward */
-  var GROW = 420; /* ms a block spends approaching */
+  var GROW = 560; /* ms a block spends approaching */
   var FLASH = 260; /* ms of landing glow */
   var buildDelay = null; /* per-block start time offset */
   var buildTotal = 0;
@@ -243,14 +243,14 @@
     /* incoming blocks start large and faint (close to the viewer) and
        shrink onto the page, squashing slightly below full size on impact
        before settling — trailed by a bigger ghost of where they just were */
-    var START = 2.6; /* how "close" a block starts, as a scale factor */
+    var START = 6; /* how "close" a block starts, as a scale factor */
     for (var f = 0; f < emerging.length; f++) {
       var b = emerging[f];
       var u = b.t - 1;
       var c1 = 1.70158;
       var e = 1 + (c1 + 1) * u * u * u + c1 * u * u; /* easeOutBack 0 → 1 */
       var sc = Math.max(0.01, 1 + (START - 1) * (1 - e)); /* START → 1, dip on impact */
-      var alpha = Math.min(1, b.t / 0.35); /* comes into focus as it nears */
+      var alpha = Math.min(1, 0.12 + b.t / 0.55); /* comes into focus as it nears */
       var cx = b.x * s + s / 2;
       var cy = b.y * s + s / 2;
 
