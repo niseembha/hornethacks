@@ -333,13 +333,13 @@ canvas {
   text-decoration: none;
   font-family: var(--pixel);
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 1rem;
   letter-spacing: 0.01em;
   color: var(--text);
 }
 .brand svg {
-  width: 2.5rem;
-  height: 1.875rem;
+  width: 2rem;
+  height: 1.5rem;
   flex: none;
   color: var(--text); /* pixel hornet picks this up via currentColor */
   image-rendering: pixelated;
