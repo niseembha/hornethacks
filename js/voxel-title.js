@@ -35,9 +35,10 @@
   var lastGlint = 0;
   var lastIdleDraw = 0;
 
-  /* Build animation: blocks emerge from the page depth (z-axis), scaling
-     up into their slot with a pop, radiating from the center outward */
-  var GROW = 420; /* ms a block spends emerging */
+  /* Build animation: blocks fly in from the viewer's side of the z-axis —
+     big, close, and faint — and shrink down onto the page with a squash
+     as they land, radiating from the center outward */
+  var GROW = 420; /* ms a block spends approaching */
   var FLASH = 260; /* ms of landing glow */
   var buildDelay = null; /* per-block start time offset */
   var buildTotal = 0;
@@ -239,21 +240,24 @@
       }
     }
 
-    /* emerging blocks scale up out of the page depth, with a soft ghost
-       of where they just were, and a slight overshoot pop as they land */
+    /* incoming blocks start large and faint (close to the viewer) and
+       shrink onto the page, squashing slightly below full size on impact
+       before settling — trailed by a bigger ghost of where they just were */
+    var START = 2.6; /* how "close" a block starts, as a scale factor */
     for (var f = 0; f < emerging.length; f++) {
       var b = emerging[f];
       var u = b.t - 1;
       var c1 = 1.70158;
-      var sc = Math.max(0, 1 + (c1 + 1) * u * u * u + c1 * u * u); /* easeOutBack */
-      var alpha = Math.min(1, b.t / 0.25); /* materialize out of the dark */
+      var e = 1 + (c1 + 1) * u * u * u + c1 * u * u; /* easeOutBack 0 → 1 */
+      var sc = Math.max(0.01, 1 + (START - 1) * (1 - e)); /* START → 1, dip on impact */
+      var alpha = Math.min(1, b.t / 0.35); /* comes into focus as it nears */
       var cx = b.x * s + s / 2;
       var cy = b.y * s + s / 2;
 
       ctx.save();
-      ctx.globalAlpha = alpha * 0.25; /* depth ghost, one step behind */
+      ctx.globalAlpha = alpha * 0.18; /* ghost trailing closer to the viewer */
       ctx.translate(cx, cy);
-      ctx.scale(Math.max(0.01, sc * 0.65), Math.max(0.01, sc * 0.65));
+      ctx.scale(sc * 1.45, sc * 1.45);
       ctx.translate(-cx, -cy);
       drawFront(b.x, b.y, s, 6, 0);
       ctx.restore();
@@ -261,7 +265,7 @@
       ctx.save();
       ctx.globalAlpha = alpha;
       ctx.translate(cx, cy);
-      ctx.scale(Math.max(0.01, sc), Math.max(0.01, sc));
+      ctx.scale(sc, sc);
       ctx.translate(-cx, -cy);
       drawSides(b.x, b.y, s, oy, b.ox, 0);
       drawFront(b.x, b.y, s, 8, 0);
