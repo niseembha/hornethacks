@@ -8,10 +8,11 @@
   <meta property="og:title" content="HornetHacks — a 12-hour high school hackathon">
   <meta property="og:description" content="Sat, Oct 10, 2026 · Valdes STEM + Innovation Center at Greenhill School, Addison, TX. Twelve hours to build something with a sting.">
   <meta property="og:type" content="website">
-  <meta name="theme-color" content="#0a0a0a">
+  <meta name="theme-color" content="#000000">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/geist-sans-latin-400-normal.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/geist-sans-latin-700-normal.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/geist-mono-latin-400-normal.woff2">
   <link rel="stylesheet" href="css/style.css">
   <script>document.documentElement.classList.add("js");</script>
   <script type="application/ld+json">
@@ -43,230 +44,54 @@
 </head>
 <body>
 
-  <!-- Reusable SVG symbols (hornet mark + hex icons) -->
-  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
-    <defs>
-      <clipPath id="hh-ab">
-        <path d="M11 32c0-4.8 4.4-8 10.5-8 5 0 8.6 2.7 9.7 8-1.1 5.3-4.7 8-9.7 8-6.1 0-10.5-3.2-10.5-8z"/>
-      </clipPath>
-      <symbol id="hh-mark" viewBox="0 0 64 64">
-        <g transform="rotate(-18 32 32)">
-          <ellipse cx="30" cy="19.6" rx="10.2" ry="4.3" transform="rotate(-30 30 19.6)" fill="currentColor" opacity="0.26"/>
-          <ellipse cx="34" cy="21" rx="8.6" ry="3.7" transform="rotate(-12 34 21)" fill="currentColor" opacity="0.16"/>
-          <path d="M3 32l9-2.6v5.2z" fill="currentColor"/>
-          <path d="M11 32c0-4.8 4.4-8 10.5-8 5 0 8.6 2.7 9.7 8-1.1 5.3-4.7 8-9.7 8-6.1 0-10.5-3.2-10.5-8z" fill="#f0a500" stroke="currentColor" stroke-width="1.1"/>
-          <g clip-path="url(#hh-ab)" fill="#0a0a0a">
-            <path d="M15.5 23.5h4.2l-1.6 17h-4.2z"/>
-            <path d="M22.3 23.5h4.2l-1.6 17h-4.2z"/>
-          </g>
-          <ellipse cx="34.8" cy="32" rx="6.2" ry="6.8" fill="currentColor"/>
-          <circle cx="45.6" cy="32" r="4.7" fill="currentColor"/>
-          <circle cx="47.2" cy="30.4" r="1.5" fill="#f0a500"/>
-          <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
-            <path d="M48.2 28.4c2-2.6 4.6-3.9 7.4-4.1"/>
-            <path d="M49.3 30.1c2.4-1.7 5-2.3 7.8-2"/>
-          </g>
-        </g>
-      </symbol>
-      <symbol id="hh-hex-solid" viewBox="0 0 24 24">
-        <path d="M12 1.5l9.1 5.25v10.5L12 22.5l-9.1-5.25V6.75z" fill="currentColor"/>
-      </symbol>
-      <symbol id="hh-hex-line" viewBox="0 0 24 26">
-        <path d="M12 2l9 5.5v11L12 24l-9-5.5v-11z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-      </symbol>
-    </defs>
-  </svg>
-
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="index.html" aria-label="HornetHacks home">
-        <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#hh-mark"/></svg>
-        <span>Hornet<b>Hacks</b></span>
-      </a>
-      <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
-        <span class="bars"></span>
-      </button>
-      <nav id="site-nav" class="site-nav" aria-label="Site">
-        <a href="about.html">About</a>
-        <a href="schedule.html">Schedule</a>
-        <a href="faq.html">FAQ</a>
-        <a href="sponsors.html">Sponsors</a>
-        <a href="contact.html">Contact</a>
-        <a class="btn" data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-INTEREST-FORM">Register interest</a>
-      </nav>
-    </div>
+  <header class="top">
+    <a class="wordmark" href="index.html">Hornet<b>Hacks</b></a>
+    <p class="status-pill"><span class="pulse" aria-hidden="true"></span>Interest list open</p>
   </header>
 
   <main id="main">
-
-    <!-- Hero -->
-    <section class="hero">
-      <div class="wrap">
-        <p class="status-pill"><span class="pulse" aria-hidden="true"></span>Interest list open</p>
-        <p class="eyebrow">12-hour high school hackathon</p>
-        <h1>Hornet<span class="sting">Hacks</span></h1>
-        <p class="lede">One Saturday. Twelve hours. Team up, learn from mentors and workshops, and demo something real by sundown — no experience required.</p>
-        <p class="event-meta">
-          <span>Sat, October 10, 2026</span>
-          <span class="dot" aria-hidden="true">&#x2B22;</span>
-          <span>8:00 AM – 8:00 PM</span>
-          <span class="dot" aria-hidden="true">&#x2B22;</span>
-          <span>Valdes STEM + Innovation Center · Greenhill School, Addison, TX</span>
-        </p>
-        <div class="cta-row">
-          <a class="btn" data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-INTEREST-FORM">
-            <svg class="hex" aria-hidden="true"><use href="#hh-hex-solid"/></svg>
-            Join the interest list
-          </a>
-          <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-SPONSOR-FORM">Interested in sponsoring HornetHacks?</a>
-        </div>
+    <section class="intro">
+      <p class="eyebrow">12-hour high school hackathon</p>
+      <h1>HornetHacks</h1>
+      <p class="lede">One Saturday. Twelve hours. High schoolers team up, learn from mentors, and demo something real by sundown — no experience required. Free to attend.</p>
+      <div class="meta" role="list">
+        <p role="listitem">Sat, Oct 10 2026 — 8:00 AM–8:00 PM</p>
+        <p role="listitem">Valdes STEM + Innovation Center</p>
+        <p role="listitem">Greenhill School · Addison, TX</p>
+      </div>
+      <div class="cta-row">
+        <a class="btn" data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-INTEREST-FORM">Join the interest list<span class="arr" aria-hidden="true">↗</span></a>
+        <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-SPONSOR-FORM">Sponsoring? Share your interest</a>
       </div>
     </section>
 
-    <!-- The hive -->
-    <section class="hive-section" aria-label="Explore the site through the hive">
-      <div class="wrap">
-        <div class="hive-stage">
-          <div id="hive-canvas-host" aria-hidden="true"></div>
-
-          <!-- Static honeycomb: shown when JavaScript or WebGL is unavailable -->
-          <div class="hive-fallback">
-            <svg viewBox="30 16 360 364" role="navigation" aria-label="Hive navigation">
-              <defs>
-                <polygon id="fb-hex" points="60,0 30,52 -30,52 -60,0 -30,-52 30,-52"/>
-              </defs>
-              <g font-family="Space Grotesk, sans-serif" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="1">
-                <g transform="translate(210 198)">
-                  <use href="#fb-hex" fill="#f5a623" stroke="#2e2e2e" stroke-width="1.5"/>
-                  <use href="#hh-mark" style="color:#0a0a0a" x="-34" y="-34" width="68" height="68"/>
-                </g>
-                <a href="https://forms.gle/REPLACE-WITH-INTEREST-FORM" data-link="interest" target="_blank" rel="noopener">
-                  <g transform="translate(210 88)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">REGISTER</text>
-                  </g>
-                </a>
-                <a href="about.html">
-                  <g transform="translate(305 143)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">ABOUT</text>
-                  </g>
-                </a>
-                <a href="schedule.html">
-                  <g transform="translate(305 253)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">SCHEDULE</text>
-                  </g>
-                </a>
-                <a href="faq.html">
-                  <g transform="translate(210 308)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">FAQ</text>
-                  </g>
-                </a>
-                <a href="sponsors.html">
-                  <g transform="translate(115 253)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">SPONSORS</text>
-                  </g>
-                </a>
-                <a href="contact.html">
-                  <g transform="translate(115 143)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">CONTACT</text>
-                  </g>
-                </a>
-              </g>
-            </svg>
-          </div>
-        </div>
-        <p class="hive-hint">the hive is the map · <span class="kbd">drag</span> → spin · <span class="kbd">click a cell</span> → navigate</p>
+    <section class="stage" aria-label="A hornets' nest">
+      <div id="nest-host" aria-hidden="true"></div>
+      <!-- Static silhouette shown when JavaScript or WebGL is unavailable -->
+      <div class="nest-fallback" aria-hidden="true">
+        <svg viewBox="0 0 200 240">
+          <defs>
+            <radialGradient id="nf" cx="42%" cy="34%" r="75%">
+              <stop offset="0%" stop-color="#585349"/>
+              <stop offset="55%" stop-color="#3b372f"/>
+              <stop offset="100%" stop-color="#17150f"/>
+            </radialGradient>
+          </defs>
+          <path d="M112 18c-30-4-54 8-66 32-10 21-10 48-2 72 9 26 26 46 48 52 20 5 38-3 48-20 12-20 14-52 6-80-7-26-16-52-34-56z" fill="url(#nf)"/>
+          <path d="M60 30 L4 6" stroke="#241d15" stroke-width="5" stroke-linecap="round"/>
+          <ellipse cx="96" cy="152" rx="9" ry="11" fill="#0a0908"/>
+        </svg>
       </div>
     </section>
-
-    <!-- Quick facts -->
-    <section class="facts">
-      <div class="wrap">
-        <div class="grid">
-          <div class="fact">
-            <p class="label">When</p>
-            <p class="value">Sat, October 10, 2026</p>
-            <p class="sub">8:00 AM – 8:00 PM · one epic day</p>
-          </div>
-          <div class="fact">
-            <p class="label">Where</p>
-            <p class="value">Greenhill School, Addison, TX</p>
-            <p class="sub">Valdes STEM + Innovation Center</p>
-          </div>
-          <div class="fact">
-            <p class="label">Who</p>
-            <p class="value">High school students</p>
-            <p class="sub">Grades 9–12 · all experience levels</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Short about -->
-    <section class="section">
-      <div class="wrap prose" style="text-align:center">
-        <h2>A hackathon with a sting</h2>
-        <p>HornetHacks packs everything great about a hackathon into a single Saturday. Show up with an idea (or none at all), find a team, build with help from mentors and workshops, and demo your project to judges before the day is out.</p>
-        <p>It's free, beginner-friendly, and made for high school students across Dallas–Fort Worth.</p>
-        <p><a class="link-quiet" href="about.html">More about the event →</a></p>
-      </div>
-    </section>
-
-    <!-- Closing CTA -->
-    <section class="section">
-      <div class="wrap">
-        <div class="band">
-          <h2>Ready to build?</h2>
-          <p>Registration opens soon — join the interest list and we'll sting you (gently) the moment it does.</p>
-          <a class="btn" data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-INTEREST-FORM">
-            <svg class="hex" aria-hidden="true"><use href="#hh-hex-solid"/></svg>
-            Join the interest list
-          </a>
-          <p style="margin-top:1.4rem;margin-bottom:0">
-            <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-SPONSOR-FORM">Companies &amp; organizations: sponsor HornetHacks →</a>
-          </p>
-        </div>
-      </div>
-    </section>
-
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <div class="top">
-        <a class="brand" href="index.html" aria-label="HornetHacks home">
-          <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#hh-mark"/></svg>
-          <span>Hornet<b>Hacks</b></span>
-        </a>
-        <nav aria-label="Footer">
-          <a href="about.html">About</a>
-          <a href="schedule.html">Schedule</a>
-          <a href="faq.html">FAQ</a>
-          <a href="sponsors.html">Sponsors</a>
-          <a href="contact.html">Contact</a>
-          <a data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-INTEREST-FORM">Interest form</a>
-        </nav>
-      </div>
-      <div class="fine">
-        <p>© <span data-year>2026</span> HornetHacks · Sat, Oct 10, 2026 · Greenhill School, Addison, TX</p>
-        <p>
-          <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-SPONSOR-FORM">Become a sponsor</a>
-          &nbsp;·&nbsp;
-          <a class="link-quiet" data-link="email" data-show-email href="mailto:hello@hornethacks.org">hello@hornethacks.org</a>
-        </p>
-      </div>
-    </div>
+  <footer class="bottom">
+    <p>© <span data-year>2026</span> HornetHacks</p>
+    <p><a class="link-quiet" data-link="email" data-show-email href="mailto:hello@hornethacks.org">hello@hornethacks.org</a></p>
   </footer>
 
   <script src="js/config.js"></script>
   <script src="js/main.js"></script>
-  <script type="module" src="js/hive.js"></script>
+  <script type="module" src="js/nest.js"></script>
 </body>
 </html>

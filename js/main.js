@@ -1,8 +1,7 @@
-/* Shared behavior: config-driven links, mobile nav, footer year. */
+/* Shared behavior: config-driven links + footer year. */
 (function () {
   var cfg = window.HORNETHACKS || {};
 
-  /* Apply configured URLs everywhere they appear */
   if (cfg.interestFormUrl) {
     document.querySelectorAll('[data-link="interest"]').forEach(function (a) {
       a.href = cfg.interestFormUrl;
@@ -20,23 +19,6 @@
     });
   }
 
-  /* Mobile nav */
-  var toggle = document.querySelector(".nav-toggle");
-  var nav = document.getElementById("site-nav");
-  if (toggle && nav) {
-    toggle.addEventListener("click", function () {
-      var open = nav.classList.toggle("open");
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-    nav.addEventListener("click", function (e) {
-      if (e.target.closest("a")) {
-        nav.classList.remove("open");
-        toggle.setAttribute("aria-expanded", "false");
-      }
-    });
-  }
-
-  /* Footer year */
   document.querySelectorAll("[data-year]").forEach(function (el) {
     el.textContent = new Date().getFullYear();
   });

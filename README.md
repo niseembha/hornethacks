@@ -1,18 +1,20 @@
 # HornetHacks Website
 
-Landing site for **HornetHacks** — a 12-hour high school hackathon on
-**Saturday, October 10, 2026** at the Valdes STEM + Innovation Center,
-Greenhill School, Addison, TX.
+Single-page landing site for **HornetHacks** — a 12-hour high school
+hackathon on **Saturday, October 10, 2026** at the Valdes STEM + Innovation
+Center, Greenhill School, Addison, TX.
 
-The centerpiece is an interactive, realistic 3D honeycomb on the home page:
-drag it to spin, click a cell to navigate. The six cells around the center
-link to About, Schedule, FAQ, Sponsors, Contact, and the interest form.
+The design is ultra-minimal monochrome (black / white / gray, one amber
+status dot) in the spirit of vercel.com. The counterpoint is the centerpiece:
+a **photoreal 3D hornets' nest** — procedurally generated paper banding,
+a bark-textured branch, and tiny hornets that fly in and out of the entrance
+or crawl on the surface. It is purely aesthetic: one viewport, no scrolling,
+no navigation.
 
 ## Running locally
 
-The site is plain HTML/CSS/JS with no build step, but the 3D hive uses ES
-modules, so it must be served over HTTP (opening `index.html` directly from
-the filesystem won't load the hive). Any static server works:
+Plain HTML/CSS/JS, no build step — but the 3D nest uses ES modules, so serve
+over HTTP (opening `index.html` straight from the filesystem won't load it):
 
 ```bash
 python3 -m http.server 8000
@@ -20,51 +22,43 @@ python3 -m http.server 8000
 ```
 
 Deploying is just uploading the folder — GitHub Pages, Netlify, Vercel, and
-Cloudflare Pages all serve it as-is with zero configuration.
+Cloudflare Pages serve it as-is with zero configuration.
 
 ## Things you'll want to edit
 
 | What | Where |
 | --- | --- |
-| **Interest form + sponsor form URLs, contact email** | `js/config.js` — applied to every button, link, and hive cell at load. (The same placeholder URLs also appear in the HTML `href`s as a no-JS fallback — search for `REPLACE-WITH` when you update them.) |
-| Schedule times | `schedule.html` (currently marked tentative) |
-| FAQ answers | `faq.html` |
-| Copy on any page | The corresponding `.html` file |
+| **Interest form + sponsor form URLs, contact email** | `js/config.js` — applied to every link at load. (The same placeholder URLs also sit in the HTML `href`s as a no-JS fallback — search for `REPLACE-WITH` when you update them.) |
+| Headline / copy / dates | `index.html` |
 | Colors / typography | CSS variables at the top of `css/style.css` |
-| Hive cells, links, and materials | `js/hive.js` (`NAV_CELLS` and `DECOR_CELLS` at the top) |
+| Nest shape, materials, lighting, hornet behavior | `js/nest.js` (profile, palette, and counts are all near the top of each section) |
 
 > **Placeholders to replace before launch:** both `forms.gle/REPLACE-WITH-…`
 > URLs in `js/config.js`, and the `hello@hornethacks.org` contact email.
-> The 8 AM – 8 PM times and day-of schedule are reasonable defaults for a
-> 12-hour event — adjust to your real run-of-show.
 
 ## Structure
 
 ```
-index.html            Landing page (hero, 3D hive, facts, CTA)
-about.html            What the event is, what to expect, venue
-schedule.html         Day-of timeline
-faq.html              Accordion FAQ
-sponsors.html         Sponsor pitch + sponsor interest CTA
-contact.html          Email, forms, directions
-css/style.css         All styles (design tokens up top)
+index.html            The entire site (one viewport, no scroll)
+css/style.css         All styles (monochrome tokens up top)
 js/config.js          ← form URLs + contact email live here
-js/main.js            Mobile nav, config-driven links
-js/hive.js            The interactive 3D hive (Three.js)
+js/main.js            Config-driven links, year stamp
+js/nest.js            The photoreal nest + hornets (Three.js)
 assets/vendor/        Vendored Three.js (no CDN dependency)
 assets/fonts/         Self-hosted Geist Sans + Geist Mono
-assets/*.svg          Hornet mark + favicon
+assets/favicon.svg    Monochrome hornet-in-hexagon mark
 ```
 
 ## Notes
 
-- **No external requests at runtime.** Three.js and the fonts are vendored,
-  so the site works offline and isn't affected by CDN outages or school
-  network filters.
-- **Accessibility & fallbacks.** The hive is progressive enhancement: every
-  cell's destination is also in the header and footer nav, and a static SVG
-  honeycomb with the same links renders when JavaScript or WebGL is
-  unavailable. Idle animation is disabled for users with
-  `prefers-reduced-motion`.
-- **Mobile.** The hive rotates with horizontal drags and keeps vertical
-  swipes for page scrolling; taps on cells navigate.
+- **No external requests at runtime.** Three.js and the fonts are vendored;
+  every texture on the nest is generated in-browser on a canvas. Works
+  offline and behind school network filters.
+- **Fallbacks.** A static nest silhouette renders when JavaScript or WebGL
+  is unavailable, so the layout never breaks. With `prefers-reduced-motion`,
+  the nest holds still and the flying hornets stay home.
+- **Interaction.** The nest is decorative, but you can drag to spin it, and
+  it sways gently while idle. On phones, vertical swipes are left alone.
+- **No-scroll layout.** The page is designed to fit one viewport at any
+  reasonable size; on very short screens (< 540 px) scrolling is re-enabled
+  so nothing becomes unreachable.
