@@ -554,17 +554,7 @@ canvas {
 .vcube use {
   transform-box: fill-box;
   transform-origin: 50% 50%;
-  animation: cube-pop 0.6s cubic-bezier(0.3, 1.15, 0.55, 1) backwards;
-}
-/* smallest pops first, biggest lands last */
-.vcube-c use {
-  animation-delay: 0.35s;
-}
-.vcube-b use {
-  animation-delay: 0.55s;
-}
-.vcube-a use {
-  animation-delay: 0.75s;
+  animation: cube-pop 0.6s cubic-bezier(0.3, 1.15, 0.55, 1) 0.35s backwards;
 }
 @keyframes cube-pop {
   from {
