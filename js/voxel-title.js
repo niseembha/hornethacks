@@ -89,6 +89,10 @@
   function sideRColor(green) {
     return green ? "hsl(160,58%,29%)" : "hsl(150,6%,46%)";
   }
+  function sideLColor(green) {
+    /* light comes from the top-left, so left faces are a touch brighter */
+    return green ? "hsl(160,55%,36%)" : "hsl(150,6%,56%)";
+  }
   function sideBColor(green) {
     return green ? "hsl(162,62%,19%)" : "hsl(150,7%,30%)";
   }
@@ -103,13 +107,18 @@
     ctx.fill();
   }
 
-  /* ---- Draw the blocks (progress ∈ 0..1 staggers the build-in) ---- */
+  /* ---- Draw the blocks (progress ∈ 0..1 staggers the build-in) ----
+     One-point perspective: the extrusion converges on a vanishing point
+     behind the center of the word, so letters left of center show their
+     right faces, letters right of center show their left faces, and the
+     middle sits flat — a natural centered curve. */
   function draw(progress) {
     var wAvail = host.clientWidth || 300;
     var s = Math.max(3, Math.floor(wAvail / (gw + 2)));
-    var dx = Math.max(2, Math.round(s * 0.5));
-    var W = gw * s + dx;
-    var H = gh * s + dx;
+    var oxMax = s * 1.1; /* horizontal depth at the outer edges */
+    var oy = Math.max(2, Math.round(s * 0.5)); /* constant downward drop */
+    var W = gw * s + 2;
+    var H = gh * s + oy + 1;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = W * dpr;
     canvas.height = H * dpr;
@@ -118,6 +127,7 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
 
+    var half = gw / 2;
     var maxSum = gw + gh;
     /* pass 0: extruded side faces · pass 1: front faces (cover the sides) */
     for (var pass = 0; pass < 2; pass++) {
@@ -128,11 +138,18 @@
           var green = x >= splitX;
           var px = x * s;
           var py = y * s;
+          /* offset toward the central vanishing point */
+          var ox = ((half - (x + 0.5)) / half) * oxMax;
           if (pass === 0) {
-            ctx.fillStyle = sideRColor(green);
-            quad(px + s, py, px + s + dx, py + dx, px + s + dx, py + s + dx, px + s, py + s);
+            if (ox > 0.5) {
+              ctx.fillStyle = sideRColor(green);
+              quad(px + s, py, px + s + ox, py + oy, px + s + ox, py + s + oy, px + s, py + s);
+            } else if (ox < -0.5) {
+              ctx.fillStyle = sideLColor(green);
+              quad(px, py, px + ox, py + oy, px + ox, py + s + oy, px, py + s);
+            }
             ctx.fillStyle = sideBColor(green);
-            quad(px, py + s, px + dx, py + s + dx, px + s + dx, py + s + dx, px + s, py + s);
+            quad(px, py + s, px + ox, py + s + oy, px + s + ox, py + s + oy, px + s, py + s);
           } else {
             ctx.fillStyle = "rgba(4,12,9,0.9)"; /* thin mortar seam */
             ctx.fillRect(px, py, s, s);
