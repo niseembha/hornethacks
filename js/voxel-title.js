@@ -35,6 +35,14 @@
   var lastGlint = 0;
   var lastIdleDraw = 0;
 
+  /* Build animation: each block falls into place (bottom rows first,
+     sweeping left → right with jitter) and lands with a brief flash */
+  var FALL = 380; /* ms a block spends falling */
+  var FLASH = 260; /* ms of landing glow */
+  var buildDelay = null; /* per-block start time offset */
+  var buildDrop = null; /* per-block drop height, in block units */
+  var buildTotal = 0;
+
   /* Deterministic per-block jitter so the mosaic is stable */
   function hash(x, y) {
     var h = Math.imul(x + 1, 374761393) + Math.imul(y + 1, 668265263);
@@ -84,6 +92,25 @@
     gw = right - left + 1;
     gh = grid.length;
     splitX = wA - left;
+
+    /* choreograph the build */
+    buildDelay = new Float32Array(gw * gh);
+    buildDrop = new Float32Array(gw * gh);
+    var maxD = 0;
+    for (var by = 0; by < gh; by++) {
+      for (var bx = 0; bx < gw; bx++) {
+        if (!grid[by][bx]) continue;
+        var idx = by * gw + bx;
+        var d =
+          (bx / gw) * 820 + /* left → right sweep */
+          ((gh - 1 - by) / gh) * 260 + /* lower rows land first */
+          hash(bx + 13, by + 7) * 260; /* organic jitter */
+        buildDelay[idx] = d;
+        if (d > maxD) maxD = d;
+        buildDrop[idx] = 2.2 + hash(bx + 3, by + 11) * 2.6;
+      }
+    }
+    buildTotal = maxD + FALL + FLASH;
   }
 
   /* ---- Block face colors (light from the top-left) ---- */
@@ -141,8 +168,36 @@
      behind the center of the word, so letters left of center show their
      right faces, letters right of center show their left faces, and the
      middle sits flat — a natural centered curve. */
-  function draw(progress, now) {
+  function drawSides(x, y, s, oy, ox, yOff) {
+    var green = x >= splitX;
+    var px = x * s;
+    var py = y * s + yOff;
+    if (ox > 0.5) {
+      ctx.fillStyle = sideRColor(green);
+      quad(px + s, py, px + s + ox, py + oy, px + s + ox, py + s + oy, px + s, py + s);
+    } else if (ox < -0.5) {
+      ctx.fillStyle = sideLColor(green);
+      quad(px, py, px + ox, py + oy, px + ox, py + s + oy, px, py + s);
+    }
+    ctx.fillStyle = sideBColor(green);
+    quad(px, py + s, px + ox, py + s + oy, px + s + ox, py + s + oy, px + s, py + s);
+  }
+
+  function drawFront(x, y, s, boost, yOff) {
+    var green = x >= splitX;
+    var px = x * s;
+    var py = y * s + yOff;
+    ctx.fillStyle = "rgba(4,12,9,0.9)"; /* thin mortar seam */
+    ctx.fillRect(px, py, s, s);
+    ctx.fillStyle = frontColor(green, x, y, boost);
+    ctx.fillRect(px + 0.5, py + 0.5, s - 1, s - 1);
+  }
+
+  /* Render the mark. buildMs === undefined → complete (idle/static);
+     otherwise it's elapsed build time and blocks are settled / falling. */
+  function draw(now, buildMs) {
     now = now || 0;
+    var complete = buildMs === undefined;
     var wAvail = host.clientWidth || 300;
     var s = Math.max(3, Math.floor(wAvail / (gw + 2)));
     curS = s;
@@ -159,51 +214,61 @@
     ctx.clearRect(0, 0, W, H);
 
     var half = gw / 2;
-    var maxSum = gw + gh;
-    /* pass 0: extruded side faces · pass 1: front faces (cover the sides) */
+    var falling = [];
+
+    /* settled blocks: side pass, then front pass (fronts cover the sides) */
     for (var pass = 0; pass < 2; pass++) {
       for (var y = 0; y < gh; y++) {
         for (var x = 0; x < gw; x++) {
           if (!grid[y][x]) continue;
-          if ((x + y) / maxSum > progress) continue;
-          var green = x >= splitX;
-          var px = x * s;
-          var py = y * s;
-          /* offset toward the central vanishing point */
           var ox = ((half - (x + 0.5)) / half) * oxMax;
-          if (pass === 0) {
-            if (ox > 0.5) {
-              ctx.fillStyle = sideRColor(green);
-              quad(px + s, py, px + s + ox, py + oy, px + s + ox, py + s + oy, px + s, py + s);
-            } else if (ox < -0.5) {
-              ctx.fillStyle = sideLColor(green);
-              quad(px, py, px + ox, py + oy, px + ox, py + s + oy, px, py + s);
+          var boost = 0;
+          if (!complete) {
+            var i = y * gw + x;
+            var t = (buildMs - buildDelay[i]) / FALL;
+            if (t < 0) continue; /* not yet spawned */
+            if (t < 1) {
+              if (pass === 1) falling.push({ x: x, y: y, i: i, t: t, ox: ox });
+              continue;
             }
-            ctx.fillStyle = sideBColor(green);
-            quad(px, py + s, px + ox, py + s + oy, px + s + ox, py + s + oy, px + s, py + s);
-          } else {
-            ctx.fillStyle = "rgba(4,12,9,0.9)"; /* thin mortar seam */
-            ctx.fillRect(px, py, s, s);
-            ctx.fillStyle = frontColor(green, x, y, liveBoost(x, y, now));
-            ctx.fillRect(px + 0.5, py + 0.5, s - 1, s - 1);
+            var age = buildMs - buildDelay[i] - FALL;
+            if (age < FLASH) boost = (1 - age / FLASH) * 18; /* landing flash */
           }
+          if (pass === 0) drawSides(x, y, s, oy, ox, 0);
+          else drawFront(x, y, s, boost + liveBoost(x, y, now), 0);
         }
       }
+    }
+
+    /* airborne blocks render above everything, with a faint motion trail */
+    for (var f = 0; f < falling.length; f++) {
+      var b = falling[f];
+      var ease = b.t * b.t; /* gravity: accelerate into the slot */
+      var yOff = -(1 - ease) * buildDrop[b.i] * s;
+      var alpha = Math.min(1, b.t / 0.3); /* materialize softly up top */
+      ctx.globalAlpha = alpha * 0.3;
+      drawFront(b.x, b.y, s, 6, yOff - s * 0.55);
+      ctx.globalAlpha = alpha;
+      drawSides(b.x, b.y, s, oy, b.ox, yOff);
+      drawFront(b.x, b.y, s, 8, yOff);
+      ctx.globalAlpha = 1;
     }
   }
 
   function reveal() {
     if (RM) {
-      draw(1);
+      draw(performance.now());
       return;
     }
     var t0 = performance.now();
-    var DUR = 750;
     (function step(now) {
-      var p = Math.min(1, (now - t0) / DUR);
-      draw(p * p * (3 - 2 * p) * 1.15, now); /* slight overshoot finishes the corner */
-      if (p < 1) requestAnimationFrame(step);
-      else startIdle();
+      var elapsed = now - t0;
+      draw(now, elapsed);
+      if (elapsed < buildTotal) requestAnimationFrame(step);
+      else {
+        draw(now);
+        startIdle();
+      }
     })(t0);
   }
 
@@ -244,7 +309,7 @@
       glints = glints.filter(function (g) {
         return now - g.t0 < 750;
       });
-      draw(1, now);
+      draw(now);
     }
 
     var io = new IntersectionObserver(function (entries) {
@@ -267,7 +332,7 @@
       host.classList.add("active");
       reveal();
       new ResizeObserver(function () {
-        draw(1);
+        draw(performance.now());
       }).observe(host);
     } catch (err) {
       /* canvas blocked (e.g. privacy mode) → text headline stays */
