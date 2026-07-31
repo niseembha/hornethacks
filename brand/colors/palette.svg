@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="672" height="670" viewBox="0 0 672 670">
+  <rect width="672" height="670" fill="#0a0a0a"/>
+  <text x="24" y="52" fill="#ededed" font-size="24" font-weight="600" font-family="ui-monospace,Menlo,Consolas,monospace">HornetHacks palette</text>
+  <rect x="24" y="86" width="72" height="64" fill="#0a0a0a" stroke="#2a2a2a"/>
+  <text x="112" y="112" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Background</text>
+  <text x="112" y="136" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#0a0a0a</text>
+  <rect x="348" y="86" width="72" height="64" fill="#101010" stroke="#2a2a2a"/>
+  <text x="436" y="112" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Surface</text>
+  <text x="436" y="136" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#101010</text>
+  <rect x="24" y="168" width="72" height="64" fill="#161616" stroke="#2a2a2a"/>
+  <text x="112" y="194" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Surface 2</text>
+  <text x="112" y="218" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#161616</text>
+  <rect x="348" y="168" width="72" height="64" fill="#222222" stroke="#2a2a2a"/>
+  <text x="436" y="194" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Border</text>
+  <text x="436" y="218" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#222222</text>
+  <rect x="24" y="250" width="72" height="64" fill="#383838" stroke="#2a2a2a"/>
+  <text x="112" y="276" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Border strong</text>
+  <text x="112" y="300" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#383838</text>
+  <rect x="348" y="250" width="72" height="64" fill="#ededed" stroke="#2a2a2a"/>
+  <text x="436" y="276" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Text</text>
+  <text x="436" y="300" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#ededed</text>
+  <rect x="24" y="332" width="72" height="64" fill="#9b9b9b" stroke="#2a2a2a"/>
+  <text x="112" y="358" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Text dim</text>
+  <text x="112" y="382" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#9b9b9b</text>
+  <rect x="348" y="332" width="72" height="64" fill="#6b6b6b" stroke="#2a2a2a"/>
+  <text x="436" y="358" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Text faint</text>
+  <text x="436" y="382" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#6b6b6b</text>
+  <rect x="24" y="414" width="72" height="64" fill="#34d399" stroke="#2a2a2a"/>
+  <text x="112" y="440" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Emerald</text>
+  <text x="112" y="464" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#34d399</text>
+  <rect x="348" y="414" width="72" height="64" fill="#6ee7b7" stroke="#2a2a2a"/>
+  <text x="436" y="440" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Emerald bright</text>
+  <text x="436" y="464" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#6ee7b7</text>
+  <rect x="24" y="496" width="72" height="64" fill="#0e9f6e" stroke="#2a2a2a"/>
+  <text x="112" y="522" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Emerald deep</text>
+  <text x="112" y="546" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#0e9f6e</text>
+  <rect x="348" y="496" width="72" height="64" fill="#0b6b4c" stroke="#2a2a2a"/>
+  <text x="436" y="522" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Emerald dark</text>
+  <text x="436" y="546" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#0b6b4c</text>
+  <rect x="24" y="578" width="72" height="64" fill="#07452f" stroke="#2a2a2a"/>
+  <text x="112" y="604" fill="#ededed" font-size="17" font-family="ui-monospace,Menlo,Consolas,monospace">Emerald darker</text>
+  <text x="112" y="628" fill="#9b9b9b" font-size="15" font-family="ui-monospace,Menlo,Consolas,monospace">#07452f</text>
+</svg>
