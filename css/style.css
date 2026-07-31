@@ -1002,7 +1002,21 @@ html.js .reveal.in {
 }
 .brand:hover svg,
 .brand:focus-visible svg {
-  animation: buzz 0.45s linear;
+  /* the flap keyframes flip the --fw-a/--fw-b wing-frame opacities, which
+     inherit into the #hh-mark <use> shadow DOM */
+  animation: buzz 0.45s linear, hh-flap-brand 160ms linear infinite;
+}
+@keyframes hh-flap-brand {
+  0%,
+  49.9% {
+    --fw-a: 1;
+    --fw-b: 0;
+  }
+  50%,
+  100% {
+    --fw-a: 0;
+    --fw-b: 1;
+  }
 }
 
 /* Card cube icons pop on hover */
