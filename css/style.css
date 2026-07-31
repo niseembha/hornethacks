@@ -964,21 +964,10 @@ html.js .reveal.in {
   transform: none;
 }
 
-/* Typing caret for the hero eyebrow */
+/* Reserve the hero eyebrow's line box while it types itself out */
 .hero .eyebrow [data-type] {
   display: inline-block;
   min-height: 1.2em;
-}
-[data-type].typing::after {
-  content: "▮";
-  margin-left: 0.35em;
-  color: var(--green);
-  animation: blink 0.9s steps(1) infinite;
-}
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
 }
 
 /* The pixel hornet in the header buzzes when you poke it */

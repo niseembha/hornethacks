@@ -40,16 +40,10 @@
   if (typeEl && !RM) {
     var full = typeEl.textContent;
     typeEl.textContent = "";
-    typeEl.classList.add("typing");
     var i = 0;
     var timer = setInterval(function () {
       typeEl.textContent = full.slice(0, ++i);
-      if (i >= full.length) {
-        clearInterval(timer);
-        setTimeout(function () {
-          typeEl.classList.remove("typing");
-        }, 2600);
-      }
+      if (i >= full.length) clearInterval(timer);
     }, 42);
   }
 
