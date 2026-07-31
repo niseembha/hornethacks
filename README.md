@@ -52,7 +52,7 @@ js/config.js          ← form URLs + contact email live here
 js/main.js            Mobile nav, config-driven links
 js/hive.js            The interactive 3D hive (Three.js)
 assets/vendor/        Vendored Three.js (no CDN dependency)
-assets/fonts/         Self-hosted Geist Sans + Geist Mono
+assets/fonts/         Self-hosted Space Grotesk
 assets/*.svg          Hornet mark + favicon
 ```
 

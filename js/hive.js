@@ -93,14 +93,14 @@ async function main() {
   glint.position.set(2.6, 2.2, 4.4);
   scene.add(glint);
 
-  /* ---- Soft amber halo behind the comb (grounds it on the dark page) ---- */
-  const haloTex = radialTexture("rgba(245,166,35,0.5)", "rgba(245,166,35,0)");
-  const halo = new THREE.Mesh(
-    new THREE.PlaneGeometry(13.5, 13.5),
-    new THREE.MeshBasicMaterial({ map: haloTex, transparent: true, opacity: 0.16, depthWrite: false })
+  /* ---- Soft backdrop shadow so the comb feels grounded ---- */
+  const shadowTex = radialTexture("rgba(46,30,8,0.55)", "rgba(46,30,8,0)");
+  const shadow = new THREE.Mesh(
+    new THREE.PlaneGeometry(11.5, 11.5),
+    new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, opacity: 0.42, depthWrite: false })
   );
-  halo.position.set(0, 0, -1.4);
-  scene.add(halo);
+  shadow.position.set(0.1, -0.55, -1.35);
+  scene.add(shadow);
 
   /* ---- Shared geometry ---- */
   const wallGeo = new THREE.ExtrudeGeometry(hexRing(R, R * 0.84), {
@@ -167,7 +167,7 @@ async function main() {
   }
 
   /* Navigation cells + center logo cell */
-  const labelFont = '500 84px "Geist Mono", ui-monospace, monospace';
+  const labelFont = '700 92px "Space Grotesk", ui-sans-serif, sans-serif';
   await Promise.race([
     document.fonts.load(labelFont).catch(() => {}),
     new Promise((res) => setTimeout(res, 1500)),
@@ -265,10 +265,10 @@ async function main() {
     motes = new THREE.Points(
       g,
       new THREE.PointsMaterial({
-        color: 0xf0b03c,
+        color: 0xdca43e,
         size: 0.055,
         transparent: true,
-        opacity: 0.65,
+        opacity: 0.5,
         depthWrite: false,
         sizeAttenuation: true,
       })
@@ -507,10 +507,10 @@ async function main() {
     } catch (e) {
       /* older browsers: no tracking, still fine */
     }
-    let px = 84;
+    let px = 92;
     const upper = text.toUpperCase();
     do {
-      g.font = `500 ${px}px "Geist Mono", ui-monospace, monospace`;
+      g.font = `700 ${px}px "Space Grotesk", ui-sans-serif, sans-serif`;
       if (g.measureText(upper).width <= 410) break;
       px -= 4;
     } while (px > 40);

@@ -1,73 +1,47 @@
 /* ==========================================================================
    HornetHacks — shared stylesheet
-   Technical minimalist: near-black surfaces, hairline borders, monospace
-   accents, one amber accent. Inspired by vercel.com / cursor.com.
+   Clean, minimal, hornet-themed. One palette, one typeface, lots of air.
    ========================================================================== */
 
 /* ---- Fonts (self-hosted, see assets/fonts) ------------------------------ */
 @font-face {
-  font-family: "Geist Sans";
+  font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("../assets/fonts/geist-sans-latin-400-normal.woff2") format("woff2");
+  src: url("../assets/fonts/space-grotesk-latin-400-normal.woff2") format("woff2");
 }
 @font-face {
-  font-family: "Geist Sans";
+  font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url("../assets/fonts/geist-sans-latin-500-normal.woff2") format("woff2");
+  src: url("../assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2");
 }
 @font-face {
-  font-family: "Geist Sans";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("../assets/fonts/geist-sans-latin-600-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Geist Sans";
+  font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("../assets/fonts/geist-sans-latin-700-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../assets/fonts/geist-mono-latin-400-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("../assets/fonts/geist-mono-latin-500-normal.woff2") format("woff2");
+  src: url("../assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2");
 }
 
 /* ---- Design tokens ------------------------------------------------------ */
 :root {
-  --bg: #0a0a0a;
-  --surface: #101010;
-  --surface-2: #161616;
-  --border: #222222;
-  --border-strong: #383838;
-  --text: #ededed;
-  --text-dim: #9b9b9b;
-  --text-faint: #6b6b6b;
-  --amber: #f5a623;
-  --amber-deep: #c47f00;
-  --amber-glow: rgba(245, 166, 35, 0.14);
-  --radius: 10px;
+  --paper: #faf6ee;
+  --paper-2: #f4eddd;
+  --ink: #1c1710;
+  --ink-soft: #6b6152;
+  --gold: #f0a500;
+  --gold-deep: #c97f00;
+  --gold-soft: #f7ce6b;
+  --line: rgba(28, 23, 16, 0.14);
+  --line-faint: rgba(28, 23, 16, 0.08);
+  --radius: 18px;
   --wrap: 1080px;
   --pad: clamp(1.25rem, 5vw, 2.5rem);
-  --font: "Geist Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+  --font: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Helvetica, Arial, sans-serif;
-  --mono: "Geist Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo,
-    Consolas, monospace;
 }
 
 /* ---- Base --------------------------------------------------------------- */
@@ -79,46 +53,26 @@
 
 html {
   scroll-behavior: smooth;
-  color-scheme: dark;
 }
 
 body {
   margin: 0;
-  position: relative;
   font-family: var(--font);
-  font-size: 1rem;
-  line-height: 1.65;
-  color: var(--text);
-  background: var(--bg);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-
-/* Faint dotted grid behind the top of every page */
-body::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 130vh;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-  background-size: 26px 26px;
-  -webkit-mask-image: radial-gradient(ellipse 75% 90% at 50% 0%, #000 30%, transparent 78%);
-  mask-image: radial-gradient(ellipse 75% 90% at 50% 0%, #000 30%, transparent 78%);
-  pointer-events: none;
-  z-index: 0;
-}
-body > * {
-  position: relative;
-  z-index: 1;
 }
 
 h1,
 h2,
 h3 {
   line-height: 1.1;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   margin: 0 0 0.5em;
-  font-weight: 600;
+  font-weight: 700;
   text-wrap: balance;
 }
 
@@ -138,12 +92,12 @@ canvas {
 }
 
 ::selection {
-  background: var(--amber);
-  color: #0a0a0a;
+  background: var(--gold-soft);
+  color: var(--ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--amber);
+  outline: 2px solid var(--ink);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -159,8 +113,8 @@ canvas {
   left: 1rem;
   top: -3.5rem;
   z-index: 100;
-  background: var(--text);
-  color: var(--bg);
+  background: var(--ink);
+  color: var(--paper);
   padding: 0.6rem 1rem;
   border-radius: 8px;
   text-decoration: none;
@@ -174,112 +128,75 @@ canvas {
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.55em;
-  padding: 0.72em 1.35em;
-  border: 1px solid var(--amber);
-  border-radius: 8px;
-  background: var(--amber);
-  color: #0a0a0a;
-  font: 500 0.9375rem/1 var(--font);
-  letter-spacing: 0.005em;
+  gap: 0.6em;
+  padding: 0.95em 1.9em;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--ink);
+  font: 700 1.0625rem/1 var(--font);
+  letter-spacing: 0.01em;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
-  box-shadow: 0 0 0 0 transparent;
+  transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 1px 0 rgba(28, 23, 16, 0.18), 0 10px 28px -12px rgba(201, 127, 0, 0.55);
 }
 .btn:hover {
-  background: #ffb63f;
-  border-color: #ffb63f;
-  box-shadow: 0 0 24px -6px rgba(245, 166, 35, 0.55);
+  background: var(--gold-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 1px 0 rgba(28, 23, 16, 0.18), 0 16px 34px -12px rgba(201, 127, 0, 0.6);
 }
 .btn:active {
-  background: var(--amber-deep);
-  border-color: var(--amber-deep);
+  transform: translateY(0);
 }
 .btn .hex {
-  width: 0.9em;
-  height: 0.9em;
+  width: 0.95em;
+  height: 0.95em;
   flex: none;
 }
 
 .btn--ghost {
   background: transparent;
-  border-color: var(--border-strong);
-  color: var(--text);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
 }
 .btn--ghost:hover {
-  background: var(--surface-2);
-  border-color: #555;
-  box-shadow: none;
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
 }
 
 .link-quiet {
-  color: var(--text-dim);
-  font-size: 0.875rem;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
   text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-color: #3a3a3a;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(28, 23, 16, 0.3);
   transition: color 0.15s, text-decoration-color 0.15s;
 }
 .link-quiet:hover {
-  color: var(--text);
-  text-decoration-color: var(--amber);
+  color: var(--ink);
+  text-decoration-color: var(--gold);
 }
 
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.7em;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.14em;
+  gap: 0.55em;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text-faint);
-  margin: 0 0 1.2rem;
+  color: var(--gold-deep);
+  margin: 0 0 1.1rem;
 }
 .eyebrow::before,
 .eyebrow::after {
   content: "";
-  width: 0.5em;
-  height: 0.57em;
-  background: var(--amber);
+  width: 0.55em;
+  height: 0.62em;
+  background: currentColor;
   clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
-  opacity: 0.9;
-}
-
-/* Status pill (hero) */
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55em;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  color: var(--text-dim);
-  border: 1px solid var(--border);
-  background: rgba(16, 16, 16, 0.6);
-  border-radius: 999px;
-  padding: 0.42em 0.95em;
-  margin-bottom: 1.5rem;
-}
-.status-pill .pulse {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--amber);
-  box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.6);
-  animation: pulse 2.4s infinite;
-}
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.55);
-  }
-  70% {
-    box-shadow: 0 0 0 7px rgba(245, 166, 35, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(245, 166, 35, 0);
-  }
+  opacity: 0.85;
 }
 
 /* ---- Header ------------------------------------------------------------- */
@@ -287,62 +204,61 @@ canvas {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(10, 10, 10, 0.75);
-  backdrop-filter: blur(12px) saturate(1.4);
-  -webkit-backdrop-filter: blur(12px) saturate(1.4);
-  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line-faint);
 }
 .site-header .wrap {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-height: 4rem;
+  min-height: 4.25rem;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1.0625rem;
+  font-weight: 700;
+  font-size: 1.1875rem;
   letter-spacing: -0.01em;
-  color: var(--text);
 }
 .brand svg {
-  width: 1.9rem;
-  height: 1.9rem;
+  width: 2.1rem;
+  height: 2.1rem;
   flex: none;
-  color: var(--text); /* hornet line-work picks this up via currentColor */
 }
 .brand span b {
-  color: var(--amber);
-  font-weight: 600;
+  color: var(--gold-deep);
+  font-weight: 700;
 }
 
 .site-nav {
   display: flex;
   align-items: center;
-  gap: clamp(0.9rem, 2.2vw, 1.7rem);
+  gap: clamp(1rem, 2.5vw, 1.9rem);
 }
 .site-nav a:not(.btn) {
   text-decoration: none;
-  font-weight: 400;
-  font-size: 0.875rem;
-  color: var(--text-dim);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: var(--ink);
   padding: 0.35rem 0;
-  transition: color 0.15s;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.15s, color 0.15s;
 }
 .site-nav a:not(.btn):hover {
-  color: var(--text);
+  border-color: var(--gold);
 }
 .site-nav a[aria-current="page"] {
-  color: var(--text);
+  border-color: var(--gold);
 }
 .site-nav .btn {
-  padding: 0.52em 1.05em;
-  font-size: 0.8438rem;
+  padding: 0.6em 1.25em;
+  font-size: 0.9375rem;
 }
 
 .nav-toggle {
@@ -357,10 +273,10 @@ canvas {
 .nav-toggle .bars::before,
 .nav-toggle .bars::after {
   display: block;
-  width: 1.35rem;
-  height: 1.5px;
+  width: 1.4rem;
+  height: 2px;
   border-radius: 2px;
-  background: var(--text);
+  background: var(--ink);
   transition: transform 0.25s, opacity 0.2s;
   content: "";
 }
@@ -395,19 +311,19 @@ canvas {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    background: rgba(10, 10, 10, 0.97);
-    border-bottom: 1px solid var(--border);
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
     padding: 0.5rem var(--pad) 1.25rem;
     display: none;
+    box-shadow: 0 24px 40px -28px rgba(28, 23, 16, 0.35);
   }
   .site-nav.open {
     display: flex;
   }
   .site-nav a:not(.btn) {
     padding: 0.85rem 0.25rem;
-    border-bottom: 1px solid var(--border);
-    font-size: 1rem;
-    color: var(--text);
+    border-bottom: 1px solid var(--line-faint);
+    font-size: 1.0625rem;
   }
   .site-nav .btn {
     margin-top: 1rem;
@@ -421,24 +337,18 @@ canvas {
   text-align: center;
   padding: clamp(3.5rem, 9vh, 6rem) 0 0;
 }
-.hero .eyebrow {
-  display: flex;
-  justify-content: center;
-}
 .hero h1 {
-  font-size: clamp(2.8rem, 8.5vw, 5rem);
-  font-weight: 700;
-  letter-spacing: -0.045em;
-  margin-bottom: 0.4em;
-  color: #fff;
+  font-size: clamp(2.9rem, 9vw, 5.25rem);
+  letter-spacing: -0.035em;
+  margin-bottom: 0.35em;
 }
 .hero h1 .sting {
-  color: var(--amber);
+  color: var(--gold-deep);
 }
 .hero .lede {
-  font-size: clamp(1rem, 2.2vw, 1.125rem);
-  color: var(--text-dim);
-  max-width: 36em;
+  font-size: clamp(1.0625rem, 2.4vw, 1.25rem);
+  color: var(--ink-soft);
+  max-width: 34em;
   margin-inline: auto;
 }
 
@@ -447,15 +357,13 @@ canvas {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem 1rem;
-  margin: 1.5rem 0 2.2rem;
-  font-family: var(--mono);
-  font-size: clamp(0.75rem, 1.8vw, 0.8438rem);
-  letter-spacing: 0.02em;
-  color: var(--text-dim);
+  gap: 0.5rem 1.1rem;
+  margin: 1.4rem 0 2.1rem;
+  font-weight: 500;
+  font-size: clamp(0.9375rem, 2vw, 1.0625rem);
 }
 .event-meta .dot {
-  color: var(--amber);
+  color: var(--gold);
   font-size: 0.72em;
 }
 @media (max-width: 640px) {
@@ -472,7 +380,7 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.9rem;
 }
 
 /* ---- Hive stage --------------------------------------------------------- */
@@ -486,15 +394,15 @@ canvas {
   margin-inline: auto;
   aspect-ratio: 1 / 0.94;
 }
-/* Soft amber glow behind the comb */
+/* Soft radial glow behind the comb */
 .hive-stage::before {
   content: "";
   position: absolute;
-  inset: -14%;
+  inset: -12%;
   background: radial-gradient(
     closest-side,
-    rgba(245, 166, 35, 0.16),
-    rgba(245, 166, 35, 0.045) 55%,
+    rgba(240, 165, 0, 0.16),
+    rgba(240, 165, 0, 0.05) 55%,
     transparent 75%
   );
   pointer-events: none;
@@ -511,14 +419,14 @@ canvas {
 }
 .hive-hint {
   text-align: center;
-  font-family: var(--mono);
-  color: var(--text-faint);
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
-  margin: 1.2rem auto 0;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  margin: 1.1rem auto 0;
+  max-width: 30em;
 }
 .hive-hint .kbd {
-  color: var(--amber);
+  font-weight: 700;
+  color: var(--ink);
 }
 
 /* Static SVG fallback (no JS / no WebGL) */
@@ -536,12 +444,11 @@ canvas {
   cursor: pointer;
 }
 .hive-fallback a .cell-fill {
-  transition: fill 0.15s, stroke 0.15s;
+  transition: fill 0.15s;
 }
 .hive-fallback a:hover .cell-fill,
 .hive-fallback a:focus .cell-fill {
-  fill: #1d1503;
-  stroke: var(--amber);
+  fill: var(--gold);
 }
 html.js .hive-fallback {
   display: none; /* hidden once JS runs; re-shown by hive.js if WebGL is unavailable */
@@ -557,40 +464,32 @@ html.js .hive-fallback.show {
 .facts .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
+  gap: 1rem;
 }
 .fact {
-  padding: 1.5rem 1.6rem;
-  background: var(--surface);
-  transition: background 0.15s;
-}
-.fact:hover {
-  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.5rem;
+  background: color-mix(in srgb, var(--paper-2) 55%, transparent);
 }
 .fact .label {
-  font-family: var(--mono);
-  font-size: 0.6875rem;
-  font-weight: 400;
+  font-size: 0.8125rem;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--amber);
-  margin-bottom: 0.45rem;
+  color: var(--gold-deep);
+  margin-bottom: 0.35rem;
 }
 .fact .value {
-  font-size: 1.0625rem;
-  font-weight: 600;
+  font-size: 1.1875rem;
+  font-weight: 700;
   letter-spacing: -0.01em;
-  line-height: 1.35;
-  color: var(--text);
+  line-height: 1.3;
 }
 .fact .sub {
-  color: var(--text-faint);
-  font-size: 0.875rem;
-  margin: 0.25rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  margin: 0.2rem 0 0;
 }
 @media (max-width: 700px) {
   .facts .grid {
@@ -604,15 +503,12 @@ html.js .hive-fallback.show {
   padding: clamp(3rem, 8vh, 5rem) 0 clamp(1.5rem, 4vh, 2.5rem);
 }
 .page-hero h1 {
-  font-size: clamp(2.2rem, 6vw, 3.4rem);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  color: #fff;
+  font-size: clamp(2.3rem, 6.5vw, 3.6rem);
 }
 .page-hero .lede {
-  color: var(--text-dim);
-  font-size: clamp(1rem, 2vw, 1.0938rem);
-  max-width: 40em;
+  color: var(--ink-soft);
+  font-size: clamp(1.0625rem, 2.2vw, 1.1875rem);
+  max-width: 38em;
   margin-inline: auto;
 }
 
@@ -623,9 +519,8 @@ html.js .hive-fallback.show {
   padding-bottom: clamp(4rem, 9vh, 6rem);
 }
 .section h2 {
-  font-size: clamp(1.4rem, 3.2vw, 1.8rem);
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
   margin-bottom: 1.2rem;
-  color: #fff;
 }
 
 .prose {
@@ -633,11 +528,7 @@ html.js .hive-fallback.show {
   margin-inline: auto;
 }
 .prose p {
-  color: var(--text-dim);
-}
-.prose strong {
-  color: var(--text);
-  font-weight: 600;
+  color: color-mix(in srgb, var(--ink) 82%, var(--ink-soft));
 }
 
 .card-grid {
@@ -646,69 +537,61 @@ html.js .hive-fallback.show {
   gap: 1rem;
 }
 .card {
-  border: 1px solid var(--border);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 1.5rem;
-  background: var(--surface);
-  transition: border-color 0.15s, background 0.15s;
-}
-.card:hover {
-  border-color: var(--border-strong);
-  background: var(--surface-2);
 }
 .card h3 {
-  font-size: 1.0313rem;
+  font-size: 1.125rem;
   margin-bottom: 0.4rem;
-  color: var(--text);
 }
 .card p {
-  color: var(--text-dim);
-  font-size: 0.9063rem;
+  color: var(--ink-soft);
+  font-size: 0.9688rem;
   margin: 0;
 }
 .card .cell-icon {
-  width: 1.7rem;
-  height: 1.9rem;
-  margin-bottom: 1rem;
-  color: var(--amber);
+  width: 2rem;
+  height: 2.2rem;
+  margin-bottom: 0.9rem;
+  color: var(--gold);
 }
 
 /* ---- Timeline (schedule) ------------------------------------------------ */
 .timeline {
-  max-width: 640px;
+  max-width: 620px;
   margin-inline: auto;
-  border-top: 1px solid var(--border);
-  list-style: none;
-  padding-left: 0;
+  border-top: 1px solid var(--line);
 }
 .timeline li {
   display: grid;
   grid-template-columns: 6.5rem 1fr;
   gap: 1.25rem;
   padding: 1.05rem 0.25rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--line);
   align-items: baseline;
 }
+.timeline {
+  list-style: none;
+  padding-left: 0;
+}
 .timeline .time {
-  font-family: var(--mono);
-  font-weight: 500;
-  font-size: 0.8438rem;
-  color: var(--amber);
+  font-weight: 700;
+  color: var(--gold-deep);
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 .timeline .what b {
   display: block;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text);
+  font-size: 1.0625rem;
 }
 .timeline .what span {
-  color: var(--text-faint);
-  font-size: 0.875rem;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
 }
 @media (max-width: 480px) {
   .timeline li {
-    grid-template-columns: 5rem 1fr;
+    grid-template-columns: 5.2rem 1fr;
     gap: 0.9rem;
   }
 }
@@ -719,10 +602,10 @@ html.js .hive-fallback.show {
   margin-inline: auto;
 }
 .faq details {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--line);
 }
 .faq details:first-of-type {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--line);
 }
 .faq summary {
   list-style: none;
@@ -731,14 +614,9 @@ html.js .hive-fallback.show {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: 1.1rem 0.25rem;
-  font-weight: 500;
-  font-size: 0.9688rem;
-  color: var(--text);
-  transition: color 0.15s;
-}
-.faq summary:hover {
-  color: var(--amber);
+  padding: 1.15rem 0.25rem;
+  font-weight: 700;
+  font-size: 1.0625rem;
 }
 .faq summary::-webkit-details-marker {
   display: none;
@@ -746,61 +624,40 @@ html.js .hive-fallback.show {
 .faq summary::after {
   content: "+";
   flex: none;
-  font-family: var(--mono);
-  width: 1.55rem;
-  height: 1.55rem;
+  width: 1.6rem;
+  height: 1.6rem;
   display: grid;
   place-items: center;
-  border: 1px solid var(--border-strong);
-  border-radius: 6px;
-  font-weight: 400;
-  color: var(--text-dim);
-  transition: transform 0.2s, border-color 0.2s, color 0.2s;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  font-weight: 500;
+  color: var(--gold-deep);
+  transition: transform 0.2s, background 0.2s;
 }
 .faq details[open] summary::after {
-  content: "−";
-  color: var(--amber);
-  border-color: var(--amber);
+  content: "–";
+  transform: rotate(180deg);
+  background: var(--paper-2);
 }
 .faq details p {
-  padding: 0 2.6rem 1.15rem 0.25rem;
-  color: var(--text-dim);
-  font-size: 0.9375rem;
+  padding: 0 2.5rem 1.15rem 0.25rem;
+  color: var(--ink-soft);
   margin: 0;
 }
 
 /* ---- Callout band ------------------------------------------------------- */
 .band {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: calc(var(--radius) + 4px);
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: calc(var(--radius) + 6px);
   padding: clamp(2.25rem, 6vw, 3.5rem);
   text-align: center;
-  overflow: hidden;
-}
-.band::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(60% 120% at 50% 0%, var(--amber-glow), transparent 70%);
-  pointer-events: none;
-}
-.band::after {
-  content: "";
-  position: absolute;
-  inset: 0 20% auto;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(245, 166, 35, 0.7), transparent);
-}
-.band > * {
-  position: relative;
 }
 .band h2 {
   color: #fff;
 }
 .band p {
-  color: var(--text-dim);
+  color: rgba(250, 246, 238, 0.75);
   max-width: 36em;
   margin-inline: auto;
 }
@@ -808,17 +665,18 @@ html.js .hive-fallback.show {
   margin-top: 0.75rem;
 }
 .band .link-quiet {
-  color: var(--text-faint);
+  color: rgba(250, 246, 238, 0.65);
+  text-decoration-color: rgba(250, 246, 238, 0.35);
 }
 .band .link-quiet:hover {
-  color: var(--text);
+  color: #fff;
 }
 
 /* ---- Footer ------------------------------------------------------------- */
 .site-footer {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--line);
   padding: 2.5rem 0 3rem;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 }
 .site-footer .top {
   display: flex;
@@ -834,28 +692,22 @@ html.js .hive-fallback.show {
 }
 .site-footer nav a {
   text-decoration: none;
-  color: var(--text-dim);
-  transition: color 0.15s;
+  color: var(--ink-soft);
 }
 .site-footer nav a:hover {
-  color: var(--text);
+  color: var(--ink);
 }
 .site-footer .fine {
   margin-top: 1.75rem;
-  color: var(--text-faint);
+  color: var(--ink-soft);
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1.5rem;
   justify-content: space-between;
-  font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 .site-footer .fine p {
   margin: 0;
-}
-.site-footer .fine .link-quiet {
-  font-size: inherit;
-  font-family: var(--mono);
 }
 
 /* ---- Motion ------------------------------------------------------------- */
