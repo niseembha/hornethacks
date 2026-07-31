@@ -35,12 +35,11 @@
   var lastGlint = 0;
   var lastIdleDraw = 0;
 
-  /* Build animation: each block falls into place (bottom rows first,
-     sweeping left → right with jitter) and lands with a brief flash */
-  var FALL = 380; /* ms a block spends falling */
+  /* Build animation: blocks emerge from the page depth (z-axis), scaling
+     up into their slot with a pop, radiating from the center outward */
+  var GROW = 420; /* ms a block spends emerging */
   var FLASH = 260; /* ms of landing glow */
   var buildDelay = null; /* per-block start time offset */
-  var buildDrop = null; /* per-block drop height, in block units */
   var buildTotal = 0;
 
   /* Deterministic per-block jitter so the mosaic is stable */
@@ -93,24 +92,24 @@
     gh = grid.length;
     splitX = wA - left;
 
-    /* choreograph the build */
+    /* choreograph the build: center blocks arrive first, edges last */
     buildDelay = new Float32Array(gw * gh);
-    buildDrop = new Float32Array(gw * gh);
     var maxD = 0;
     for (var by = 0; by < gh; by++) {
       for (var bx = 0; bx < gw; bx++) {
         if (!grid[by][bx]) continue;
         var idx = by * gw + bx;
+        var dx = Math.abs(bx + 0.5 - gw / 2) / (gw / 2); /* 0 center → 1 edge */
+        var dy = Math.abs(by + 0.5 - gh / 2) / (gh / 2);
         var d =
-          (bx / gw) * 820 + /* left → right sweep */
-          ((gh - 1 - by) / gh) * 260 + /* lower rows land first */
-          hash(bx + 13, by + 7) * 260; /* organic jitter */
+          dx * 780 + /* radiate outward horizontally */
+          dy * 140 + /* slight vertical bloom */
+          hash(bx + 13, by + 7) * 240; /* organic jitter */
         buildDelay[idx] = d;
         if (d > maxD) maxD = d;
-        buildDrop[idx] = 2.2 + hash(bx + 3, by + 11) * 2.6;
       }
     }
-    buildTotal = maxD + FALL + FLASH;
+    buildTotal = maxD + GROW + FLASH;
   }
 
   /* ---- Block face colors (light from the top-left) ---- */
@@ -214,7 +213,7 @@
     ctx.clearRect(0, 0, W, H);
 
     var half = gw / 2;
-    var falling = [];
+    var emerging = [];
 
     /* settled blocks: side pass, then front pass (fronts cover the sides) */
     for (var pass = 0; pass < 2; pass++) {
@@ -225,14 +224,14 @@
           var boost = 0;
           if (!complete) {
             var i = y * gw + x;
-            var t = (buildMs - buildDelay[i]) / FALL;
+            var t = (buildMs - buildDelay[i]) / GROW;
             if (t < 0) continue; /* not yet spawned */
             if (t < 1) {
-              if (pass === 1) falling.push({ x: x, y: y, i: i, t: t, ox: ox });
+              if (pass === 1) emerging.push({ x: x, y: y, t: t, ox: ox });
               continue;
             }
-            var age = buildMs - buildDelay[i] - FALL;
-            if (age < FLASH) boost = (1 - age / FLASH) * 18; /* landing flash */
+            var age = buildMs - buildDelay[i] - GROW;
+            if (age < FLASH) boost = (1 - age / FLASH) * 18; /* arrival flash */
           }
           if (pass === 0) drawSides(x, y, s, oy, ox, 0);
           else drawFront(x, y, s, boost + liveBoost(x, y, now), 0);
@@ -240,17 +239,33 @@
       }
     }
 
-    /* airborne blocks render above everything, with a faint motion trail */
-    for (var f = 0; f < falling.length; f++) {
-      var b = falling[f];
-      var ease = b.t * b.t; /* gravity: accelerate into the slot */
-      var yOff = -(1 - ease) * buildDrop[b.i] * s;
-      var alpha = Math.min(1, b.t / 0.3); /* materialize softly up top */
-      ctx.globalAlpha = alpha * 0.3;
-      drawFront(b.x, b.y, s, 6, yOff - s * 0.55);
+    /* emerging blocks scale up out of the page depth, with a soft ghost
+       of where they just were, and a slight overshoot pop as they land */
+    for (var f = 0; f < emerging.length; f++) {
+      var b = emerging[f];
+      var u = b.t - 1;
+      var c1 = 1.70158;
+      var sc = Math.max(0, 1 + (c1 + 1) * u * u * u + c1 * u * u); /* easeOutBack */
+      var alpha = Math.min(1, b.t / 0.25); /* materialize out of the dark */
+      var cx = b.x * s + s / 2;
+      var cy = b.y * s + s / 2;
+
+      ctx.save();
+      ctx.globalAlpha = alpha * 0.25; /* depth ghost, one step behind */
+      ctx.translate(cx, cy);
+      ctx.scale(Math.max(0.01, sc * 0.65), Math.max(0.01, sc * 0.65));
+      ctx.translate(-cx, -cy);
+      drawFront(b.x, b.y, s, 6, 0);
+      ctx.restore();
+
+      ctx.save();
       ctx.globalAlpha = alpha;
-      drawSides(b.x, b.y, s, oy, b.ox, yOff);
-      drawFront(b.x, b.y, s, 8, yOff);
+      ctx.translate(cx, cy);
+      ctx.scale(Math.max(0.01, sc), Math.max(0.01, sc));
+      ctx.translate(-cx, -cy);
+      drawSides(b.x, b.y, s, oy, b.ox, 0);
+      drawFront(b.x, b.y, s, 8, 0);
+      ctx.restore();
       ctx.globalAlpha = 1;
     }
   }
