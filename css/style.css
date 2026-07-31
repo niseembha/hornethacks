@@ -340,6 +340,8 @@ canvas {
 .brand svg {
   width: 1.71875rem; /* 2.5px per cell of the 11x10 sprite (27.5x25px) */
   height: 1.5625rem;
+  position: relative;
+  top: -2px; /* optical alignment with the wordmark */
   flex: none;
   color: var(--text); /* pixel hornet picks this up via currentColor */
   image-rendering: pixelated;
