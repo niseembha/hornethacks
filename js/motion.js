@@ -66,7 +66,7 @@
       var dir = Math.random() < 0.5 ? 1 : -1;
       var wrap = document.createElement("div");
       wrap.className = "flyby";
-      wrap.innerHTML = '<svg viewBox="0 0 20 18" aria-hidden="true"><use href="#hh-mark"/></svg>';
+      wrap.innerHTML = '<svg viewBox="0 0 16 12" aria-hidden="true"><use href="#hh-mark"/></svg>';
       decor.appendChild(wrap);
       var y0 = h * (0.1 + Math.random() * 0.55);
       var amp = 10 + Math.random() * 12;
