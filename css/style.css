@@ -549,6 +549,32 @@ canvas {
   position: absolute;
   opacity: 0.8;
 }
+/* Pop-in on load: animate the <use> child so the float animation's
+   transform on the svg itself is untouched */
+.vcube use {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: cube-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+.vcube-a use {
+  animation-delay: 0.35s;
+}
+.vcube-b use {
+  animation-delay: 0.55s;
+}
+.vcube-c use {
+  animation-delay: 0.75s;
+}
+@keyframes cube-pop {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 .vcube-a {
   width: clamp(70px, 9vw, 130px);
   left: 8%;
