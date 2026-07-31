@@ -338,8 +338,8 @@ canvas {
   color: var(--text);
 }
 .brand svg {
-  width: 2.0625rem; /* 3px per cell of the 11x10 sprite */
-  height: 1.875rem;
+  width: 1.71875rem; /* 2.5px per cell of the 11x10 sprite (27.5x25px) */
+  height: 1.5625rem;
   flex: none;
   color: var(--text); /* pixel hornet picks this up via currentColor */
   image-rendering: pixelated;
