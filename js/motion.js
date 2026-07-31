@@ -61,7 +61,7 @@
     var SPRITE =
       '<svg viewBox="0 0 11 10" shape-rendering="crispEdges" aria-hidden="true">' +
       '<g class="fw fw-a">' +
-      '<g fill="#6b6b6b">' +
+      '<g fill="#000000">' +
       '<rect x="3" y="0" width="2" height="1"/><rect x="6" y="0" width="2" height="1"/>' +
       '<rect x="2" y="1" width="1" height="2"/><rect x="5" y="1" width="1" height="1"/>' +
       '<rect x="8" y="1" width="1" height="2"/><rect x="6" y="2" width="1" height="1"/>' +
@@ -71,14 +71,14 @@
       '<rect x="3" y="2" width="3" height="1"/><rect x="7" y="2" width="1" height="1"/>' +
       "</g></g>" +
       '<g class="fw fw-b">' +
-      '<g fill="#6b6b6b">' +
+      '<g fill="#000000">' +
       '<rect x="1" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/>' +
       '<rect x="9" y="2" width="1" height="1"/>' +
       "</g>" +
       '<g fill="#34d399">' +
       '<rect x="2" y="2" width="3" height="1"/><rect x="6" y="2" width="3" height="1"/>' +
       "</g></g>" +
-      '<g fill="#6b6b6b">' +
+      '<g fill="#000000">' +
       '<rect x="3" y="3" width="6" height="1"/>' +
       '<rect x="2" y="4" width="2" height="1"/><rect x="5" y="4" width="1" height="5"/>' +
       '<rect x="9" y="4" width="1" height="1"/>' +
@@ -90,7 +90,7 @@
       '<rect x="3" y="9" width="6" height="1"/>' +
       "</g>" +
       '<g fill="#34d399"><rect x="4" y="4" width="1" height="5"/></g>' +
-      '<g fill="#0a0a0a"><rect x="8" y="6" width="1" height="1"/></g>' +
+      '<g fill="#000000"><rect x="8" y="6" width="1" height="1"/></g>' +
       '<g fill="currentColor">' +
       '<rect x="6" y="4" width="3" height="1"/><rect x="2" y="5" width="1" height="3"/>' +
       '<rect x="6" y="5" width="4" height="1"/><rect x="6" y="6" width="2" height="1"/>' +
