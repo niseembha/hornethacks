@@ -625,9 +625,6 @@ canvas {
     0 0 30px -10px rgba(52, 211, 153, 0.35);
 }
 .fact .label {
-  display: flex;
-  align-items: center;
-  gap: 0.55em;
   font-family: var(--pixel);
   font-size: 0.7188rem;
   font-weight: 400;
@@ -635,47 +632,6 @@ canvas {
   text-transform: uppercase;
   color: var(--green);
   margin-bottom: 0.6rem;
-}
-.fact-cube {
-  width: 13px;
-  height: 15px;
-  flex: none;
-  color: var(--green);
-  transition: transform 0.2s, color 0.2s;
-}
-.fact:hover .fact-cube {
-  transform: translateY(-2px) scale(1.12);
-  color: var(--green-bright);
-}
-/* Entrance: each card rises and settles with a soft overshoot while its
-   extrusion builds underneath. Overrides the generic .reveal fade;
-   motion.js supplies the stagger via --reveal-delay and the .in trigger. */
-html.js .fact.reveal,
-html.js .fact.reveal.in {
-  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, background 0.15s;
-  transition-delay: 0s;
-}
-html.js .fact.reveal {
-  opacity: 0;
-}
-html.js .fact.reveal.in {
-  animation: fact-in 0.65s cubic-bezier(0.22, 1.28, 0.42, 1) both;
-  animation-delay: var(--reveal-delay, 0s);
-}
-@keyframes fact-in {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-    box-shadow: 0 0 0 0 var(--border-strong), 0 0 0 0 var(--border);
-  }
-  55% {
-    opacity: 1;
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    box-shadow: 2px 2px 0 0 var(--border-strong), 4px 4px 0 0 var(--border);
-  }
 }
 .fact .value {
   font-size: 1.0625rem;

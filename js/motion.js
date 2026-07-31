@@ -10,7 +10,7 @@
   /* ---- Scroll reveals with a small stagger per group ---- */
   if (!RM && "IntersectionObserver" in window) {
     var els = document.querySelectorAll(
-      ".fact, .card, .timeline li, .faq details, .band, .section h2, .prose > p"
+      ".card, .timeline li, .faq details, .band, .section h2, .prose > p"
     );
     var groups = new Map();
     els.forEach(function (el) {
