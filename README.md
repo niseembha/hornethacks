@@ -48,7 +48,6 @@ contact.html          Email, forms, directions
 css/style.css         All styles (design tokens up top)
 js/config.js          ← form URLs + contact email live here
 js/main.js            Mobile nav, config-driven links
-js/voxel-title.js     Renders the hero wordmark as 3D voxel blocks
 assets/fonts/         Self-hosted Geist Sans/Mono + Silkscreen
 assets/favicon.svg    Pixel hornet favicon
 ```
