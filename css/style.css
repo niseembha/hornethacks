@@ -554,7 +554,7 @@ canvas {
 .vcube use {
   transform-box: fill-box;
   transform-origin: 50% 50%;
-  animation: cube-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  animation: cube-pop 0.6s cubic-bezier(0.3, 1.15, 0.55, 1) backwards;
 }
 /* smallest pops first, biggest lands last */
 .vcube-c use {
@@ -568,7 +568,7 @@ canvas {
 }
 @keyframes cube-pop {
   from {
-    transform: scale(0);
+    transform: scale(0.6);
     opacity: 0;
   }
   to {
@@ -600,7 +600,7 @@ canvas {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-14px);
+    transform: translateY(-28px);
   }
 }
 @keyframes float-b {
@@ -609,7 +609,7 @@ canvas {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(10px);
+    transform: translateY(22px);
   }
 }
 @media (max-width: 760px) {
