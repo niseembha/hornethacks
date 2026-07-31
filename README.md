@@ -32,7 +32,7 @@ Cloudflare Pages all serve it as-is with zero configuration.
 | Colors / typography | CSS variables at the top of `css/style.css` |
 
 > **Placeholders to replace before launch:** both `forms.gle/REPLACE-WITH-…`
-> URLs in `js/config.js`, and the `hello@hornethacks.org` contact email.
+> URLs in `js/config.js`, and the `team@hornethacks.com` contact email.
 > The 8 AM – 8 PM times and day-of schedule are reasonable defaults for a
 > 12-hour event — adjust to your real run-of-show.
 

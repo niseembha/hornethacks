@@ -11,5 +11,5 @@ window.HORNETHACKS = {
   sponsorFormUrl: "https://forms.gle/mgJEzq5jDzMutS6cA",
 
   /* General contact email */
-  contactEmail: "hello@hornethacks.org",
+  contactEmail: "team@hornethacks.com",
 };
