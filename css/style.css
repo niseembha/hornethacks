@@ -549,24 +549,6 @@ canvas {
   position: absolute;
   opacity: 0.8;
 }
-/* Pop-in on load: animate the <use> child so the float animation's
-   transform on the svg itself is untouched */
-.vcube use {
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-  /* the hero's closing beat: wordmark build + typing finish first */
-  animation: cube-pop 0.6s cubic-bezier(0.3, 1.15, 0.55, 1) 2.4s backwards;
-}
-@keyframes cube-pop {
-  from {
-    transform: scale(0.6);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
 .vcube-a {
   width: clamp(70px, 9vw, 130px);
   left: 8%;
