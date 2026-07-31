@@ -17,7 +17,12 @@
       var n = groups.get(el.parentElement) || 0;
       groups.set(el.parentElement, n + 1);
       el.classList.add("reveal");
-      el.style.setProperty("--reveal-delay", Math.min(n * 70, 420) + "ms");
+      /* long lists (schedule timeline, FAQ) cascade faster so late items
+         aren't left waiting behind a big stagger */
+      var quick = el.matches(".timeline li, .faq details");
+      var step = quick ? 40 : 70;
+      var cap = quick ? 200 : 420;
+      el.style.setProperty("--reveal-delay", Math.min(n * step, cap) + "ms");
     });
     var io = new IntersectionObserver(
       function (entries) {
