@@ -114,9 +114,9 @@
      middle sits flat — a natural centered curve. */
   function draw(progress) {
     var wAvail = host.clientWidth || 300;
-    var s = Math.max(3, Math.floor(wAvail / (gw + 2)));
-    var oxMax = s * 1.1; /* horizontal depth at the outer edges */
-    var oy = Math.max(2, Math.round(s * 0.5)); /* constant downward drop */
+    var s = Math.max(3, Math.floor(wAvail / (gw + 1)));
+    var oxMax = s * 0.8; /* horizontal depth at the outer edges */
+    var oy = Math.max(2, Math.round(s * 0.45)); /* constant downward drop */
     var W = gw * s + 2;
     var H = gh * s + oy + 1;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
