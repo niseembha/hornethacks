@@ -505,6 +505,13 @@ html.js:not(.no-voxel) .voxel-title {
   /* the 63x5-block raster: (63+2 side pad) : (5 + 0.5 extrusion drop) */
   aspect-ratio: 65 / 5.5;
 }
+@media (max-width: 760px) {
+  /* phones: let the wordmark bleed to the screen edges for maximum size */
+  .voxel-title {
+    width: calc(100% + var(--pad) * 2);
+    margin-inline: calc(var(--pad) * -1);
+  }
+}
 .voxel-title canvas {
   filter: drop-shadow(0 6px 30px rgba(52, 211, 153, 0.22));
 }

@@ -204,7 +204,10 @@
     now = now || 0;
     var complete = buildMs === undefined;
     var wAvail = host.clientWidth || 300;
-    var s = Math.max(3, Math.floor(wAvail / (gw + 2)));
+    /* narrow screens get fractional block sizes so the mark fills the full
+       width instead of dropping to the next whole-block step down */
+    var sRaw = wAvail / (gw + 2);
+    var s = Math.max(3, wAvail < 700 ? sRaw : Math.floor(sRaw));
     curS = s;
     var oxMax = s * 1.1; /* horizontal depth at the outer edges */
     var oy = Math.max(2, Math.round(s * 0.5)); /* constant downward drop */
