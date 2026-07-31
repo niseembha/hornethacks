@@ -15,7 +15,7 @@
   <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
     <defs>
       <symbol id="hh-mark" viewBox="0 0 16 16" shape-rendering="crispEdges">
-        <g fill="#dfe8ff" opacity="0.85">
+        <g fill="#d9f2e6" opacity="0.8">
           <rect x="6" y="1" width="3" height="1"/><rect x="5" y="2" width="5" height="1"/>
           <rect x="5" y="3" width="5" height="1"/><rect x="6" y="4" width="3" height="1"/>
         </g>
@@ -29,7 +29,7 @@
           <rect x="4" y="10" width="1" height="1"/><rect x="8" y="10" width="1" height="1"/><rect x="10" y="10" width="1" height="1"/>
           <rect x="8" y="11" width="1" height="1"/><rect x="10" y="11" width="1" height="1"/>
         </g>
-        <g fill="#f5a623">
+        <g fill="#34d399">
           <rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="2" height="1"/>
           <rect x="2" y="7" width="2" height="1"/><rect x="5" y="7" width="2" height="1"/>
           <rect x="2" y="8" width="2" height="1"/><rect x="5" y="8" width="2" height="1"/>
@@ -38,11 +38,25 @@
         </g>
         <rect x="12" y="7" width="1" height="1" fill="#0a0a0a"/>
       </symbol>
-      <symbol id="hh-hex-solid" viewBox="0 0 24 24">
-        <path d="M12 1.5l9.1 5.25v10.5L12 22.5l-9.1-5.25V6.75z" fill="currentColor"/>
+      <symbol id="hh-cube-solid" viewBox="0 0 24 28">
+        <polygon points="12,2 22,8 12,14 2,8" fill="currentColor"/>
+        <polygon points="22,8 22,20 12,26 12,14" fill="currentColor" opacity="0.55"/>
+        <polygon points="2,8 12,14 12,26 2,20" fill="currentColor" opacity="0.3"/>
       </symbol>
-      <symbol id="hh-hex-line" viewBox="0 0 24 26">
-        <path d="M12 2l9 5.5v11L12 24l-9-5.5v-11z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <symbol id="hh-cube-line" viewBox="0 0 24 28">
+        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+          <polygon points="12,2 22,8 22,20 12,26 2,20 2,8"/>
+          <path d="M2 8l10 6 10-6M12 14v12"/>
+        </g>
+      </symbol>
+      <symbol id="hh-cube-big" viewBox="0 0 100 116">
+        <polygon points="50,8 93,33 50,58 7,33" fill="rgba(52,211,153,0.09)"/>
+        <polygon points="93,33 93,83 50,108 50,58" fill="rgba(52,211,153,0.045)"/>
+        <polygon points="7,33 50,58 50,108 7,83" fill="rgba(52,211,153,0.02)"/>
+        <g fill="none" stroke="#34d399" stroke-width="1.5" stroke-linejoin="round" opacity="0.5">
+          <polygon points="50,8 93,33 93,83 50,108 7,83 7,33"/>
+          <path d="M7 33l43 25 43-25M50 58v50"/>
+        </g>
       </symbol>
     </defs>
   </svg>
@@ -83,17 +97,17 @@
         <h2 style="text-align:center">Why sponsor</h2>
         <div class="card-grid">
           <div class="card">
-            <svg class="cell-icon" aria-hidden="true"><use href="#hh-hex-line"/></svg>
+            <svg class="cell-icon" aria-hidden="true"><use href="#hh-cube-line"/></svg>
             <h3>Meet tomorrow's builders</h3>
             <p>Connect with motivated, technically curious students years before recruiters do — and their families and teachers, too.</p>
           </div>
           <div class="card">
-            <svg class="cell-icon" aria-hidden="true"><use href="#hh-hex-line"/></svg>
+            <svg class="cell-icon" aria-hidden="true"><use href="#hh-cube-line"/></svg>
             <h3>Real, visible impact</h3>
             <p>Sponsorship pays for meals, prizes, workshop materials, and swag. Every dollar shows up in a student's day.</p>
           </div>
           <div class="card">
-            <svg class="cell-icon" aria-hidden="true"><use href="#hh-hex-line"/></svg>
+            <svg class="cell-icon" aria-hidden="true"><use href="#hh-cube-line"/></svg>
             <h3>Be part of the story</h3>
             <p>Logo placement, an opening-ceremony shoutout, the option to send mentors or judges, and a demo-day front seat.</p>
           </div>
@@ -115,7 +129,7 @@
           <h2>Become a sponsor</h2>
           <p>Two minutes of your time, twelve hours of student building. Tell us you're interested and we'll take it from there.</p>
           <a class="btn" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-SPONSOR-FORM">
-            <svg class="hex" aria-hidden="true"><use href="#hh-hex-solid"/></svg>
+            <svg class="hex" aria-hidden="true"><use href="#hh-cube-solid"/></svg>
             Sponsor interest form
           </a>
           <p style="margin-top:1.4rem;margin-bottom:0">

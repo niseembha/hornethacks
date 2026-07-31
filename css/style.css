@@ -1,8 +1,8 @@
 /* ==========================================================================
    HornetHacks — shared stylesheet
-   Playful voxel-technical: near-black surfaces, hairline borders, pixel-font
-   accents, and glowing neon gradients (amber → orange → magenta → violet).
-   Inspired by vercel.com / cursor.com, tuned clean 8-bit.
+   Clean voxel-technical: near-black surfaces, hairline borders, extruded
+   3D-block buttons, isometric cube accents, and a restrained emerald
+   palette. Inspired by vercel.com / cursor.com with a quiet 8-bit wink.
    ========================================================================== */
 
 /* ---- Fonts (self-hosted, see assets/fonts) ------------------------------ */
@@ -49,13 +49,6 @@
   src: url("../assets/fonts/geist-mono-latin-500-normal.woff2") format("woff2");
 }
 @font-face {
-  font-family: "Press Start 2P";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../assets/fonts/press-start-2p-latin-400-normal.woff2") format("woff2");
-}
-@font-face {
   font-family: "Silkscreen";
   font-style: normal;
   font-weight: 400;
@@ -80,13 +73,13 @@
   --text: #ededed;
   --text-dim: #9b9b9b;
   --text-faint: #6b6b6b;
-  --amber: #f5a623;
-  --amber-deep: #c47f00;
-  --amber-glow: rgba(245, 166, 35, 0.14);
-  --neon-orange: #ff5c39;
-  --neon-pink: #ff2d92;
-  --neon-violet: #8a63ff;
-  --grad: linear-gradient(100deg, var(--amber), var(--amber) 14%, var(--neon-orange) 48%, var(--neon-pink) 80%, var(--neon-violet));
+  --green: #34d399;
+  --green-bright: #6ee7b7;
+  --green-deep: #0e9f6e;
+  --green-dark: #0b6b4c;
+  --green-darker: #07452f;
+  --green-glow: rgba(52, 211, 153, 0.13);
+  --grad: linear-gradient(100deg, var(--green-bright), var(--green) 45%, var(--green-deep));
   --radius: 2px;
   --wrap: 1080px;
   --pad: clamp(1.25rem, 5vw, 2.5rem);
@@ -94,7 +87,7 @@
     Helvetica, Arial, sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo,
     Consolas, monospace;
-  --pixel: "Press Start 2P", "Silkscreen", "Geist Mono", monospace;
+  --pixel: "Silkscreen", "Geist Mono", monospace;
 }
 
 /* ---- Base --------------------------------------------------------------- */
@@ -127,8 +120,8 @@ body::before {
   position: absolute;
   inset: 0 0 auto;
   height: 130vh;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(52, 211, 153, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(52, 211, 153, 0.05) 1px, transparent 1px);
   background-size: 34px 34px;
   -webkit-mask-image: radial-gradient(ellipse 75% 90% at 50% 0%, #000 30%, transparent 78%);
   mask-image: radial-gradient(ellipse 75% 90% at 50% 0%, #000 30%, transparent 78%);
@@ -166,12 +159,12 @@ canvas {
 }
 
 ::selection {
-  background: var(--neon-pink);
-  color: #fff;
+  background: var(--green);
+  color: #05130d;
 }
 
 :focus-visible {
-  outline: 2px solid var(--amber);
+  outline: 2px solid var(--green);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -199,31 +192,36 @@ canvas {
 }
 
 /* ---- Buttons & links ---------------------------------------------------- */
+/* Extruded voxel block: the darker green "side faces" build the 3D depth */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.9em;
-  padding: 1em 1.4em;
-  border: 2px solid #000;
+  gap: 0.65em;
+  padding: 0.85em 1.5em;
+  border: 0;
   border-radius: 0;
-  background: var(--amber);
-  color: #0a0a0a;
-  font: 400 0.72rem/1.4 var(--pixel);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  background: var(--green);
+  color: #04130c;
+  font: 500 0.9063rem/1 var(--font);
+  letter-spacing: 0.005em;
   text-decoration: none;
   cursor: pointer;
   transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
-  box-shadow: 4px 4px 0 0 var(--neon-pink), 0 0 30px -8px rgba(255, 45, 146, 0.45);
+  box-shadow: 1px 1px 0 0 var(--green-deep), 2px 2px 0 0 var(--green-deep),
+    3px 3px 0 0 var(--green-dark), 4px 4px 0 0 var(--green-dark),
+    5px 5px 0 0 var(--green-darker), 0 0 34px -8px rgba(52, 211, 153, 0.4);
 }
 .btn:hover {
-  background: #ffb63f;
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 0 var(--neon-pink), 0 0 38px -6px rgba(255, 45, 146, 0.65);
+  background: var(--green-bright);
+  transform: translate(-1px, -1px);
+  box-shadow: 1px 1px 0 0 var(--green-deep), 2px 2px 0 0 var(--green-deep),
+    3px 3px 0 0 var(--green-dark), 4px 4px 0 0 var(--green-dark),
+    5px 5px 0 0 var(--green-darker), 6px 6px 0 0 var(--green-darker),
+    0 0 40px -6px rgba(52, 211, 153, 0.55);
 }
 .btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 0 var(--neon-pink);
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 0 var(--green-darker), 2px 2px 0 0 var(--green-darker);
 }
 .btn .hex {
   width: 0.9em;
@@ -232,15 +230,15 @@ canvas {
 }
 
 .btn--ghost {
-  background: transparent;
-  border-color: var(--border-strong);
+  background: var(--surface-2);
   color: var(--text);
-  box-shadow: 4px 4px 0 0 #222;
+  border: 1px solid var(--border-strong);
+  box-shadow: 2px 2px 0 0 #1a1a1a, 4px 4px 0 0 #111;
 }
 .btn--ghost:hover {
-  background: var(--surface-2);
-  border-color: var(--amber);
-  box-shadow: 6px 6px 0 0 #222;
+  background: #1c1c1c;
+  border-color: var(--green-deep);
+  box-shadow: 2px 2px 0 0 #1a1a1a, 4px 4px 0 0 #111, 5px 5px 0 0 #0c0c0c;
 }
 
 .link-quiet {
@@ -253,7 +251,7 @@ canvas {
 }
 .link-quiet:hover {
   color: var(--text);
-  text-decoration-color: var(--amber);
+  text-decoration-color: var(--green);
 }
 
 .eyebrow {
@@ -261,7 +259,7 @@ canvas {
   align-items: center;
   gap: 0.9em;
   font-family: var(--pixel);
-  font-size: 0.5938rem;
+  font-size: 0.6875rem;
   font-weight: 400;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -271,10 +269,9 @@ canvas {
 .eyebrow::before,
 .eyebrow::after {
   content: "";
-  width: 0.5em;
-  height: 0.57em;
-  background: var(--amber);
-  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  width: 0.42em;
+  height: 0.42em;
+  background: var(--green);
   opacity: 0.9;
 }
 
@@ -284,7 +281,7 @@ canvas {
   align-items: center;
   gap: 0.9em;
   font-family: var(--pixel);
-  font-size: 0.5938rem;
+  font-size: 0.6875rem;
   color: var(--text-dim);
   border: 1px solid var(--border);
   background: rgba(16, 16, 16, 0.6);
@@ -295,20 +292,19 @@ canvas {
 .status-pill .pulse {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
-  background: var(--amber);
-  box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.6);
+  background: var(--green); /* square: a single lit voxel */
+  box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6);
   animation: pulse 2.4s infinite;
 }
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.55);
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55);
   }
   70% {
-    box-shadow: 0 0 0 7px rgba(245, 166, 35, 0);
+    box-shadow: 0 0 0 7px rgba(52, 211, 153, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(245, 166, 35, 0);
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
   }
 }
 
@@ -336,9 +332,9 @@ canvas {
   gap: 0.7rem;
   text-decoration: none;
   font-family: var(--pixel);
-  font-weight: 400;
-  font-size: 0.6875rem;
-  letter-spacing: 0;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
   color: var(--text);
 }
 .brand svg {
@@ -349,8 +345,8 @@ canvas {
   image-rendering: pixelated;
 }
 .brand span b {
-  color: var(--amber);
-  font-weight: 400;
+  color: var(--green);
+  font-weight: 700;
 }
 
 .site-nav {
@@ -373,12 +369,14 @@ canvas {
   color: var(--text);
 }
 .site-nav .btn {
-  padding: 0.75em 1em;
-  font-size: 0.5625rem;
-  box-shadow: 3px 3px 0 0 var(--neon-pink);
+  padding: 0.6em 1.05em;
+  font-size: 0.8125rem;
+  box-shadow: 1px 1px 0 0 var(--green-deep), 2px 2px 0 0 var(--green-dark),
+    3px 3px 0 0 var(--green-darker);
 }
 .site-nav .btn:hover {
-  box-shadow: 4px 4px 0 0 var(--neon-pink);
+  box-shadow: 1px 1px 0 0 var(--green-deep), 2px 2px 0 0 var(--green-dark),
+    3px 3px 0 0 var(--green-darker), 4px 4px 0 0 var(--green-darker);
 }
 
 .nav-toggle {
@@ -455,27 +453,25 @@ canvas {
 .hero {
   position: relative;
   text-align: center;
-  padding: clamp(3.5rem, 9vh, 6rem) 0 0;
+  padding: clamp(3.5rem, 10vh, 7rem) 0 clamp(3.5rem, 9vh, 6rem);
 }
 .hero .eyebrow {
   display: flex;
   justify-content: center;
 }
 .hero h1 {
-  font-family: var(--pixel);
-  font-size: clamp(1.55rem, 5.4vw, 3.05rem);
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.25;
-  margin-bottom: 0.7em;
+  font-size: clamp(2.8rem, 8.5vw, 5rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  margin-bottom: 0.4em;
+  color: #fff;
+}
+.hero h1 .sting {
   background: var(--grad);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  filter: drop-shadow(0 0 24px rgba(255, 92, 57, 0.28));
-}
-.hero h1 .sting {
-  color: transparent; /* the gradient paints straight through */
+  filter: drop-shadow(0 0 26px rgba(52, 211, 153, 0.3));
 }
 .hero .lede {
   font-size: clamp(1rem, 2.2vw, 1.125rem);
@@ -497,7 +493,7 @@ canvas {
   color: var(--text-dim);
 }
 .event-meta .dot {
-  color: var(--amber);
+  color: var(--green);
   font-size: 0.72em;
 }
 @media (max-width: 640px) {
@@ -517,84 +513,65 @@ canvas {
   gap: 1rem;
 }
 
-/* ---- Hive stage --------------------------------------------------------- */
-.hive-section {
-  position: relative;
-  padding: clamp(1.5rem, 4vh, 3rem) 0 clamp(2.5rem, 6vh, 4rem);
-}
-.hive-stage {
-  position: relative;
-  width: min(660px, 100%);
-  margin-inline: auto;
-  aspect-ratio: 1 / 0.94;
-}
-/* Multi-color neon glow behind the comb + faint scanlines over it */
-.hive-stage::before {
-  content: "";
-  position: absolute;
-  inset: -14%;
-  background: radial-gradient(42% 42% at 32% 34%, rgba(245, 166, 35, 0.17), transparent 70%),
-    radial-gradient(44% 44% at 70% 62%, rgba(255, 45, 146, 0.13), transparent 72%),
-    radial-gradient(38% 38% at 42% 76%, rgba(138, 99, 255, 0.11), transparent 70%);
-  pointer-events: none;
-}
-.hive-stage::after {
-  content: "";
+/* ---- Floating isometric voxel cubes behind the hero ---------------------- */
+.voxel-decor {
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 4px);
   pointer-events: none;
-  z-index: 2;
+  overflow: hidden;
 }
-#hive-canvas-host,
-#hive-canvas-host canvas {
+.vcube {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  opacity: 0.8;
 }
-#hive-canvas-host canvas {
-  touch-action: pan-y; /* vertical swipes scroll the page; horizontal drags spin the hive */
+.vcube-a {
+  width: clamp(70px, 9vw, 130px);
+  left: 8%;
+  top: 16%;
+  animation: float-a 11s ease-in-out infinite;
 }
-.hive-hint {
-  text-align: center;
-  font-family: var(--mono);
-  color: var(--text-faint);
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
-  margin: 1.2rem auto 0;
+.vcube-b {
+  width: clamp(44px, 5.5vw, 80px);
+  right: 10%;
+  top: 8%;
+  animation: float-b 13s ease-in-out infinite;
 }
-.hive-hint .kbd {
-  color: var(--amber);
+.vcube-c {
+  width: clamp(30px, 3.8vw, 56px);
+  right: 20%;
+  bottom: 4%;
+  animation: float-a 9s ease-in-out 1.2s infinite;
 }
-
-/* Static SVG fallback (no JS / no WebGL) */
-.hive-fallback {
-  position: absolute;
-  inset: 4%;
-  display: grid;
-  place-items: center;
+@keyframes float-a {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
 }
-.hive-fallback svg {
-  width: 100%;
-  height: 100%;
+@keyframes float-b {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0.001deg);
+  }
+  50% {
+    transform: translateY(10px);
+  }
 }
-.hive-fallback a {
-  cursor: pointer;
-}
-.hive-fallback a .cell-fill {
-  transition: fill 0.15s, stroke 0.15s;
-}
-.hive-fallback a:hover .cell-fill,
-.hive-fallback a:focus .cell-fill {
-  fill: #1d1503;
-  stroke: var(--amber);
-}
-html.js .hive-fallback {
-  display: none; /* hidden once JS runs; re-shown by hive.js if WebGL is unavailable */
-}
-html.js .hive-fallback.show {
-  display: grid;
+@media (max-width: 760px) {
+  .vcube-a {
+    left: 2%;
+    top: 4%;
+  }
+  .vcube-b {
+    right: 3%;
+    top: 2%;
+  }
+  .vcube-c {
+    display: none;
+  }
 }
 
 /* ---- Fact strip --------------------------------------------------------- */
@@ -620,18 +597,12 @@ html.js .hive-fallback.show {
 }
 .fact .label {
   font-family: var(--pixel);
-  font-size: 0.5625rem;
+  font-size: 0.7188rem;
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--amber);
-  margin-bottom: 0.55rem;
-}
-.facts .fact:nth-child(2) .label {
-  color: var(--neon-pink);
-}
-.facts .fact:nth-child(3) .label {
-  color: var(--neon-violet);
+  color: var(--green);
+  margin-bottom: 0.5rem;
 }
 .fact .value {
   font-size: 1.0625rem;
@@ -657,16 +628,10 @@ html.js .hive-fallback.show {
   padding: clamp(3rem, 8vh, 5rem) 0 clamp(1.5rem, 4vh, 2.5rem);
 }
 .page-hero h1 {
-  font-family: var(--pixel);
-  font-size: clamp(1.15rem, 3.6vw, 1.95rem);
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.35;
-  background: var(--grad);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 20px rgba(255, 92, 57, 0.24));
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: #fff;
 }
 .page-hero .lede {
   color: var(--text-dim);
@@ -682,12 +647,8 @@ html.js .hive-fallback.show {
   padding-bottom: clamp(4rem, 9vh, 6rem);
 }
 .section h2 {
-  font-family: var(--pixel);
-  font-size: clamp(0.85rem, 2.2vw, 1.1rem);
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.5;
-  margin-bottom: 1.3rem;
+  font-size: clamp(1.4rem, 3.2vw, 1.8rem);
+  margin-bottom: 1.2rem;
   color: #fff;
 }
 
@@ -713,16 +674,14 @@ html.js .hive-fallback.show {
   border-radius: var(--radius);
   padding: 1.5rem;
   background: var(--surface);
-  transition: background 0.15s, box-shadow 0.15s, border-color 0.15s;
+  box-shadow: 3px 3px 0 0 rgba(255, 255, 255, 0.03); /* faint extruded edge */
+  transition: background 0.15s, box-shadow 0.15s, border-color 0.15s, transform 0.15s;
 }
 .card:hover {
   background: var(--surface-2);
-  border-color: transparent;
-  /* gradient border + soft neon spill */
-  background-image: linear-gradient(var(--surface-2), var(--surface-2)), var(--grad);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-  box-shadow: 0 0 30px -12px rgba(255, 45, 146, 0.5);
+  border-color: var(--green-dark);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 0 rgba(52, 211, 153, 0.14), 0 0 30px -12px rgba(52, 211, 153, 0.35);
 }
 .card h3 {
   font-size: 1.0313rem;
@@ -738,7 +697,7 @@ html.js .hive-fallback.show {
   width: 1.7rem;
   height: 1.9rem;
   margin-bottom: 1rem;
-  color: var(--amber);
+  color: var(--green);
 }
 
 /* ---- Timeline (schedule) ------------------------------------------------ */
@@ -760,15 +719,9 @@ html.js .hive-fallback.show {
 .timeline .time {
   font-family: var(--pixel);
   font-weight: 400;
-  font-size: 0.625rem;
-  color: var(--amber);
+  font-size: 0.7813rem;
+  color: var(--green);
   white-space: nowrap;
-}
-.timeline li:nth-child(3n + 2) .time {
-  color: var(--neon-pink);
-}
-.timeline li:nth-child(3n) .time {
-  color: var(--neon-violet);
 }
 .timeline .what b {
   display: block;
@@ -812,7 +765,7 @@ html.js .hive-fallback.show {
   transition: color 0.15s;
 }
 .faq summary:hover {
-  color: var(--amber);
+  color: var(--green);
 }
 .faq summary::-webkit-details-marker {
   display: none;
@@ -834,8 +787,8 @@ html.js .hive-fallback.show {
 }
 .faq details[open] summary::after {
   content: "−";
-  color: var(--amber);
-  border-color: var(--amber);
+  color: var(--green);
+  border-color: var(--green);
 }
 .faq details p {
   padding: 0 2.6rem 1.15rem 0.25rem;
@@ -858,8 +811,8 @@ html.js .hive-fallback.show {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(45% 110% at 22% 0%, var(--amber-glow), transparent 70%),
-    radial-gradient(45% 110% at 78% 0%, rgba(255, 45, 146, 0.12), transparent 70%);
+  background: radial-gradient(45% 110% at 22% 0%, var(--green-glow), transparent 70%),
+    radial-gradient(45% 110% at 78% 0%, rgba(52, 211, 153, 0.07), transparent 70%);
   pointer-events: none;
 }
 .band::after {

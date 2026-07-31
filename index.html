@@ -12,7 +12,6 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/geist-sans-latin-400-normal.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/geist-sans-latin-700-normal.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/press-start-2p-latin-400-normal.woff2">
   <link rel="stylesheet" href="css/style.css">
   <script>document.documentElement.classList.add("js");</script>
   <script type="application/ld+json">
@@ -48,7 +47,7 @@
   <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
     <defs>
       <symbol id="hh-mark" viewBox="0 0 16 16" shape-rendering="crispEdges">
-        <g fill="#dfe8ff" opacity="0.85">
+        <g fill="#d9f2e6" opacity="0.8">
           <rect x="6" y="1" width="3" height="1"/><rect x="5" y="2" width="5" height="1"/>
           <rect x="5" y="3" width="5" height="1"/><rect x="6" y="4" width="3" height="1"/>
         </g>
@@ -62,7 +61,7 @@
           <rect x="4" y="10" width="1" height="1"/><rect x="8" y="10" width="1" height="1"/><rect x="10" y="10" width="1" height="1"/>
           <rect x="8" y="11" width="1" height="1"/><rect x="10" y="11" width="1" height="1"/>
         </g>
-        <g fill="#f5a623">
+        <g fill="#34d399">
           <rect x="3" y="6" width="1" height="1"/><rect x="5" y="6" width="2" height="1"/>
           <rect x="2" y="7" width="2" height="1"/><rect x="5" y="7" width="2" height="1"/>
           <rect x="2" y="8" width="2" height="1"/><rect x="5" y="8" width="2" height="1"/>
@@ -71,11 +70,25 @@
         </g>
         <rect x="12" y="7" width="1" height="1" fill="#0a0a0a"/>
       </symbol>
-      <symbol id="hh-hex-solid" viewBox="0 0 24 24">
-        <path d="M12 1.5l9.1 5.25v10.5L12 22.5l-9.1-5.25V6.75z" fill="currentColor"/>
+      <symbol id="hh-cube-solid" viewBox="0 0 24 28">
+        <polygon points="12,2 22,8 12,14 2,8" fill="currentColor"/>
+        <polygon points="22,8 22,20 12,26 12,14" fill="currentColor" opacity="0.55"/>
+        <polygon points="2,8 12,14 12,26 2,20" fill="currentColor" opacity="0.3"/>
       </symbol>
-      <symbol id="hh-hex-line" viewBox="0 0 24 26">
-        <path d="M12 2l9 5.5v11L12 24l-9-5.5v-11z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <symbol id="hh-cube-line" viewBox="0 0 24 28">
+        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+          <polygon points="12,2 22,8 22,20 12,26 2,20 2,8"/>
+          <path d="M2 8l10 6 10-6M12 14v12"/>
+        </g>
+      </symbol>
+      <symbol id="hh-cube-big" viewBox="0 0 100 116">
+        <polygon points="50,8 93,33 50,58 7,33" fill="rgba(52,211,153,0.09)"/>
+        <polygon points="93,33 93,83 50,108 50,58" fill="rgba(52,211,153,0.045)"/>
+        <polygon points="7,33 50,58 50,108 7,83" fill="rgba(52,211,153,0.02)"/>
+        <g fill="none" stroke="#34d399" stroke-width="1.5" stroke-linejoin="round" opacity="0.5">
+          <polygon points="50,8 93,33 93,83 50,108 7,83 7,33"/>
+          <path d="M7 33l43 25 43-25M50 58v50"/>
+        </g>
       </symbol>
     </defs>
   </svg>
@@ -106,6 +119,11 @@
 
     <!-- Hero -->
     <section class="hero">
+      <div class="voxel-decor" aria-hidden="true">
+        <svg class="vcube vcube-a" viewBox="0 0 100 116"><use href="#hh-cube-big"/></svg>
+        <svg class="vcube vcube-b" viewBox="0 0 100 116"><use href="#hh-cube-big"/></svg>
+        <svg class="vcube vcube-c" viewBox="0 0 100 116"><use href="#hh-cube-big"/></svg>
+      </div>
       <div class="wrap">
         <p class="status-pill"><span class="pulse" aria-hidden="true"></span>Interest list open</p>
         <p class="eyebrow">12-hour high school hackathon</p>
@@ -113,14 +131,14 @@
         <p class="lede">One Saturday. Twelve hours. Team up, learn from mentors and workshops, and demo something real by sundown — no experience required.</p>
         <p class="event-meta">
           <span>Sat, October 10, 2026</span>
-          <span class="dot" aria-hidden="true">&#x2B22;</span>
+          <span class="dot" aria-hidden="true">&#x25A0;</span>
           <span>8:00 AM – 8:00 PM</span>
-          <span class="dot" aria-hidden="true">&#x2B22;</span>
+          <span class="dot" aria-hidden="true">&#x25A0;</span>
           <span>Valdes STEM + Innovation Center · Greenhill School, Addison, TX</span>
         </p>
         <div class="cta-row">
           <a class="btn" data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-INTEREST-FORM">
-            <svg class="hex" aria-hidden="true"><use href="#hh-hex-solid"/></svg>
+            <svg class="hex" aria-hidden="true"><use href="#hh-cube-solid"/></svg>
             Join the interest list
           </a>
           <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-SPONSOR-FORM">Interested in sponsoring HornetHacks?</a>
@@ -128,66 +146,6 @@
       </div>
     </section>
 
-    <!-- The hive -->
-    <section class="hive-section" aria-label="Explore the site through the hive">
-      <div class="wrap">
-        <div class="hive-stage">
-          <div id="hive-canvas-host" aria-hidden="true"></div>
-
-          <!-- Static honeycomb: shown when JavaScript or WebGL is unavailable -->
-          <div class="hive-fallback">
-            <svg viewBox="30 16 360 364" role="navigation" aria-label="Hive navigation">
-              <defs>
-                <polygon id="fb-hex" points="60,0 30,52 -30,52 -60,0 -30,-52 30,-52"/>
-              </defs>
-              <g font-family="Press Start 2P, monospace" font-size="9" text-anchor="middle">
-                <g transform="translate(210 198)">
-                  <use href="#fb-hex" fill="#f5a623" stroke="#2e2e2e" stroke-width="1.5"/>
-                  <use href="#hh-mark" style="color:#0a0a0a" x="-34" y="-34" width="68" height="68"/>
-                </g>
-                <a href="https://forms.gle/REPLACE-WITH-INTEREST-FORM" data-link="interest" target="_blank" rel="noopener">
-                  <g transform="translate(210 88)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">REGISTER</text>
-                  </g>
-                </a>
-                <a href="about.html">
-                  <g transform="translate(305 143)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">ABOUT</text>
-                  </g>
-                </a>
-                <a href="schedule.html">
-                  <g transform="translate(305 253)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">SCHEDULE</text>
-                  </g>
-                </a>
-                <a href="faq.html">
-                  <g transform="translate(210 308)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">FAQ</text>
-                  </g>
-                </a>
-                <a href="sponsors.html">
-                  <g transform="translate(115 253)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">SPONSORS</text>
-                  </g>
-                </a>
-                <a href="contact.html">
-                  <g transform="translate(115 143)">
-                    <use href="#fb-hex" class="cell-fill" fill="#141414" stroke="#2e2e2e" stroke-width="1.5"/>
-                    <text y="5" fill="#ededed">CONTACT</text>
-                  </g>
-                </a>
-              </g>
-            </svg>
-          </div>
-        </div>
-        <p class="hive-hint">THE HIVE IS THE MAP ▸ <span class="kbd">DRAG</span> TO SPIN ▸ <span class="kbd">CLICK A CELL</span> TO WARP</p>
-      </div>
-    </section>
 
     <!-- Quick facts -->
     <section class="facts">
@@ -229,7 +187,7 @@
           <h2>Ready to build?</h2>
           <p>Registration opens soon — join the interest list and we'll sting you (gently) the moment it does.</p>
           <a class="btn" data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/REPLACE-WITH-INTEREST-FORM">
-            <svg class="hex" aria-hidden="true"><use href="#hh-hex-solid"/></svg>
+            <svg class="hex" aria-hidden="true"><use href="#hh-cube-solid"/></svg>
             Join the interest list
           </a>
           <p style="margin-top:1.4rem;margin-bottom:0">
@@ -270,6 +228,5 @@
 
   <script src="js/config.js"></script>
   <script src="js/main.js"></script>
-  <script type="module" src="js/hive.js"></script>
 </body>
 </html>
