@@ -651,11 +651,9 @@ canvas {
   padding: clamp(3rem, 8vh, 5rem) 0 clamp(1.5rem, 4vh, 2.5rem);
 }
 .page-hero h1 {
-  font-family: var(--mono);
-  font-size: clamp(2rem, 5.5vw, 3.1rem);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
   color: #fff;
 }
 .page-hero .lede {
