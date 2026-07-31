@@ -49,6 +49,13 @@
   src: url("../assets/fonts/geist-mono-latin-500-normal.woff2") format("woff2");
 }
 @font-face {
+  font-family: "Pixelify Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/pixelify-sans-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
   font-family: "Silkscreen";
   font-style: normal;
   font-weight: 400;
@@ -88,6 +95,7 @@
   --mono: "Geist Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo,
     Consolas, monospace;
   --pixel: "Silkscreen", "Geist Mono", monospace;
+  --pixel-display: "Pixelify Sans", "Silkscreen", "Geist Mono", monospace;
 }
 
 /* ---- Base --------------------------------------------------------------- */
@@ -651,9 +659,11 @@ canvas {
   padding: clamp(3rem, 8vh, 5rem) 0 clamp(1.5rem, 4vh, 2.5rem);
 }
 .page-hero h1 {
-  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  font-family: var(--pixel-display);
+  font-size: clamp(2.3rem, 6.5vw, 3.6rem);
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: 0.005em;
+  line-height: 1.1;
   color: #fff;
 }
 .page-hero .lede {
