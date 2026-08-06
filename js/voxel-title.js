@@ -20,6 +20,23 @@
   var TEXT_A = "HORNET";
   var TEXT_B = "HACKS";
   var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var INTRO = document.documentElement.classList.contains("hero-intro-active");
+  var skipRequested = false;
+  var building = false;
+  var buildRaf = 0;
+  var lastBuildElapsed = 0;
+  var idleStarted = false;
+
+  window.addEventListener("hh:intro-skip", function () {
+    skipRequested = true;
+    building = false;
+    if (buildRaf) cancelAnimationFrame(buildRaf);
+    buildRaf = 0;
+    if (grid) {
+      draw(performance.now());
+      startIdle();
+    }
+  });
 
   var canvas = document.createElement("canvas");
   canvas.width = 0; /* keep the pre-draw canvas out of layout — the host's */
@@ -241,6 +258,13 @@
             }
             var age = buildMs - buildDelay[i] - GROW;
             if (age < FLASH) boost = (1 - age / FLASH) * 18; /* arrival flash */
+            /* A restrained emerald charge crosses the assembled faces once
+               most blocks have landed, tying the mosaic into the hive boot. */
+            var sweep = (buildMs - 1120) / 360 * gw;
+            var sweepDistance = Math.abs(x - sweep);
+            if (sweep > -3 && sweep < gw + 3 && sweepDistance < 2.8) {
+              boost += (1 - sweepDistance / 2.8) * 19;
+            }
           }
           if (pass === 0) drawSides(x, y, s, oy, ox, 0);
           else drawFront(x, y, s, boost + liveBoost(x, y, now), 0);
@@ -282,18 +306,24 @@
   }
 
   function reveal() {
-    if (RM) {
+    if (RM || !INTRO || skipRequested) {
       draw(performance.now());
+      startIdle();
       return;
     }
+    building = true;
     var t0 = performance.now();
     (function step(now) {
       var elapsed = now - t0;
+      lastBuildElapsed = elapsed;
       draw(now, elapsed);
-      if (elapsed < buildTotal) requestAnimationFrame(step);
+      if (elapsed < buildTotal && building && !skipRequested) buildRaf = requestAnimationFrame(step);
       else {
+        building = false;
+        buildRaf = 0;
         draw(now);
         startIdle();
+        window.dispatchEvent(new CustomEvent("hh:title-built"));
       }
     })(t0);
   }
@@ -301,7 +331,8 @@
   /* After the build-in: blocks glow near the cursor, and random glints
      shimmer across the mark while it's on screen. ~30fps, paused offscreen. */
   function startIdle() {
-    if (RM) return;
+    if (RM || idleStarted) return;
+    idleStarted = true;
 
     canvas.addEventListener("pointermove", function (e) {
       pointer = { x: e.offsetX / curS, y: e.offsetY / curS };
@@ -360,9 +391,11 @@
     try {
       rasterize();
       if (!gw || !gh) return fallback(); /* raster failed → text headline */
+      document.documentElement.classList.add("voxel-ready");
       reveal();
       new ResizeObserver(function () {
-        draw(performance.now());
+        if (building) draw(performance.now(), lastBuildElapsed);
+        else draw(performance.now());
       }).observe(host);
     } catch (err) {
       fallback(); /* canvas blocked (e.g. privacy mode) → text headline */
@@ -373,7 +406,7 @@
   var ready = document.fonts && document.fonts.load
     ? Promise.race([
         document.fonts.load('8px "Silkscreen"'),
-        new Promise(function (res) { setTimeout(res, 1500); }),
+        new Promise(function (res) { setTimeout(res, 650); }),
       ])
     : Promise.resolve();
   ready.then(start, start);

@@ -457,8 +457,38 @@ canvas {
 /* ---- Hero --------------------------------------------------------------- */
 .hero {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
   text-align: center;
   padding: clamp(3.5rem, 10vh, 7rem) 0 clamp(3.5rem, 9vh, 6rem);
+  --content-x: 0px;
+  --content-y: 0px;
+  --cube-near-x: 0px;
+  --cube-near-y: 0px;
+  --cube-far-x: 0px;
+  --cube-far-y: 0px;
+  background:
+    radial-gradient(ellipse 55% 36% at 50% 42%, rgba(52, 211, 153, 0.065), transparent 72%),
+    linear-gradient(180deg, rgba(6, 12, 9, 0.12), transparent 72%);
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(52, 211, 153, 0.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(52, 211, 153, 0.026) 1px, transparent 1px);
+  background-size: 17px 17px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 78% at 50% 42%, #000, transparent 78%);
+  mask-image: radial-gradient(ellipse 70% 78% at 50% 42%, #000, transparent 78%);
+}
+.hero-content {
+  position: relative;
+  z-index: 3;
+  transform: translate3d(var(--content-x), var(--content-y), 0);
+  transition: transform 180ms ease-out;
 }
 .hero .eyebrow {
   display: flex;
@@ -494,6 +524,7 @@ html.js:not(.no-voxel) .hero h1 {
   white-space: nowrap;
 }
 .voxel-title {
+  position: relative;
   display: none;
   justify-content: center;
   align-items: center;
@@ -515,6 +546,23 @@ html.js:not(.no-voxel) .voxel-title {
 }
 .voxel-title canvas {
   filter: drop-shadow(0 6px 30px rgba(52, 211, 153, 0.22));
+}
+.voxel-title::after {
+  content: "";
+  position: absolute;
+  inset: -18% 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-120%) skewX(-18deg);
+  background: linear-gradient(90deg, transparent 40%, rgba(167, 243, 208, 0.18) 49%, rgba(255, 255, 255, 0.32) 50%, rgba(52, 211, 153, 0.16) 52%, transparent 60%);
+  mix-blend-mode: screen;
+  animation: title-sweep 8.5s 4.8s ease-in-out infinite;
+}
+@keyframes title-sweep {
+  0%, 72% { opacity: 0; transform: translateX(-120%) skewX(-18deg); }
+  75% { opacity: 0.65; }
+  85% { opacity: 0; transform: translateX(120%) skewX(-18deg); }
+  100% { opacity: 0; transform: translateX(120%) skewX(-18deg); }
 }
 .hero .lede {
   font-size: clamp(1rem, 2.2vw, 1.125rem);
@@ -556,16 +604,229 @@ html.js:not(.no-voxel) .voxel-title {
   gap: 1rem;
 }
 
+/* MLH affiliation: a compact trust marker within the hero, substantial
+   enough to be noticed without competing with the registration action. */
+.mlh-hero-partnership {
+  width: min(680px, 100%);
+  margin: 2.25rem auto 0;
+  padding: 1rem 1.1rem;
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: center;
+  gap: 1.1rem;
+  text-align: left;
+  color: var(--text);
+  text-decoration: none;
+  background: rgba(16, 16, 16, 0.78);
+  border: 1px solid var(--border-strong);
+  box-shadow: 3px 3px 0 0 var(--border), 0 18px 45px -34px rgba(52, 211, 153, 0.65);
+}
+.mlh-hero-partnership img {
+  width: 88px;
+  height: auto;
+}
+.mlh-partnership-copy {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+.mlh-partnership-copy strong {
+  font-family: var(--pixel);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--green-bright);
+}
+.mlh-partnership-copy > span {
+  color: var(--text-dim);
+  font-size: 0.8438rem;
+  line-height: 1.5;
+}
+@media (max-width: 560px) {
+  .mlh-hero-partnership {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 0.85rem;
+    padding: 0.9rem;
+    margin-top: 2rem;
+  }
+  .mlh-hero-partnership img {
+    width: 64px;
+  }
+  .mlh-partnership-copy > span {
+    font-size: 0.7813rem;
+  }
+}
+
+/* ---- Hero atmosphere + startup choreography ---------------------------- */
+.hero-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.hero-boot {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  overflow: hidden;
+  font: 500 0.625rem/1 var(--mono);
+  letter-spacing: 0.12em;
+  color: rgba(110, 231, 183, 0.72);
+}
+.boot-scan {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background:
+    linear-gradient(180deg, transparent 0, rgba(52, 211, 153, 0.12) 48%, rgba(110, 231, 183, 0.35) 50%, rgba(52, 211, 153, 0.08) 53%, transparent 58%) 0 -35vh / 100% 34vh no-repeat,
+    repeating-linear-gradient(0deg, transparent 0 4px, rgba(52, 211, 153, 0.018) 5px 6px);
+}
+.boot-code,
+.boot-skip {
+  position: absolute;
+  opacity: 0;
+  text-shadow: 0 0 10px rgba(52, 211, 153, 0.34);
+}
+.boot-code::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 0.65em;
+  background: var(--green);
+  box-shadow: 0 0 9px rgba(52, 211, 153, 0.75);
+}
+.boot-code-a { left: 6%; top: 14%; }
+.boot-code-b { right: 7%; top: 25%; }
+.boot-code-c { left: 10%; bottom: 18%; }
+.boot-code-d { right: 10%; bottom: 13%; }
+.boot-skip {
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  width: max-content;
+  color: rgba(155, 155, 155, 0.58);
+  letter-spacing: 0.06em;
+}
+html.hero-intro-active .hero {
+  background-color: #050806;
+  animation: hero-power-on 2.65s ease-out both;
+}
+html.hero-intro-active .hero-boot { opacity: 1; }
+html.hero-intro-active .boot-scan { animation: boot-scan 2.15s 0.08s ease-out both; }
+html.hero-intro-active .boot-code-a { animation: boot-signal 0.5s 0.12s steps(3, end) both; }
+html.hero-intro-active .boot-code-b { animation: boot-signal 0.55s 0.34s steps(3, end) both; }
+html.hero-intro-active .boot-code-c { animation: boot-signal 0.55s 0.62s steps(3, end) both; }
+html.hero-intro-active .boot-code-d { animation: boot-signal 0.6s 1.05s steps(3, end) both; }
+html.hero-intro-active .boot-skip { animation: boot-skip 1.7s 0.3s ease both; }
+html.hero-intro-active .hero .status-pill { animation: hero-arrive 0.52s 1.54s ease-out both; }
+html.hero-intro-active .hero .eyebrow { animation: hero-arrive 0.52s 1.66s ease-out both; }
+html.hero-intro-active .hero .lede { animation: hero-arrive 0.56s 1.84s ease-out both; }
+html.hero-intro-active .hero .event-meta { animation: hero-arrive 0.56s 1.98s ease-out both; }
+html.hero-intro-active .hero .cta-row { animation: hero-arrive 0.56s 2.12s ease-out both; }
+html.hero-intro-active .hero .mlh-hero-partnership { animation: hero-arrive 0.56s 2.24s ease-out both; }
+html.hero-intro-active .hero-content a { pointer-events: none; }
+html.hero-intro-skipped .hero .status-pill,
+html.hero-intro-skipped .hero .eyebrow,
+html.hero-intro-skipped .hero .lede,
+html.hero-intro-skipped .hero .event-meta,
+html.hero-intro-skipped .hero .cta-row,
+html.hero-intro-skipped .hero .mlh-hero-partnership {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+html.hero-intro-skipped .hero-boot,
+html.hero-intro-done .hero-boot {
+  opacity: 0;
+  visibility: hidden;
+}
+@keyframes hero-power-on {
+  0% { background-color: #020403; }
+  38% { background-color: #050806; }
+  100% { background-color: transparent; }
+}
+@keyframes boot-scan {
+  0% { opacity: 0; background-position: 0 -35vh, 0 0; }
+  12% { opacity: 0.8; }
+  78% { opacity: 0.46; background-position: 0 92vh, 0 0; }
+  100% { opacity: 0; background-position: 0 110vh, 0 0; }
+}
+@keyframes boot-signal {
+  0% { opacity: 0; transform: translateY(4px); }
+  24%, 68% { opacity: 0.82; transform: none; }
+  100% { opacity: 0; transform: translateY(-3px); }
+}
+@keyframes boot-skip {
+  0%, 12%, 100% { opacity: 0; }
+  28%, 72% { opacity: 1; }
+}
+@keyframes hero-arrive {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* The hero's primary action gets a directional, contained energy pass. */
+.hero .cta-row .btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 48px;
+  --btn-x: 50%;
+}
+.hero .cta-row .btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  background:
+    radial-gradient(circle at var(--btn-x) 50%, rgba(255, 255, 255, 0.35), transparent 28%),
+    linear-gradient(105deg, transparent 34%, rgba(255, 255, 255, 0.25) 49%, transparent 64%);
+  transform: translateX(-45%);
+  transition: opacity 0.18s, transform 0.45s ease-out;
+}
+.hero .cta-row .btn:hover::before,
+.hero .cta-row .btn:focus-visible::before {
+  opacity: 0.75;
+  transform: translateX(45%);
+}
+.hero .cta-row .btn:focus-visible {
+  outline: 3px solid var(--green-bright);
+  outline-offset: 5px;
+}
+.button-pixel {
+  position: absolute;
+  z-index: 8;
+  width: 4px;
+  height: 4px;
+  pointer-events: none;
+  background: var(--green-bright);
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.8);
+  animation: button-pixel 0.52s ease-out forwards;
+}
+@keyframes button-pixel {
+  to { opacity: 0; transform: translate(var(--burst-x), var(--burst-y)) rotate(90deg); }
+}
+
 /* ---- Floating isometric voxel cubes behind the hero ---------------------- */
 .voxel-decor {
   position: absolute;
   inset: 0;
+  z-index: 2;
   pointer-events: none;
   overflow: hidden;
 }
 .vcube {
   position: absolute;
   opacity: 0.8;
+  transform-origin: center;
+  will-change: transform;
 }
 .vcube-a {
   width: clamp(70px, 9vw, 130px);
@@ -588,19 +849,19 @@ html.js:not(.no-voxel) .voxel-title {
 @keyframes float-a {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translate3d(var(--cube-near-x), var(--cube-near-y), 0) rotate(0deg);
   }
   50% {
-    transform: translateY(-28px);
+    transform: translate3d(var(--cube-near-x), calc(-28px + var(--cube-near-y)), 0) rotate(4deg);
   }
 }
 @keyframes float-b {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translate3d(var(--cube-far-x), var(--cube-far-y), 0) rotate(0deg);
   }
   50% {
-    transform: translateY(22px);
+    transform: translate3d(var(--cube-far-x), calc(22px + var(--cube-far-y)), 0) rotate(-5deg);
   }
 }
 @media (max-width: 760px) {
@@ -776,6 +1037,74 @@ html.js .fact.reveal.in:hover {
   height: 1.9rem;
   margin-bottom: 1rem;
   color: var(--green);
+}
+
+/* Partner feature on the sponsors page. The official color mark sits on a
+   quiet light field so its supplied colors remain true and fully legible. */
+.partner-section {
+  padding-top: 1rem;
+}
+.mlh-partner-panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(250px, 0.75fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+  padding: clamp(1.75rem, 5vw, 3rem);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: 4px 4px 0 0 var(--border);
+  overflow: hidden;
+}
+.mlh-partner-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+  background: var(--grad);
+}
+.mlh-partner-copy {
+  position: relative;
+}
+.mlh-partner-copy .eyebrow {
+  margin-bottom: 0.8rem;
+}
+.mlh-partner-copy h2 {
+  margin-bottom: 0.75rem;
+}
+.mlh-partner-copy > p:not(.eyebrow) {
+  max-width: 38em;
+  color: var(--text-dim);
+  margin-bottom: 1rem;
+}
+.mlh-partner-logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  padding: 2rem;
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  box-shadow: 5px 5px 0 0 var(--green-darker);
+}
+.mlh-partner-logo img {
+  width: min(220px, 100%);
+  height: auto;
+}
+
+@media (max-width: 700px) {
+  .mlh-partner-panel {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+  .mlh-partner-logo {
+    min-height: 145px;
+    padding: 1.5rem;
+  }
+  .mlh-partner-logo img {
+    width: min(190px, 70%);
+  }
 }
 
 /* ---- Timeline (schedule) ------------------------------------------------ */
@@ -977,24 +1306,6 @@ html.js .fact.reveal.in:hover {
     transform: none;
   }
 }
-.hero .status-pill {
-  animation: rise 0.55s 0.05s ease-out both;
-}
-.hero .eyebrow {
-  animation: rise 0.55s 0.15s ease-out both;
-}
-.hero h1 {
-  animation: rise 0.55s 0.2s ease-out both;
-}
-.hero .lede {
-  animation: rise 0.55s 0.3s ease-out both;
-}
-.hero .event-meta {
-  animation: rise 0.55s 0.4s ease-out both;
-}
-.hero .cta-row {
-  animation: rise 0.55s 0.5s ease-out both;
-}
 .page-hero .eyebrow {
   animation: rise 0.5s 0.05s ease-out both;
 }
@@ -1106,36 +1417,6 @@ html.js .reveal.in {
   }
 }
 
-/* The occasional hero flyby hornet (spawned by motion.js) */
-.flyby {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 44px; /* 4px per cell of the 11x10 sprite */
-  height: 40px;
-  color: var(--text);
-  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.35));
-  will-change: transform;
-  z-index: 80; /* above the sticky header; only the focus-only skip-link outranks it */
-  cursor: pointer;
-  pointer-events: auto;
-}
-.flyby::after {
-  /* generous tap target for a small moving sprite */
-  content: "";
-  position: absolute;
-  inset: -10px;
-}
-.flyby .fw-b {
-  opacity: 0;
-}
-html.js .flyby .fw-a {
-  animation: hh-flap 160ms linear infinite;
-}
-html.js .flyby .fw-b {
-  animation: hh-flap 160ms linear infinite;
-  animation-delay: -80ms;
-}
 @keyframes hh-flap {
   0%,
   49.9% {
@@ -1146,18 +1427,93 @@ html.js .flyby .fw-b {
     opacity: 0;
   }
 }
-.flyby.dead {
+
+/* Persistent hero hornet: curved flight is supplied by motion.js. */
+.hero-hornet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 44px;
+  height: 40px;
+  color: var(--text);
+  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.42));
+  cursor: pointer;
+  pointer-events: auto;
+  will-change: transform;
+  transform-origin: 50% 55%;
+}
+.hero-hornet.behind { z-index: 2; opacity: 0.78; }
+.hero-hornet::before {
+  content: "";
+  position: absolute;
+  inset: -11px;
+}
+.hero-hornet::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -18px;
+  top: 52%;
+  width: 22px;
+  height: 2px;
+  opacity: 0.48;
+  background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.8));
+  box-shadow: -9px 5px 0 -0.5px rgba(52, 211, 153, 0.25), -4px -5px 0 -0.5px rgba(110, 231, 183, 0.28);
+}
+.hero-hornet .fw-b { opacity: 0; }
+.hero-hornet .fw-a { animation: hh-flap 112ms linear infinite; }
+.hero-hornet .fw-b { animation: hh-flap 112ms -56ms linear infinite; }
+.hero-hornet.falling {
   cursor: default;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 }
-.flyby.dead .fw-a,
-.flyby.dead .fw-b {
-  animation: none;
+.hero-hornet.falling::after { opacity: 0; }
+.hero-hornet.falling .fw-a,
+.hero-hornet.falling .fw-b { animation: none; }
+.hero-hornet.falling .fw-a { opacity: 0; }
+.hero-hornet.falling .fw-b { opacity: 1; }
+.hero-hornet.recovering {
+  animation: hornet-recover 0.4s steps(3, end) 2;
 }
-.flyby.dead .fw-a {
-  opacity: 0;
+@keyframes hornet-recover {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.42)); }
+  50% { filter: drop-shadow(0 0 13px rgba(110, 231, 183, 0.8)); }
 }
-.flyby.dead .fw-b {
-  opacity: 1; /* wings splayed flat — very dead */
+.hornet-pixel {
+  position: absolute;
+  z-index: 2;
+  width: 3px;
+  height: 3px;
+  background: var(--green);
+  pointer-events: none;
+  box-shadow: 0 0 7px rgba(52, 211, 153, 0.65);
+  animation: hornet-pixel 0.72s ease-out forwards;
+}
+@keyframes hornet-pixel {
+  to { opacity: 0; transform: translate(var(--trail-x), var(--trail-y)) scale(0.45); }
+}
+
+@media (max-width: 760px) {
+  .hero {
+    padding-top: clamp(3rem, 8vh, 4.5rem);
+  }
+  .hero-content { transform: none; }
+  .hero-hornet { width: 36px; height: 33px; }
+  .boot-code-c,
+  .boot-code-d { display: none; }
+  .boot-code-a { left: 4%; top: 11%; }
+  .boot-code-b { right: 4%; top: 19%; }
+  .hero-atmosphere { opacity: 0.75; }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero { padding-block: 2.25rem 2.75rem; }
+  .hero .status-pill { margin-bottom: 0.8rem; }
+  .hero .eyebrow { margin-bottom: 0.8rem; }
+  .voxel-title { margin-bottom: 1rem; }
+  .event-meta { margin-block: 1rem 1.5rem; }
 }
 
 /* ---- Motion ------------------------------------------------------------- */
@@ -1170,5 +1526,18 @@ html.js .flyby .fw-b {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+  .hero-boot,
+  .hero-hornet,
+  .hornet-pixel,
+  .button-pixel {
+    display: none !important;
+  }
+  .hero-content,
+  .vcube {
+    transform: none !important;
+  }
+  .voxel-title::after {
+    animation: none !important;
   }
 }
