@@ -1428,71 +1428,49 @@ html.js .reveal.in {
   }
 }
 
-/* Persistent hero hornet: curved flight is supplied by motion.js. */
-.hero-hornet {
-  position: absolute;
+/* The flyby hornet rides fixed on <body>, above everything; clicking it
+   swats it out of the air (motion.js supplies flight and the fall). */
+.flyby {
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 5;
-  width: 44px;
+  width: 44px; /* 4px per cell of the 11x10 sprite */
   height: 40px;
   color: var(--text);
-  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.42));
+  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.35));
+  will-change: transform;
+  z-index: 80; /* above the sticky header; only the focus-only skip-link outranks it */
   cursor: pointer;
   pointer-events: auto;
-  will-change: transform;
-  transform-origin: 50% 55%;
 }
-.hero-hornet.behind { z-index: 2; opacity: 0.78; }
-.hero-hornet::before {
+.flyby::after {
+  /* generous tap target for a small moving sprite */
   content: "";
   position: absolute;
-  inset: -11px;
+  inset: -10px;
 }
-.hero-hornet::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: -18px;
-  top: 52%;
-  width: 22px;
-  height: 2px;
-  opacity: 0.48;
-  background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.8));
-  box-shadow: -9px 5px 0 -0.5px rgba(52, 211, 153, 0.25), -4px -5px 0 -0.5px rgba(110, 231, 183, 0.28);
+.flyby .fw-b {
+  opacity: 0;
 }
-.hero-hornet .fw-b { opacity: 0; }
-.hero-hornet .fw-a { animation: hh-flap 112ms linear infinite; }
-.hero-hornet .fw-b { animation: hh-flap 112ms -56ms linear infinite; }
-.hero-hornet.falling {
+html.js .flyby .fw-a {
+  animation: hh-flap 160ms linear infinite;
+}
+html.js .flyby .fw-b {
+  animation: hh-flap 160ms linear infinite;
+  animation-delay: -80ms;
+}
+.flyby.dead {
   cursor: default;
-  pointer-events: none;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 }
-.hero-hornet.falling::after { opacity: 0; }
-.hero-hornet.falling .fw-a,
-.hero-hornet.falling .fw-b { animation: none; }
-.hero-hornet.falling .fw-a { opacity: 0; }
-.hero-hornet.falling .fw-b { opacity: 1; }
-.hero-hornet.recovering {
-  animation: hornet-recover 0.4s steps(3, end) 2;
+.flyby.dead .fw-a,
+.flyby.dead .fw-b {
+  animation: none;
 }
-@keyframes hornet-recover {
-  0%, 100% { filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.42)); }
-  50% { filter: drop-shadow(0 0 13px rgba(110, 231, 183, 0.8)); }
+.flyby.dead .fw-a {
+  opacity: 0;
 }
-.hornet-pixel {
-  position: absolute;
-  z-index: 2;
-  width: 3px;
-  height: 3px;
-  background: var(--green);
-  pointer-events: none;
-  box-shadow: 0 0 7px rgba(52, 211, 153, 0.65);
-  animation: hornet-pixel 0.72s ease-out forwards;
-}
-@keyframes hornet-pixel {
-  to { opacity: 0; transform: translate(var(--trail-x), var(--trail-y)) scale(0.45); }
+.flyby.dead .fw-b {
+  opacity: 1; /* wings splayed flat — very dead */
 }
 
 @media (max-width: 760px) {
@@ -1500,7 +1478,6 @@ html.js .reveal.in {
     padding-top: clamp(3rem, 8vh, 4.5rem);
   }
   .hero-content { transform: none; }
-  .hero-hornet { width: 36px; height: 33px; }
   .boot-code-c,
   .boot-code-d { display: none; }
   .boot-code-a { left: 4%; top: 11%; }
@@ -1528,8 +1505,7 @@ html.js .reveal.in {
     animation-duration: 0.01ms !important;
   }
   .hero-boot,
-  .hero-hornet,
-  .hornet-pixel,
+  .flyby,
   .button-pixel {
     display: none !important;
   }
