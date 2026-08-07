@@ -461,12 +461,6 @@ canvas {
   overflow: hidden;
   text-align: center;
   padding: clamp(3.5rem, 10vh, 7rem) 0 clamp(3.5rem, 9vh, 6rem);
-  --content-x: 0px;
-  --content-y: 0px;
-  --cube-near-x: 0px;
-  --cube-near-y: 0px;
-  --cube-far-x: 0px;
-  --cube-far-y: 0px;
   background:
     radial-gradient(ellipse 55% 36% at 50% 42%, rgba(52, 211, 153, 0.065), transparent 72%),
     linear-gradient(180deg, rgba(6, 12, 9, 0.12), transparent 72%);
@@ -487,8 +481,6 @@ canvas {
 .hero-content {
   position: relative;
   z-index: 3;
-  transform: translate3d(var(--content-x), var(--content-y), 0);
-  transition: transform 180ms ease-out;
 }
 .hero .eyebrow {
   display: flex;
@@ -849,19 +841,19 @@ html.hero-intro-done .hero-boot {
 @keyframes float-a {
   0%,
   100% {
-    transform: translate3d(var(--cube-near-x), var(--cube-near-y), 0) rotate(0deg);
+    transform: translateY(0) rotate(0deg);
   }
   50% {
-    transform: translate3d(var(--cube-near-x), calc(-28px + var(--cube-near-y)), 0) rotate(4deg);
+    transform: translateY(-28px) rotate(4deg);
   }
 }
 @keyframes float-b {
   0%,
   100% {
-    transform: translate3d(var(--cube-far-x), var(--cube-far-y), 0) rotate(0deg);
+    transform: translateY(0) rotate(0deg);
   }
   50% {
-    transform: translate3d(var(--cube-far-x), calc(22px + var(--cube-far-y)), 0) rotate(-5deg);
+    transform: translateY(22px) rotate(-5deg);
   }
 }
 @media (max-width: 760px) {
@@ -1477,7 +1469,6 @@ html.js .flyby .fw-b {
   .hero {
     padding-top: clamp(3rem, 8vh, 4.5rem);
   }
-  .hero-content { transform: none; }
   .boot-code-c,
   .boot-code-d { display: none; }
   .boot-code-a { left: 4%; top: 11%; }
