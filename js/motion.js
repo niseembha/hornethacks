@@ -96,33 +96,7 @@
     }, { once: true });
   }
 
-  /* ---- Pointer depth: one rAF write, no layout reads while moving ---- */
   var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  if (!RM && finePointer) {
-    var targetX = 0;
-    var targetY = 0;
-    var parallaxRaf = 0;
-    function paintParallax() {
-      parallaxRaf = 0;
-      hero.style.setProperty("--content-x", (-targetX * 2).toFixed(2) + "px");
-      hero.style.setProperty("--content-y", (-targetY * 1.2).toFixed(2) + "px");
-      hero.style.setProperty("--cube-near-x", (targetX * 9).toFixed(2) + "px");
-      hero.style.setProperty("--cube-near-y", (targetY * 7).toFixed(2) + "px");
-      hero.style.setProperty("--cube-far-x", (-targetX * 12).toFixed(2) + "px");
-      hero.style.setProperty("--cube-far-y", (-targetY * 8).toFixed(2) + "px");
-    }
-    hero.addEventListener("pointermove", function (e) {
-      var rect = hero.getBoundingClientRect();
-      targetX = Math.max(-1, Math.min(1, (e.clientX - rect.left) / rect.width * 2 - 1));
-      targetY = Math.max(-1, Math.min(1, (e.clientY - rect.top) / rect.height * 2 - 1));
-      if (!parallaxRaf) parallaxRaf = requestAnimationFrame(paintParallax);
-    }, { passive: true });
-    hero.addEventListener("pointerleave", function () {
-      targetX = 0;
-      targetY = 0;
-      if (!parallaxRaf) parallaxRaf = requestAnimationFrame(paintParallax);
-    }, { passive: true });
-  }
 
   /* ---- One lightweight canvas: honeycomb activation + data pixels ---- */
   var atmosphere = hero.querySelector("[data-hero-atmosphere]");
