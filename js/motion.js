@@ -1,6 +1,6 @@
 /* ==========================================================================
    Motion layer: scroll reveals, hero startup, parallax, atmosphere, and the
-   pixel hornets flying through the hero. Everything here is
+   occasional pixel hornet buzzing across the hero. Everything here is
    decorative: it is skipped under prefers-reduced-motion, and the page is
    fully usable (and fully visible) without it.
    ========================================================================== */
@@ -250,8 +250,11 @@
     atmosphereRaf = requestAnimationFrame(drawAtmosphere);
   }
 
-  /* ---- Persistent, interactive pixel hornet ---- */
-  if (hero.querySelector(".voxel-decor") && !RM) {
+  /* ---- Every so often, a tiny hornet buzzes across the screen ---- */
+  /* The flyby carries its own copy of the sprite (rather than <use>) so the
+     two wing frames can flutter via CSS; it rides fixed on <body>, above
+     everything, and clicking it swats it out of the air. */
+  if (document.querySelector(".hero .voxel-decor") && !RM) {
     var SPRITE =
       '<svg viewBox="0 0 11 10" shape-rendering="crispEdges" aria-hidden="true">' +
       '<g class="fw fw-a">' +
@@ -292,137 +295,78 @@
       '<rect x="6" y="8" width="3" height="1"/>' +
       "</g>" +
       "</svg>";
-    var hornet = document.createElement("div");
-    hornet.className = "hero-hornet";
-    hornet.setAttribute("aria-hidden", "true");
-    hornet.innerHTML = SPRITE;
-    hero.appendChild(hornet);
-    var flight = null;
-    var flightTimer = 0;
-    var trailTimer = 0;
-    var knocked = false;
-
-    function point(a, b, c, d, t) {
-      var u = 1 - t;
-      return u * u * u * a + 3 * u * u * t * b + 3 * u * t * t * c + t * t * t * d;
-    }
-
-    function burstAtHornet() {
-      var hr = hornet.getBoundingClientRect();
-      var rr = hero.getBoundingClientRect();
-      for (var i = 0; i < (compact ? 4 : 7); i++) {
-        var bit = document.createElement("i");
-        bit.className = "hornet-pixel";
-        bit.style.left = (hr.left - rr.left + hr.width / 2) + "px";
-        bit.style.top = (hr.top - rr.top + hr.height / 2) + "px";
-        bit.style.setProperty("--trail-x", (-18 - Math.random() * 22) + "px");
-        bit.style.setProperty("--trail-y", (-12 + Math.random() * 24) + "px");
-        hero.appendChild(bit);
-        window.setTimeout(function (node) { node.remove(); }, 760, bit);
-      }
-    }
-
-    function fly(intro) {
-      if (knocked) return;
+    var SPEED = 130; /* px per second — a steady, unhurried cruise */
+    var flyby = function () {
       if (document.hidden) {
-        flightTimer = window.setTimeout(function () { fly(intro); }, 1500);
+        schedule(9000);
         return;
       }
-      var w = hero.clientWidth;
-      var h = hero.clientHeight;
-      var leftToRight = intro || Math.random() > 0.5;
-      var edge = compact ? 40 : 55;
-      var startX = leftToRight ? -edge : w + edge;
-      var endX = leftToRight ? w + edge : -edge;
-      var upper = intro || Math.random() > 0.45;
-      var y0 = upper ? h * 0.2 : h * 0.68;
-      var y3 = upper ? h * 0.34 : h * 0.58;
-      var p1x = leftToRight ? w * 0.24 : w * 0.76;
-      var p2x = leftToRight ? w * 0.68 : w * 0.32;
-      var p1y = intro ? h * 0.52 : (upper ? h * 0.12 : h * 0.78);
-      var p2y = intro ? h * 0.18 : (upper ? h * 0.44 : h * 0.46);
-      hornet.classList.toggle("behind", intro || !upper);
-      hornet.style.opacity = "1";
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      var dir = Math.random() < 0.5 ? 1 : -1;
+      var wrap = document.createElement("div");
+      wrap.className = "flyby";
+      wrap.setAttribute("aria-hidden", "true");
+      wrap.innerHTML = SPRITE;
+      document.body.appendChild(wrap);
+      var y0 = h * (0.12 + Math.random() * 0.5);
+      var amp = 12 + Math.random() * 8;
+      var cycles = 2 + Math.random();
       var frames = [];
-      var steps = compact ? 26 : 40;
-      for (var k = 0; k <= steps; k++) {
-        var t = k / steps;
-        var x = point(startX, p1x, p2x, endX, t);
-        var y = point(y0, p1y, p2y, y3, t) + Math.sin(t * Math.PI * 5) * 4;
-        var next = Math.min(1, t + 0.015);
-        var nx = point(startX, p1x, p2x, endX, next);
-        var ny = point(y0, p1y, p2y, y3, next);
-        var dir = nx >= x ? 1 : -1;
-        var tilt = Math.max(-16, Math.min(16, (ny - y) * 5));
+      var N = 36;
+      for (var k = 0; k <= N; k++) {
+        var p = k / N;
+        var x = dir > 0 ? -44 + p * (w + 88) : w + 44 - p * (w + 88);
+        var y = y0 + Math.sin(p * Math.PI * 2 * cycles) * amp;
         frames.push({
-          transform: "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0) rotate(" + tilt.toFixed(1) + "deg) scaleX(" + dir + ")"
+          transform:
+            "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) scaleX(" + (dir > 0 ? 1 : -1) + ")",
         });
       }
-      flight = hornet.animate(frames, {
-        duration: intro ? 2450 : 5200 + Math.random() * 1600,
+      var anim = wrap.animate(frames, {
+        duration: ((w + 88) / SPEED) * 1000,
         easing: "linear",
-        fill: "forwards"
       });
-      clearInterval(trailTimer);
-      trailTimer = window.setInterval(function () {
-        if (!document.hidden && !knocked) burstAtHornet();
-      }, compact ? 240 : 150);
-      flight.onfinish = function () {
-        clearInterval(trailTimer);
-        hornet.style.opacity = "0";
-        flightTimer = window.setTimeout(function () { fly(false); }, 4800 + Math.random() * 5200);
+      anim.onfinish = function () {
+        wrap.remove();
+        schedule();
       };
-    }
-
-    hornet.addEventListener("click", function (e) {
-      e.preventDefault();
-      if (knocked) return;
-      knocked = true;
-      clearTimeout(flightTimer);
-      clearInterval(trailTimer);
-      var frozen = getComputedStyle(hornet).transform;
-      var hornetRect = hornet.getBoundingClientRect();
-      var heroRect = hero.getBoundingClientRect();
-      if (flight) flight.cancel();
-      hornet.style.transform = frozen === "none" ? "" : frozen;
-      hornet.classList.remove("behind");
-      hornet.classList.add("falling");
-      burstAtHornet();
-      window.dispatchEvent(new CustomEvent("hh:energy-pulse", {
-        detail: {
-          x: hornetRect.left - heroRect.left + hornetRect.width / 2,
-          y: hornetRect.top - heroRect.top + hornetRect.height / 2,
-          power: 0.9
-        }
-      }));
-      var fall = Math.max(130, heroRect.bottom - hornetRect.top + 30);
-      var drop = hornet.animate([
-        { transform: (frozen === "none" ? "" : frozen) + " translateY(0) rotate(0deg)" },
-        { transform: (frozen === "none" ? "" : frozen) + " translateY(-18px) rotate(105deg)", offset: 0.22 },
-        { transform: (frozen === "none" ? "" : frozen) + " translateY(" + fall + "px) rotate(430deg)" }
-      ], { duration: 780 + Math.sqrt(fall) * 20, easing: "cubic-bezier(.28,.55,.55,1)", fill: "forwards" });
-      drop.onfinish = function () {
-        hornet.style.opacity = "0";
-        window.setTimeout(function () {
-          drop.cancel();
-          hornet.style.transform = "";
-          hornet.classList.remove("falling");
-          hornet.classList.add("recovering");
-          knocked = false;
-          window.setTimeout(function () {
-            hornet.classList.remove("recovering");
-            fly(false);
-          }, 850);
-        }, 900);
-      };
-    });
-
-    document.addEventListener("visibilitychange", function () {
-      if (!flight) return;
-      if (document.hidden) flight.pause();
-      else if (!knocked) flight.play();
-    });
-    window.setTimeout(function () { fly(introActive); }, introActive ? 180 : 2600);
+      wrap.addEventListener("click", function () {
+        if (wrap.classList.contains("dead")) return;
+        wrap.classList.add("dead");
+        var frozen = getComputedStyle(wrap).transform;
+        anim.cancel();
+        if (frozen === "none") frozen = "";
+        wrap.style.transform = frozen;
+        var ty = y0;
+        var m = /^matrix\(([^)]+)\)$/.exec(frozen);
+        if (m) ty = parseFloat(m[1].split(",")[5]) || y0;
+        var fall = Math.max(h - ty + 60, 120);
+        var drop = wrap.animate(
+          [
+            {
+              transform: frozen + " translateY(0) rotate(0deg)",
+              easing: "cubic-bezier(0.2, 0.65, 0.4, 1)",
+            },
+            {
+              transform: frozen + " translateY(-22px) rotate(175deg)",
+              offset: 0.3,
+              easing: "cubic-bezier(0.5, 0, 0.85, 0.4)",
+            },
+            { transform: frozen + " translateY(" + fall + "px) rotate(195deg)" },
+          ],
+          { duration: 500 + Math.sqrt(fall) * 26 }
+        );
+        drop.onfinish = function () {
+          wrap.remove();
+          schedule();
+        };
+      });
+    };
+    var schedule = function (ms) {
+      setTimeout(flyby, ms || 15000 + Math.random() * 15000);
+    };
+    schedule(2600);
   }
 
   /* ---- Hero-only CTA pointer light and tiny activation pixels ---- */
