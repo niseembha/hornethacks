@@ -1078,7 +1078,7 @@ html.js .fact.reveal.in:hover {
   padding: 2rem;
   background: #ffffff;
   border: 1px solid #d8d8d8;
-  box-shadow: 5px 5px 0 0 var(--green-darker);
+  box-shadow: 3px 3px 0 0 var(--border-strong), 6px 6px 0 0 var(--border);
 }
 .mlh-partner-logo img {
   width: min(220px, 100%);
