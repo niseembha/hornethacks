@@ -243,7 +243,7 @@ canvas {
 
 .link-quiet {
   color: var(--text-dim);
-  font-size: 0.875rem;
+  font-size: 1rem;
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-color: #3a3a3a;
@@ -259,14 +259,14 @@ canvas {
   align-items: center;
   gap: 0.9em;
   font-family: var(--pixel);
-  font-size: 0.6875rem;
-  font-weight: 400;
+  font-size: clamp(0.8125rem, 1.4vw, 0.875rem);
+  font-weight: 700;
   /* numeric line-height keeps the box the same before/after Silkscreen
      loads, so the page never reflows on font arrival */
   line-height: 1.6;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-faint);
+  color: var(--text-dim);
   margin: 0 0 1.2rem;
 }
 .eyebrow::before,
@@ -284,7 +284,7 @@ canvas {
   align-items: center;
   gap: 0.9em;
   font-family: var(--pixel);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   color: var(--text-dim);
   border: 1px solid var(--border);
   background: rgba(16, 16, 16, 0.6);
@@ -324,9 +324,48 @@ canvas {
 .site-header .wrap {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 1rem;
   min-height: 4rem;
+}
+
+/* The MLH affiliation sits inside the primary navigation so it reads as
+   event credibility, not as a separate site or an unrelated announcement. */
+.mlh-nav-badge {
+  display: inline-grid;
+  grid-template-columns: 58px auto;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.7rem;
+  margin-left: clamp(0.75rem, 2vw, 1.4rem);
+  padding: 0.45rem 0.75rem 0.45rem 0.85rem;
+  color: var(--text);
+  text-decoration: none;
+  background: linear-gradient(105deg, rgba(52, 211, 153, 0.14), rgba(16, 16, 16, 0.82));
+  border: 1px solid var(--green-dark);
+  box-shadow: inset 3px 0 0 var(--green), 2px 2px 0 var(--border);
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+}
+.mlh-nav-badge:hover {
+  transform: translateY(-1px);
+  border-color: var(--green);
+  background: linear-gradient(105deg, rgba(52, 211, 153, 0.2), rgba(22, 22, 22, 0.9));
+}
+.mlh-nav-badge img {
+  width: 58px;
+  height: auto;
+}
+.mlh-nav-badge span {
+  max-width: 5.8rem;
+  font-family: var(--pixel);
+  font-size: 0.6563rem;
+  line-height: 1.35;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.mlh-nav-badge strong {
+  color: var(--green-bright);
 }
 
 .brand {
@@ -358,6 +397,7 @@ canvas {
   display: flex;
   align-items: center;
   gap: clamp(0.9rem, 2.2vw, 1.7rem);
+  margin-left: auto;
 }
 .site-nav a:not(.btn) {
   text-decoration: none;
@@ -451,6 +491,28 @@ canvas {
   .site-nav .btn {
     margin-top: 1rem;
     justify-content: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .mlh-nav-badge {
+    grid-template-columns: 56px;
+    min-height: 2.55rem;
+    margin-left: auto;
+    padding: 0.45rem 0.65rem 0.45rem 0.75rem;
+  }
+  .mlh-nav-badge img {
+    width: 56px;
+  }
+  .mlh-nav-badge span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .nav-toggle {
+    margin-left: 0.25rem;
   }
 }
 
@@ -557,7 +619,7 @@ html.js:not(.no-voxel) .voxel-title {
   100% { opacity: 0; transform: translateX(120%) skewX(-18deg); }
 }
 .hero .lede {
-  font-size: clamp(1rem, 2.2vw, 1.125rem);
+  font-size: clamp(1.125rem, 2.2vw, 1.25rem);
   color: var(--text-dim);
   max-width: 36em;
   margin-inline: auto;
@@ -571,7 +633,7 @@ html.js:not(.no-voxel) .voxel-title {
   gap: 0.5rem 1rem;
   margin: 1.5rem 0 2.2rem;
   font-family: var(--mono);
-  font-size: clamp(0.75rem, 1.8vw, 0.8438rem);
+  font-size: clamp(0.8438rem, 1.8vw, 0.9375rem);
   letter-spacing: 0.02em;
   color: var(--text-dim);
 }
@@ -928,7 +990,7 @@ html.js .fact.reveal.in:hover {
 }
 .fact .label {
   font-family: var(--pixel);
-  font-size: 0.7188rem;
+  font-size: 0.7813rem;
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -936,7 +998,7 @@ html.js .fact.reveal.in:hover {
   margin-bottom: 0.6rem;
 }
 .fact .value {
-  font-size: 1.0625rem;
+  font-size: clamp(1.1875rem, 2vw, 1.3125rem);
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.35;
@@ -944,7 +1006,7 @@ html.js .fact.reveal.in:hover {
 }
 .fact .sub {
   color: var(--text-faint);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   margin: 0.25rem 0 0;
 }
 @media (max-width: 700px) {
@@ -956,18 +1018,19 @@ html.js .fact.reveal.in:hover {
 /* ---- Generic content sections (subpages) -------------------------------- */
 .page-hero {
   text-align: center;
-  padding: clamp(3rem, 8vh, 5rem) 0 clamp(1.5rem, 4vh, 2.5rem);
+  padding: clamp(3rem, 7vh, 4.75rem) 0 clamp(2rem, 4vh, 2.75rem);
 }
 .page-hero h1 {
-  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  font-size: clamp(2.3rem, 6vw, 3.45rem);
   font-weight: 700;
   letter-spacing: -0.04em;
   color: #fff;
 }
 .page-hero .lede {
   color: var(--text-dim);
-  font-size: clamp(1rem, 2vw, 1.0938rem);
-  max-width: 40em;
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  line-height: 1.55;
+  max-width: 42em;
   margin-inline: auto;
 }
 
@@ -978,7 +1041,7 @@ html.js .fact.reveal.in:hover {
   padding-bottom: clamp(4rem, 9vh, 6rem);
 }
 .section h2 {
-  font-size: clamp(1.4rem, 3.2vw, 1.8rem);
+  font-size: clamp(1.75rem, 3.4vw, 2.25rem);
   margin-bottom: 1.2rem;
   color: #fff;
 }
@@ -989,6 +1052,7 @@ html.js .fact.reveal.in:hover {
 }
 .prose p {
   color: var(--text-dim);
+  font-size: 1.0625rem;
 }
 .prose strong {
   color: var(--text);
@@ -1015,13 +1079,13 @@ html.js .fact.reveal.in:hover {
   box-shadow: 4px 4px 0 0 rgba(52, 211, 153, 0.14), 0 0 30px -12px rgba(52, 211, 153, 0.35);
 }
 .card h3 {
-  font-size: 1.0313rem;
+  font-size: 1.25rem;
   margin-bottom: 0.4rem;
   color: var(--text);
 }
 .card p {
   color: var(--text-dim);
-  font-size: 0.9063rem;
+  font-size: 1rem;
   margin: 0;
 }
 .card .cell-icon {
@@ -1031,8 +1095,8 @@ html.js .fact.reveal.in:hover {
   color: var(--green);
 }
 
-/* Partner feature on the sponsors page. The official color mark sits on a
-   quiet light field so its supplied colors remain true and fully legible. */
+/* Partner feature on the sponsors page. The mark stays inside the site's
+   dark visual system instead of reading as a separate white advertisement. */
 .partner-section {
   padding-top: 1rem;
 }
@@ -1076,9 +1140,9 @@ html.js .fact.reveal.in:hover {
   justify-content: center;
   min-height: 180px;
   padding: 2rem;
-  background: #ffffff;
-  border: 1px solid #d8d8d8;
-  box-shadow: 3px 3px 0 0 var(--border-strong), 6px 6px 0 0 var(--border);
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.12), var(--surface-2));
+  border: 1px solid var(--green-dark);
+  box-shadow: 3px 3px 0 0 var(--border-strong), 0 20px 50px -38px rgba(52, 211, 153, 0.8);
 }
 .mlh-partner-logo img {
   width: min(220px, 100%);
@@ -1099,7 +1163,133 @@ html.js .fact.reveal.in:hover {
   }
 }
 
-/* ---- Timeline (schedule) ------------------------------------------------ */
+/* ---- Schedule ----------------------------------------------------------- */
+.schedule-coming-soon {
+  max-width: 760px;
+  margin-inline: auto;
+  padding: clamp(2rem, 6vw, 3.25rem);
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(52, 211, 153, 0.14), transparent 48%),
+    var(--surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: 4px 4px 0 var(--border);
+}
+.schedule-coming-soon .eyebrow {
+  margin-bottom: 0.9rem;
+}
+.schedule-coming-soon h2 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  margin-bottom: 0.75rem;
+}
+.schedule-coming-soon > p:not(.eyebrow) {
+  max-width: 38em;
+  margin-inline: auto;
+  color: var(--text-dim);
+  font-size: 1.0625rem;
+}
+.schedule-essentials {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  max-width: 540px;
+  margin: 1.75rem auto 0;
+  text-align: left;
+}
+.schedule-essential {
+  padding: 1rem 1.1rem;
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid var(--border);
+}
+.schedule-essential span {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--green);
+  font-family: var(--pixel);
+  font-size: 0.7813rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.schedule-essential strong {
+  font-size: 1.0625rem;
+}
+@media (max-width: 520px) {
+  .schedule-essentials {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Featured track ----------------------------------------------------- */
+.track-section {
+  padding-top: 0;
+}
+.track-panel {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.45fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: center;
+  padding: clamp(1.75rem, 5vw, 3rem);
+  background: linear-gradient(125deg, rgba(52, 211, 153, 0.12), rgba(16, 16, 16, 0.98) 48%);
+  border: 1px solid var(--border-strong);
+  box-shadow: 4px 4px 0 var(--border);
+}
+.track-panel::after {
+  content: "✦";
+  position: absolute;
+  right: clamp(1rem, 4vw, 2.5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(110, 231, 183, 0.06);
+  font-size: clamp(6rem, 14vw, 10rem);
+  line-height: 1;
+  pointer-events: none;
+}
+.track-label {
+  position: relative;
+  z-index: 1;
+}
+.track-label .eyebrow {
+  margin-bottom: 0.5rem;
+}
+.track-label strong {
+  display: block;
+  color: var(--green-bright);
+  font-size: clamp(1.45rem, 3vw, 1.8rem);
+}
+.track-copy {
+  position: relative;
+  z-index: 1;
+}
+.track-copy h2 {
+  margin-bottom: 0.65rem;
+}
+.track-copy p {
+  max-width: 42em;
+  margin-bottom: 0;
+  color: var(--text-dim);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+.track-note {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.45rem 0.7rem;
+  color: var(--text);
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid var(--green-dark);
+  font-family: var(--mono);
+  font-size: 0.875rem;
+}
+@media (max-width: 700px) {
+  .track-panel {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ---- Legacy timeline ---------------------------------------------------- */
 .timeline {
   max-width: 640px;
   margin-inline: auto;
@@ -1159,7 +1349,7 @@ html.js .fact.reveal.in:hover {
   gap: 1rem;
   padding: 1.1rem 0.25rem;
   font-weight: 500;
-  font-size: 0.9688rem;
+  font-size: 1.0625rem;
   color: var(--text);
   transition: color 0.15s;
 }
@@ -1192,7 +1382,7 @@ html.js .fact.reveal.in:hover {
 .faq details p {
   padding: 0 2.6rem 1.15rem 0.25rem;
   color: var(--text-dim);
-  font-size: 0.9375rem;
+  font-size: 1rem;
   margin: 0;
 }
 
@@ -1202,7 +1392,7 @@ html.js .fact.reveal.in:hover {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) + 4px);
-  padding: clamp(2.25rem, 6vw, 3.5rem);
+  padding: clamp(2rem, 5vw, 3rem);
   text-align: center;
   overflow: hidden;
 }
@@ -1247,7 +1437,7 @@ html.js .fact.reveal.in:hover {
 .site-footer {
   border-top: 1px solid var(--border);
   padding: 2.5rem 0 3rem;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 }
 .site-footer .top {
   display: flex;
@@ -1277,7 +1467,7 @@ html.js .fact.reveal.in:hover {
   gap: 0.5rem 1.5rem;
   justify-content: space-between;
   font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
 }
 .site-footer .fine p {
   margin: 0;
@@ -1298,14 +1488,10 @@ html.js .fact.reveal.in:hover {
     transform: none;
   }
 }
-.page-hero .eyebrow {
-  animation: rise 0.5s 0.05s ease-out both;
-}
-.page-hero h1 {
-  animation: rise 0.5s 0.12s ease-out both;
-}
+.page-hero .eyebrow,
+.page-hero h1,
 .page-hero .lede {
-  animation: rise 0.5s 0.2s ease-out both;
+  animation: none;
 }
 
 /* Scroll reveals (motion.js adds .reveal/.in; html.js guard keeps no-JS visible) */
