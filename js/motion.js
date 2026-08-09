@@ -9,17 +9,15 @@
 
   /* ---- Scroll reveals with a small stagger per group ---- */
   if (!RM && "IntersectionObserver" in window) {
-    var els = document.querySelectorAll(
-      ".fact, .card, .timeline li, .faq details, .band, .section h2, .prose > p"
-    );
+    var els = document.querySelectorAll(".fact, .card, .faq details");
     var groups = new Map();
     els.forEach(function (el) {
       var n = groups.get(el.parentElement) || 0;
       groups.set(el.parentElement, n + 1);
       el.classList.add("reveal");
-      /* long lists (schedule timeline, FAQ) cascade faster so late items
-         aren't left waiting behind a big stagger */
-      var quick = el.matches(".timeline li, .faq details");
+      /* Long FAQ lists cascade faster so later items do not wait behind
+         an unnecessarily long stagger. */
+      var quick = el.matches(".faq details");
       var step = quick ? 40 : 70;
       var cap = quick ? 200 : 420;
       el.style.setProperty("--reveal-delay", Math.min(n * step, cap) + "ms");

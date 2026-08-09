@@ -25,23 +25,22 @@ Cloudflare Pages all serve it as-is with zero configuration.
 
 | What | Where |
 | --- | --- |
-| **Interest form + sponsor form URLs, contact email** | `js/config.js` — applied to every button, link, and hive cell at load. (The same placeholder URLs also appear in the HTML `href`s as a no-JS fallback — search for `REPLACE-WITH` when you update them.) |
-| Schedule times | `schedule.html` (currently marked tentative) |
+| **Interest form + sponsor form URLs, contact email** | `js/config.js` — applied to the relevant buttons and links at load. Matching values also appear in the HTML as a no-JS fallback. |
+| Schedule announcement and confirmed event hours | `schedule.html` |
 | FAQ answers | `faq.html` |
 | Copy on any page | The corresponding `.html` file |
 | Colors / typography | CSS variables at the top of `css/style.css` |
 
-> **Placeholders to replace before launch:** both `forms.gle/REPLACE-WITH-…`
-> URLs in `js/config.js`, and the `team@hornethacks.com` contact email.
-> The 8 AM – 8 PM times and day-of schedule are reasonable defaults for a
-> 12-hour event — adjust to your real run-of-show.
+The current interest form, sponsor form, and `team@hornethacks.com` contact
+address are configured in `js/config.js`. Keep the HTML fallback links aligned
+when any of those values change.
 
 ## Structure
 
 ```
 index.html            Landing page (hero, facts, CTA)
 about.html            What the event is, what to expect, venue
-schedule.html         Day-of timeline
+schedule.html         Confirmed event details and schedule announcement
 faq.html              Accordion FAQ
 sponsors.html         Sponsor pitch + sponsor interest CTA
 contact.html          Email, forms, directions

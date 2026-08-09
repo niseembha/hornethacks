@@ -18,13 +18,11 @@
       root.classList.add("js");
       var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (reduced) root.classList.add("reduced-motion");
-      else root.classList.add("hero-intro-active");
       window.setTimeout(function () {
         if (!root.classList.contains("voxel-ready")) {
-          root.classList.add("no-voxel", "hero-intro-done");
-          root.classList.remove("hero-intro-active");
+          root.classList.add("no-voxel");
         }
-      }, 3200);
+      }, 1200);
     })();
   </script>
   <link rel="stylesheet" href="css/style.css">
@@ -143,6 +141,16 @@
 
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <div class="mlh-topbar">
+    <a class="wrap mlh-topbar-link" href="https://mlh.io" target="_blank" rel="noopener">
+      <img src="assets/mlh/mlh-logo-black.svg" alt="Major League Hacking">
+      <span class="mlh-topbar-copy">
+        <strong>Official MLH Hack Day</strong>
+        <span>Supported by Major League Hacking</span>
+      </span>
+    </a>
+  </div>
+
   <header class="site-header">
     <div class="wrap">
       <a class="brand" href="index.html" aria-label="HornetHacks home">
@@ -168,14 +176,6 @@
     <!-- Hero -->
     <section class="hero">
       <canvas class="hero-atmosphere" data-hero-atmosphere aria-hidden="true"></canvas>
-      <div class="hero-boot" aria-hidden="true">
-        <div class="boot-scan"></div>
-        <span class="boot-code boot-code-a">HIVE://LINK</span>
-        <span class="boot-code boot-code-b">GRID 08×12</span>
-        <span class="boot-code boot-code-c">SIGNAL +34</span>
-        <span class="boot-code boot-code-d">BUILD_READY</span>
-        <span class="boot-skip">tap or press any key to skip</span>
-      </div>
       <div class="voxel-decor" aria-hidden="true">
         <svg class="vcube vcube-a" viewBox="0 0 100 116"><use href="#hh-cube-big"/></svg>
         <svg class="vcube vcube-b" viewBox="0 0 100 116"><use href="#hh-cube-big"/></svg>
@@ -186,7 +186,7 @@
         <p class="eyebrow"><span data-type>12-hour high school hackathon</span></p>
         <h1>Hornet<span class="sting">Hacks</span></h1>
         <div id="voxel-title" class="voxel-title" aria-hidden="true"></div>
-        <p class="lede">One Saturday. Twelve hours. Team up, learn from mentors and workshops, and demo something real by sundown — no experience required.</p>
+        <p class="lede">A free, beginner-friendly hackathon for high school students. Build with a team, learn from mentors, and present your work—all in one day.</p>
         <p class="event-meta">
           <span>Sat, October 10, 2026</span>
           <span class="dot" aria-hidden="true">&#x25A0;</span>
@@ -199,14 +199,7 @@
             <svg class="hex" aria-hidden="true"><use href="#hh-cube-solid"/></svg>
             Join the interest list
           </a>
-          <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/mgJEzq5jDzMutS6cA">Interested in sponsoring HornetHacks?</a>
-        </div>
-        <div class="mlh-hero-partnership">
-          <img src="assets/mlh/mlh-logo-white.svg" alt="Major League Hacking">
-          <span class="mlh-partnership-copy">
-            <strong>Official MLH Hack Day</strong>
-            <span>HornetHacks is an approved MLH Hack Day supported by Major League Hacking.</span>
-          </span>
+          <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/mgJEzq5jDzMutS6cA">Explore sponsorship opportunities</a>
         </div>
       </div>
     </section>
@@ -219,7 +212,7 @@
           <div class="fact">
             <p class="label">When</p>
             <p class="value">Sat, October 10, 2026</p>
-            <p class="sub">8:00 AM – 8:00 PM · one epic day</p>
+            <p class="sub">8:00 AM – 8:00 PM</p>
           </div>
           <div class="fact">
             <p class="label">Where</p>
@@ -235,13 +228,30 @@
       </div>
     </section>
 
+    <!-- Featured track -->
+    <section class="section track-section" aria-labelledby="gemini-track-title">
+      <div class="wrap">
+        <div class="track-panel">
+          <div class="track-label">
+            <p class="eyebrow">Featured track</p>
+            <strong>Google Gemini</strong>
+          </div>
+          <div class="track-copy">
+            <h2 id="gemini-track-title">Build with Gemini</h2>
+            <p>Use Google Gemini to create an AI-powered project with a clear, useful purpose. Track resources, judging criteria, and award details will be announced before registration opens.</p>
+            <span class="track-note">Google Gemini Track · Details coming soon</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Short about -->
     <section class="section">
       <div class="wrap prose" style="text-align:center">
-        <h2>A hackathon with a sting</h2>
-        <p>HornetHacks packs everything great about a hackathon into a single Saturday. Show up with an idea (or none at all), find a team, build with help from mentors and workshops, and demo your project to judges before the day is out.</p>
-        <p>It's free, beginner-friendly, and made for high school students across Dallas–Fort Worth.</p>
-        <p><a class="link-quiet" href="about.html">More about the event →</a></p>
+        <h2>Build something worth sharing</h2>
+        <p>Bring an idea or discover one at the event. You will form a team, build with support from mentors and workshops, and present your project to judges by the end of the day.</p>
+        <p>HornetHacks is free and open to high school students across Dallas–Fort Worth, regardless of experience.</p>
+        <p><a class="link-quiet" href="about.html">Learn how HornetHacks works →</a></p>
       </div>
     </section>
 
@@ -250,13 +260,13 @@
       <div class="wrap">
         <div class="band">
           <h2>Ready to build?</h2>
-          <p>Registration opens soon — join the interest list and we'll sting you (gently) the moment it does.</p>
+          <p>Registration opens soon. Join the interest list to receive the announcement and important event updates.</p>
           <a class="btn" data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/M7gdcq6S3hP9UQd58">
             <svg class="hex" aria-hidden="true"><use href="#hh-cube-solid"/></svg>
             Join the interest list
           </a>
           <p style="margin-top:1.4rem;margin-bottom:0">
-            <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/mgJEzq5jDzMutS6cA">Companies &amp; organizations: sponsor HornetHacks →</a>
+            <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/mgJEzq5jDzMutS6cA">Organizations: become a HornetHacks sponsor →</a>
           </p>
         </div>
       </div>
