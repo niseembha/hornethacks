@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HornetHacks — a 12-hour high school hackathon · Oct 10, 2026</title>
+  <meta name="description" content="HornetHacks is an official MLH Hack Day: a free, beginner-friendly, 12-hour high school hackathon on Saturday, October 10, 2026 at Greenhill School in Addison, TX.">
+  <meta property="og:title" content="HornetHacks — a 12-hour high school hackathon">
+  <meta property="og:description" content="An official MLH Hack Day · Sat, Oct 10, 2026 · Valdes STEM + Innovation Center at Greenhill School, Addison, TX.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/geist-sans-latin-400-normal.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/geist-sans-latin-700-normal.woff2">
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.add("js");
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced) root.classList.add("reduced-motion");
+      else root.classList.add("hero-intro-active");
+      window.setTimeout(function () {
+        if (!root.classList.contains("voxel-ready")) {
+          root.classList.add("no-voxel", "hero-intro-done");
+          root.classList.remove("hero-intro-active");
+        }
+      }, 3200);
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "HornetHacks 2026",
+    "description": "A 12-hour high school hackathon at the Valdes STEM + Innovation Center, Greenhill School, Addison, TX.",
+    "startDate": "2026-10-10T08:00:00-05:00",
+    "endDate": "2026-10-10T20:00:00-05:00",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "isAccessibleForFree": true,
+    "organizer": { "@type": "Organization", "name": "HornetHacks" },
+    "location": {
+      "@type": "Place",
+      "name": "Valdes STEM + Innovation Center, Greenhill School",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "4141 Spring Valley Rd",
+        "addressLocality": "Addison",
+        "addressRegion": "TX",
+        "postalCode": "75001",
+        "addressCountry": "US"
+      }
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Reusable SVG symbols (hornet mark + hex icons) -->
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <symbol id="hh-mark" viewBox="0 0 11 10" shape-rendering="crispEdges">
+        <g style="opacity:var(--fw-a,1)">
+          <g fill="#000000">
+            <rect x="3" y="0" width="2" height="1"/>
+            <rect x="6" y="0" width="2" height="1"/>
+            <rect x="2" y="1" width="1" height="2"/>
+            <rect x="5" y="1" width="1" height="1"/>
+            <rect x="8" y="1" width="1" height="2"/>
+            <rect x="6" y="2" width="1" height="1"/>
+          </g>
+          <g fill="#34d399">
+            <rect x="3" y="1" width="2" height="1"/>
+            <rect x="6" y="1" width="2" height="1"/>
+            <rect x="3" y="2" width="3" height="1"/>
+            <rect x="7" y="2" width="1" height="1"/>
+          </g>
+        </g>
+        <g style="opacity:var(--fw-b,0)">
+          <g fill="#000000">
+            <rect x="1" y="2" width="1" height="1"/>
+            <rect x="5" y="2" width="1" height="1"/>
+            <rect x="9" y="2" width="1" height="1"/>
+          </g>
+          <g fill="#34d399">
+            <rect x="2" y="2" width="3" height="1"/>
+            <rect x="6" y="2" width="3" height="1"/>
+          </g>
+        </g>
+        <g fill="#000000">
+          <rect x="3" y="3" width="6" height="1"/>
+          <rect x="2" y="4" width="2" height="1"/>
+          <rect x="5" y="4" width="1" height="5"/>
+          <rect x="9" y="4" width="1" height="1"/>
+          <rect x="1" y="5" width="1" height="1"/>
+          <rect x="3" y="5" width="1" height="3"/>
+          <rect x="10" y="5" width="1" height="3"/>
+          <rect x="0" y="6" width="2" height="1"/>
+          <rect x="1" y="7" width="1" height="1"/>
+          <rect x="2" y="8" width="2" height="1"/>
+          <rect x="9" y="8" width="1" height="1"/>
+          <rect x="3" y="9" width="6" height="1"/>
+        </g>
+        <g fill="#34d399">
+          <rect x="4" y="4" width="1" height="5"/>
+        </g>
+        <g fill="currentColor">
+          <rect x="6" y="4" width="3" height="1"/>
+          <rect x="2" y="5" width="1" height="3"/>
+          <rect x="6" y="5" width="4" height="1"/>
+          <rect x="6" y="6" width="2" height="1"/>
+          <rect x="9" y="6" width="1" height="1"/>
+          <rect x="6" y="7" width="4" height="1"/>
+          <rect x="6" y="8" width="3" height="1"/>
+        </g>
+        <g fill="#000000">
+          <rect x="8" y="6" width="1" height="1"/>
+        </g>
+      </symbol>
+      <symbol id="hh-cube-solid" viewBox="0 0 24 28">
+        <polygon points="12,2 22,8 12,14 2,8" fill="currentColor"/>
+        <polygon points="22,8 22,20 12,26 12,14" fill="currentColor" opacity="0.55"/>
+        <polygon points="2,8 12,14 12,26 2,20" fill="currentColor" opacity="0.3"/>
+      </symbol>
+      <symbol id="hh-cube-line" viewBox="0 0 24 28">
+        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+          <polygon points="12,2 22,8 22,20 12,26 2,20 2,8"/>
+          <path d="M2 8l10 6 10-6M12 14v12"/>
+        </g>
+      </symbol>
+      <symbol id="hh-cube-big" viewBox="0 0 100 116">
+        <polygon points="50,8 93,33 50,58 7,33" fill="rgba(52,211,153,0.09)"/>
+        <polygon points="93,33 93,83 50,108 50,58" fill="rgba(52,211,153,0.045)"/>
+        <polygon points="7,33 50,58 50,108 7,83" fill="rgba(52,211,153,0.02)"/>
+        <g fill="none" stroke="#34d399" stroke-width="1.5" stroke-linejoin="round" opacity="0.5">
+          <polygon points="50,8 93,33 93,83 50,108 7,83 7,33"/>
+          <path d="M7 33l43 25 43-25M50 58v50"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="HornetHacks home">
+        <svg viewBox="0 0 11 10" aria-hidden="true"><use href="#hh-mark"/></svg>
+        <span>Hornet<b>Hacks</b></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <span class="bars"></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Site">
+        <a href="about.html">About</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="faq.html">FAQ</a>
+        <a href="sponsors.html">Sponsors</a>
+        <a href="contact.html">Contact</a>
+        <a class="btn" data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/M7gdcq6S3hP9UQd58">Register interest</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <canvas class="hero-atmosphere" data-hero-atmosphere aria-hidden="true"></canvas>
+      <div class="hero-boot" aria-hidden="true">
+        <div class="boot-scan"></div>
+        <span class="boot-code boot-code-a">HIVE://LINK</span>
+        <span class="boot-code boot-code-b">GRID 08×12</span>
+        <span class="boot-code boot-code-c">SIGNAL +34</span>
+        <span class="boot-code boot-code-d">BUILD_READY</span>
+        <span class="boot-skip">tap or press any key to skip</span>
+      </div>
+      <div class="voxel-decor" aria-hidden="true">
+        <svg class="vcube vcube-a" viewBox="0 0 100 116"><use href="#hh-cube-big"/></svg>
+        <svg class="vcube vcube-b" viewBox="0 0 100 116"><use href="#hh-cube-big"/></svg>
+        <svg class="vcube vcube-c" viewBox="0 0 100 116"><use href="#hh-cube-big"/></svg>
+      </div>
+      <div class="wrap hero-content">
+        <p class="status-pill"><span class="pulse" aria-hidden="true"></span>Interest list open</p>
+        <p class="eyebrow"><span data-type>12-hour high school hackathon</span></p>
+        <h1>Hornet<span class="sting">Hacks</span></h1>
+        <div id="voxel-title" class="voxel-title" aria-hidden="true"></div>
+        <p class="lede">One Saturday. Twelve hours. Team up, learn from mentors and workshops, and demo something real by sundown — no experience required.</p>
+        <p class="event-meta">
+          <span>Sat, October 10, 2026</span>
+          <span class="dot" aria-hidden="true">&#x25A0;</span>
+          <span>8:00 AM – 8:00 PM</span>
+          <span class="dot" aria-hidden="true">&#x25A0;</span>
+          <span>Valdes STEM + Innovation Center · Greenhill School, Addison, TX</span>
+        </p>
+        <div class="cta-row">
+          <a class="btn" data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/M7gdcq6S3hP9UQd58">
+            <svg class="hex" aria-hidden="true"><use href="#hh-cube-solid"/></svg>
+            Join the interest list
+          </a>
+          <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/mgJEzq5jDzMutS6cA">Interested in sponsoring HornetHacks?</a>
+        </div>
+        <div class="mlh-hero-partnership">
+          <img src="assets/mlh/mlh-logo-white.svg" alt="Major League Hacking">
+          <span class="mlh-partnership-copy">
+            <strong>Official MLH Hack Day</strong>
+            <span>HornetHacks is an approved MLH Hack Day supported by Major League Hacking.</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Quick facts -->
+    <section class="facts">
+      <div class="wrap">
+        <div class="grid">
+          <div class="fact">
+            <p class="label">When</p>
+            <p class="value">Sat, October 10, 2026</p>
+            <p class="sub">8:00 AM – 8:00 PM · one epic day</p>
+          </div>
+          <div class="fact">
+            <p class="label">Where</p>
+            <p class="value">Greenhill School, Addison, TX</p>
+            <p class="sub">Valdes STEM + Innovation Center</p>
+          </div>
+          <div class="fact">
+            <p class="label">Who</p>
+            <p class="value">High school students</p>
+            <p class="sub">Grades 9–12 · all experience levels</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Short about -->
+    <section class="section">
+      <div class="wrap prose" style="text-align:center">
+        <h2>A hackathon with a sting</h2>
+        <p>HornetHacks packs everything great about a hackathon into a single Saturday. Show up with an idea (or none at all), find a team, build with help from mentors and workshops, and demo your project to judges before the day is out.</p>
+        <p>It's free, beginner-friendly, and made for high school students across Dallas–Fort Worth.</p>
+        <p><a class="link-quiet" href="about.html">More about the event →</a></p>
+      </div>
+    </section>
+
+    <!-- Closing CTA -->
+    <section class="section">
+      <div class="wrap">
+        <div class="band">
+          <h2>Ready to build?</h2>
+          <p>Registration opens soon — join the interest list and we'll sting you (gently) the moment it does.</p>
+          <a class="btn" data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/M7gdcq6S3hP9UQd58">
+            <svg class="hex" aria-hidden="true"><use href="#hh-cube-solid"/></svg>
+            Join the interest list
+          </a>
+          <p style="margin-top:1.4rem;margin-bottom:0">
+            <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/mgJEzq5jDzMutS6cA">Companies &amp; organizations: sponsor HornetHacks →</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="top">
+        <a class="brand" href="index.html" aria-label="HornetHacks home">
+          <svg viewBox="0 0 11 10" aria-hidden="true"><use href="#hh-mark"/></svg>
+          <span>Hornet<b>Hacks</b></span>
+        </a>
+        <nav aria-label="Footer">
+          <a href="about.html">About</a>
+          <a href="schedule.html">Schedule</a>
+          <a href="faq.html">FAQ</a>
+          <a href="sponsors.html">Sponsors</a>
+          <a href="contact.html">Contact</a>
+          <a data-link="interest" target="_blank" rel="noopener" href="https://forms.gle/M7gdcq6S3hP9UQd58">Interest form</a>
+        </nav>
+      </div>
+      <div class="fine">
+        <p>© <span data-year>2026</span> HornetHacks · Sat, Oct 10, 2026 · Greenhill School, Addison, TX</p>
+        <p>
+          <a class="link-quiet" data-link="sponsor" target="_blank" rel="noopener" href="https://forms.gle/mgJEzq5jDzMutS6cA">Become a sponsor</a>
+          &nbsp;·&nbsp;
+          <a class="link-quiet" data-link="email" data-show-email href="mailto:team@hornethacks.com">team@hornethacks.com</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/voxel-title.js"></script>
+</body>
+</html>

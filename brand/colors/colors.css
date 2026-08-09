@@ -1,0 +1,17 @@
+/* HornetHacks brand colors */
+:root {
+  --hh-bg: #0a0a0a;
+  --hh-surface: #101010;
+  --hh-surface-2: #161616;
+  --hh-border: #222222;
+  --hh-border-strong: #383838;
+  --hh-text: #ededed;
+  --hh-text-dim: #9b9b9b;
+  --hh-text-faint: #6b6b6b;
+  --hh-emerald: #34d399;
+  --hh-emerald-bright: #6ee7b7;
+  --hh-emerald-deep: #0e9f6e;
+  --hh-emerald-dark: #0b6b4c;
+  --hh-emerald-darker: #07452f;
+  --hh-gradient: linear-gradient(100deg, #6ee7b7, #34d399 45%, #0e9f6e);
+}
