@@ -57,6 +57,26 @@
   var lastGlint = 0;
   var lastIdleDraw = 0;
 
+  /* Recurring shine: a leaning specular band that travels the glyphs
+     themselves (same brightness language as the cursor glow), instead of
+     a screen-space gradient crossing the whole title box. */
+  var SHINE_EVERY = 7000; /* ms between passes */
+  var SHINE_MS = 650; /* duration of one pass */
+  var shineT0 = -1e9;
+
+  function shineBoost(x, y, now) {
+    var t = (now - shineT0) / SHINE_MS;
+    if (t < 0 || t > 1) return 0;
+    /* the band leans like the old skewed gradient and starts/ends off-grid
+       so it slides onto and off of the letters */
+    var lean = (gh / 2 - y) * 0.55;
+    var bandX = t * (gw + 18) - 9 + lean;
+    var d = Math.abs(x - bandX);
+    if (d > 4.2) return 0;
+    var edge = 1 - d / 4.2;
+    return edge * edge * 26;
+  }
+
   /* Build animation: blocks rise up from deep inside the page (z-axis),
      growing from a distant point into their slot with an overshoot pop,
      radiating from the center outward */
@@ -154,7 +174,7 @@
       var gd = Math.sqrt(gx * gx + gy * gy);
       if (gd < 1.8) b += Math.sin(age * Math.PI) * (1 - gd / 1.8) * 15;
     }
-    return b;
+    return b + shineBoost(x, y, now);
   }
 
   function frontColor(green, x, y, boost) {
@@ -333,6 +353,8 @@
   function startIdle() {
     if (RM || idleStarted) return;
     idleStarted = true;
+    /* first shine arrives a beat after the build settles */
+    shineT0 = performance.now() - SHINE_EVERY + 2600;
 
     canvas.addEventListener("pointermove", function (e) {
       pointer = { x: e.offsetX / curS, y: e.offsetY / curS };
@@ -357,7 +379,10 @@
 
     function tick(now) {
       idleRaf = requestAnimationFrame(tick);
-      if (now - lastIdleDraw < 33) return; /* ~30fps is plenty */
+      if (now - shineT0 >= SHINE_EVERY) shineT0 = now;
+      /* full frame rate while a shine pass is moving; ~30fps otherwise */
+      var shining = now - shineT0 <= SHINE_MS + 50;
+      if (now - lastIdleDraw < (shining ? 0 : 33)) return;
       lastIdleDraw = now;
       if (now - lastGlint > 500 + hash(now | 0, 3) * 900) {
         spawnGlint(now);
