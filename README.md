@@ -1,7 +1,7 @@
 # HornetHacks Website
 
 Landing site for **HornetHacks** — a 12-hour high school hackathon on
-**Saturday, October 10, 2026** at the Valdes STEM + Innovation Center,
+**Saturday, October 24, 2026** at the Valdes STEM + Innovation Center,
 Greenhill School, Addison, TX.
 
 The design is dark, clean, and quietly voxel: extruded 3D-block buttons,
