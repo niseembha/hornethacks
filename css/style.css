@@ -1237,8 +1237,8 @@ html.js .fact.reveal.in:hover {
 }
 
 /* ---- Sponsors strip ------------------------------------------------------ */
-/* One real logo per announced sponsor; the rest render as blurred grey
-   placeholder wordmarks until they're revealed. */
+/* Announced sponsor logos render at a consistent optical height; unrevealed
+   slots use blurred grey placeholder wordmarks. */
 .sponsors-strip .wrap {
   text-align: center;
 }
