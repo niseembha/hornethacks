@@ -1572,3 +1572,13 @@ html.js .flyby .fw-b {
     transform: none !important;
   }
 }
+
+/* Keep the unconfirmed event date visible on every page. */
+.date-notice {
+  padding: 1rem 0;
+  background: var(--accent, #34d399);
+  color: #07130e;
+  text-align: center;
+  line-height: 1.6;
+}
+.date-notice strong { font-weight: 700; }
