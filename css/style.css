@@ -1575,10 +1575,18 @@ html.js .flyby .fw-b {
 
 /* Keep the unconfirmed event date visible on every page. */
 .date-notice {
-  padding: 1rem 0;
-  background: var(--accent, #34d399);
-  color: #07130e;
+  padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+  background: #b91c1c;
+  color: #fff;
+  border-bottom: 4px solid #f87171;
   text-align: center;
+  font-size: clamp(1rem, 2vw, 1.25rem);
   line-height: 1.6;
 }
-.date-notice strong { font-weight: 700; }
+.date-notice strong {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
