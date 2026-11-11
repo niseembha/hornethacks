@@ -1573,12 +1573,12 @@ html.js .flyby .fw-b {
   }
 }
 
-/* Keep the unconfirmed event date visible on every page. */
+/* Keep the confirmed event date visible on every page. */
 .date-notice {
   padding: clamp(1.5rem, 4vw, 2.5rem) 0;
-  background: #b91c1c;
+  background: #065f46;
   color: #fff;
-  border-bottom: 4px solid #f87171;
+  border-bottom: 4px solid #34d399;
   text-align: center;
   font-size: clamp(1rem, 2vw, 1.25rem);
   line-height: 1.6;

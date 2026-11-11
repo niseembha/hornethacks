@@ -1,7 +1,7 @@
 # HornetHacks Website
 
 Landing site for **HornetHacks** — a 12-hour high school hackathon.
-**The event date has not been finalized. No date is confirmed.**
+**The event date is confirmed: March 27.**
 The planned venue is the Valdes STEM + Innovation Center,
 Greenhill School, Addison, TX.
 
