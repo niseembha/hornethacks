@@ -1,7 +1,8 @@
 # HornetHacks Website
 
-Landing site for **HornetHacks** — a 12-hour high school hackathon on
-**Saturday, October 10, 2026** at the Valdes STEM + Innovation Center,
+Landing site for **HornetHacks** — a 12-hour high school hackathon.
+**The event date is confirmed: March 27.**
+The planned venue is the Valdes STEM + Innovation Center,
 Greenhill School, Addison, TX.
 
 The design is dark, clean, and quietly voxel: extruded 3D-block buttons,
@@ -25,14 +26,14 @@ Cloudflare Pages all serve it as-is with zero configuration.
 
 | What | Where |
 | --- | --- |
-| **Interest form + sponsor form URLs, contact email** | `js/config.js` — applied to every button, link, and hive cell at load. (The same placeholder URLs also appear in the HTML `href`s as a no-JS fallback — search for `REPLACE-WITH` when you update them.) |
+| **Participant registration + sponsor form URLs, contact email** | `js/config.js` — applied to every button, link, and hive cell at load. (The same URLs also appear in the HTML `href`s as a no-JS fallback.) |
 | Schedule times | `schedule.html` (currently marked tentative) |
 | FAQ answers | `faq.html` |
 | Copy on any page | The corresponding `.html` file |
 | Colors / typography | CSS variables at the top of `css/style.css` |
 
-> **Placeholders to replace before launch:** both `forms.gle/REPLACE-WITH-…`
-> URLs in `js/config.js`, and the `team@hornethacks.com` contact email.
+> **Before launch:** verify the participant registration and sponsor form URLs
+> in `js/config.js`, along with the `team@hornethacks.com` contact email.
 > The 8 AM – 8 PM times and day-of schedule are reasonable defaults for a
 > 12-hour event — adjust to your real run-of-show.
 

@@ -98,7 +98,11 @@
 
   var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  /* ---- One lightweight canvas: honeycomb activation + data pixels ---- */
+  /* ---- One lightweight canvas: the hive ----
+     A field of honeycomb outlines that breathes gently, parts around the
+     floating cubes, lights up in a top-to-bottom activation wave during
+     the boot intro, and ripples on energy pulses. The canvas itself is
+     masked in CSS so the hive dissolves into black down the page. */
   var atmosphere = hero.querySelector("[data-hero-atmosphere]");
   if (atmosphere && atmosphere.getContext && !RM) {
     var actx = atmosphere.getContext("2d");
@@ -109,10 +113,17 @@
     var atmosphereVisible = true;
     var lastAtmosphere = 0;
     var cells = [];
-    var pixels = [];
     var pulses = [];
-    var pointer = { x: -1000, y: -1000, active: false };
     var compact = window.innerWidth < 760 || (navigator.deviceMemory && navigator.deviceMemory <= 4);
+    var frameGap = compact ? 33 : 16;
+    var cubeEls = hero.querySelectorAll(".vcube");
+    var cubeZones = [];
+    var BOOT_WAVE_MS = 2100;
+    var bootT0 = introActive ? performance.now() : 0;
+    /* the wave normally finishes before the intro does; both end-of-intro
+       events also clear it so a stalled load can't leave dark cells behind */
+    window.addEventListener("hh:intro-skip", function () { bootT0 = 0; }, { once: true });
+    window.addEventListener("hh:intro-complete", function () { bootT0 = 0; }, { once: true });
 
     function sizeAtmosphere() {
       var rect = hero.getBoundingClientRect();
@@ -130,18 +141,25 @@
       var dy = radius * 0.866;
       for (var x = -radius, col = 0; x < aw + radius; x += dx, col++) {
         for (var y = -radius; y < ah + radius; y += dy * 2) {
-          cells.push({ x: x, y: y + (col % 2 ? dy : 0), r: radius });
+          var cy = y + (col % 2 ? dy : 0);
+          /* a stable per-cell phase so the breathing varies across the field */
+          cells.push({ x: x, y: cy, r: radius, phase: (x * 0.011 + cy * 0.017) % (Math.PI * 2) });
         }
       }
-      pixels = [];
-      var count = compact ? 14 : 28;
-      for (var i = 0; i < count; i++) {
-        pixels.push({
-          x: Math.random() * aw,
-          y: Math.random() * ah,
-          speed: 4 + Math.random() * 10,
-          phase: Math.random() * Math.PI * 2,
-          size: Math.random() > 0.78 ? 3 : 2
+    }
+
+    /* The wireframe cubes float on their own layer; the hive keeps a soft
+       feathered clearing around each so the two never overlap. */
+    function refreshCubeZones() {
+      var hr = hero.getBoundingClientRect();
+      cubeZones.length = 0;
+      for (var i = 0; i < cubeEls.length; i++) {
+        var r = cubeEls[i].getBoundingClientRect();
+        if (!r.width) continue;
+        cubeZones.push({
+          x: r.left - hr.left + r.width / 2,
+          y: r.top - hr.top + r.height / 2,
+          r: Math.max(r.width, r.height) * 0.62 + 8
         });
       }
     }
@@ -160,53 +178,55 @@
 
     function drawAtmosphere(now) {
       atmosphereRaf = requestAnimationFrame(drawAtmosphere);
-      if (!atmosphereVisible || document.hidden || now - lastAtmosphere < 33) return;
-      var dt = Math.min(0.05, (now - lastAtmosphere) / 1000 || 0.033);
+      if (!atmosphereVisible || document.hidden || now - lastAtmosphere < frameGap) return;
       lastAtmosphere = now;
       actx.clearRect(0, 0, aw, ah);
+      refreshCubeZones();
+
+      /* Boot: an activation wave sweeps down and lights the hive row by row */
+      var bootAge = bootT0 ? (now - bootT0) / BOOT_WAVE_MS : 2;
+      var waveY = 0;
+      if (bootAge < 1) {
+        var e = bootAge < 0.5 ? 2 * bootAge * bootAge : 1 - Math.pow(-2 * bootAge + 2, 2) / 2;
+        waveY = e * (ah + 200) - 100;
+      }
 
       for (var c = 0; c < cells.length; c++) {
         var cell = cells[c];
-        var alpha = 0.032;
-        if (pointer.active) {
-          var pd = Math.hypot(cell.x - pointer.x, cell.y - pointer.y);
-          if (pd < 170) alpha += (1 - pd / 170) * 0.2;
+        var alpha = 0.026 + 0.016 * (0.5 + 0.5 * Math.sin(now / 3400 + cell.phase));
+        if (bootAge < 1) {
+          var behind = waveY - cell.y;
+          if (behind < 0) alpha = 0; /* below the wavefront: still dark */
+          var edge = Math.abs(behind);
+          if (edge < 120) alpha += Math.pow(1 - edge / 120, 2) * 0.3; /* glowing front */
         }
         for (var q = 0; q < pulses.length; q++) {
           var pulse = pulses[q];
-          var age = (now - pulse.t0) / 900;
-          var ring = age * 260;
+          var age = (now - pulse.t0) / 1100;
+          if (age >= 1) continue;
+          var ring = (1 - Math.pow(1 - age, 3)) * 320;
           var d = Math.hypot(cell.x - pulse.x, cell.y - pulse.y);
-          var edge = Math.abs(d - ring);
-          if (age < 1 && edge < 42) alpha += (1 - edge / 42) * (1 - age) * 0.5 * pulse.power;
+          var band = Math.abs(d - ring);
+          if (band < 54) alpha += Math.pow(1 - band / 54, 2) * (1 - age) * 0.45 * pulse.power;
         }
+        for (var z = 0; z < cubeZones.length; z++) {
+          var zone = cubeZones[z];
+          var zd = Math.hypot(cell.x - zone.x, cell.y - zone.y);
+          if (zd < zone.r) { alpha = 0; break; }
+          if (zd < zone.r + 46) alpha *= (zd - zone.r) / 46;
+        }
+        if (alpha < 0.005) continue;
+        var a = Math.min(alpha, 0.5);
         hexPath(cell.x, cell.y, cell.r);
-        actx.strokeStyle = "rgba(52,211,153," + Math.min(alpha, 0.48).toFixed(3) + ")";
-        actx.lineWidth = alpha > 0.16 ? 1.15 : 0.65;
+        actx.strokeStyle = "rgba(52,211,153," + a.toFixed(3) + ")";
+        actx.lineWidth = 0.6 + a * 1.1;
         actx.stroke();
       }
-
-      for (var p = 0; p < pixels.length; p++) {
-        var px = pixels[p];
-        px.y -= px.speed * dt;
-        px.x += Math.sin(now / 1800 + px.phase) * dt * 3;
-        if (px.y < -5) { px.y = ah + 5; px.x = Math.random() * aw; }
-        var shimmer = 0.12 + (Math.sin(now / 700 + px.phase) + 1) * 0.07;
-        actx.fillStyle = "rgba(110,231,183," + shimmer.toFixed(3) + ")";
-        actx.fillRect(Math.round(px.x), Math.round(px.y), px.size, px.size);
+      for (var p = pulses.length - 1; p >= 0; p--) {
+        if (now - pulses[p].t0 >= 1100) pulses.splice(p, 1);
       }
-      pulses = pulses.filter(function (pulse) { return now - pulse.t0 < 900; });
     }
 
-    if (finePointer) {
-      hero.addEventListener("pointermove", function (e) {
-        var rect = hero.getBoundingClientRect();
-        pointer.x = e.clientX - rect.left;
-        pointer.y = e.clientY - rect.top;
-        pointer.active = true;
-      }, { passive: true });
-      hero.addEventListener("pointerleave", function () { pointer.active = false; }, { passive: true });
-    }
     window.addEventListener("hh:energy-pulse", function (e) {
       var d = e.detail || {};
       pulses.push({
