@@ -1572,21 +1572,3 @@ html.js .flyby .fw-b {
     transform: none !important;
   }
 }
-
-/* Keep the confirmed event date visible on every page. */
-.date-notice {
-  padding: clamp(1.5rem, 4vw, 2.5rem) 0;
-  background: #065f46;
-  color: #fff;
-  border-bottom: 4px solid #34d399;
-  text-align: center;
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  line-height: 1.6;
-}
-.date-notice strong {
-  display: block;
-  margin-bottom: 0.4rem;
-  font-size: clamp(1.5rem, 4vw, 2.25rem);
-  font-weight: 700;
-  line-height: 1.2;
-}
